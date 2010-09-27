@@ -1,4 +1,3 @@
-
 ;; associate .tpl files with html-mode
 (setq auto-mode-alist (cons '("\\.tpl$" . nxml-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.pt$" . nxml-mode) auto-mode-alist))
@@ -69,7 +68,6 @@
   (goto-char (point-max)))
 (global-set-key (kbd "\C-c 1") 'switch-to-zendmd)
 
-
 (defun zen-goto-sandbox ()
   (interactive)
   "Goes to the shell and cd's into the sandbox directory"
@@ -78,14 +76,6 @@
   (insert (concat "cd " main-sandbox))
   (comint-send-input))
 (global-set-key (kbd "\C-c 3") 'zen-goto-sandbox)
-
-(defun zen-reload-code ()
-  (interactive)
-  "Reloads code without restart zope"
-  (progn
-    (shell-command "wget  --auth-no-challenge --http-user=admin --http-password=zenoss http://localhost:8080/reload?action=code --http-password=zenoss && rm reload?action*" "reload-output")
-    (kill-buffer "reload-output")
-    (message "code reloaded")))
 
 (defun restart-zope ()
   "Restarts your zope server and takes you to the output.
@@ -104,7 +94,6 @@ This assumes that you have your zope instance in a shell file called zope.out"
     (switch-to-buffer (other-buffer))
     (message "Restarted ur zopez")))
 (global-set-key "\C-x\C-r" 'restart-zope)
-
 
 ;; Trac functions
 (defvar trac-public-url "http://dev.zenoss.org/trac/ticket/" "Where tickets are on the public trac")
@@ -195,7 +184,7 @@ dev/sandbox/3.0Products) and will restart zope "
   (progn
     (let ((current-svn-url (svn-current-project)))
       (browse-url  (replace-regexp-in-string "svn/" "trac/log/" current-svn-url)))))
-(global-set-key "\C-xvf" 'svn-browse-change-log)
+ (global-set-key "\C-xvf" 'svn-browse-change-log)g
 
 (defun svn-project-diff()
   "Shows me the differences in my current sandbox"
@@ -208,7 +197,7 @@ dev/sandbox/3.0Products) and will restart zope "
     (diff-mode)
     ;; fullscreen it
     (delete-other-windows)))
-(global-set-key "\C-xvo" 'svn-project-diff)
+ (global-set-key "\C-xvo" 'svn-project-diff)
 
 (defun svn-current-project ()
   "Messages a string of what the current svn project URL is, also saves it as the most recent kill"
@@ -255,10 +244,13 @@ this does not actually execute the command"
       (delete-other-windows)
       (insert (concat "svn merge -r " (car kill-ring-yank-pointer) ":HEAD " current-svn-url " .")))))
 
-
 ;; zenoss specific mysql (i don't use it for anything else)
 (setq sql-mysql-program "/usr/local/mysql/bin/mysql" )
 
+(defun maybe-kill-buffer (buffer-name)
+  "Kills the buffer if it exist"
+  (if (get-buffer buffer-name)
+      (kill-buffer buffer-name)))
 
 ;; test this function
 (defun get-current-python-package ()
@@ -279,11 +271,9 @@ Products.Zuul etc "
 single unit test is executed"
   (interactive)
   (save-excursion
-
-    (if (get-buffer "*Async Shell Command*")
-        (kill-buffer "*Async Shell Command*"))
-    ;;(beginning-of-defun )
-    (search-backward "def\s")
+    (maybe-kill-buffer "*Async Shell Command*")
+    (or (search-backward "def\s")
+        (beginning-of-defun ))
     (forward-word 2)
     (let ((function-name (current-word))
           (package (get-current-python-package)))
@@ -302,7 +292,6 @@ single unit test is executed"
 ;; making this global so we can use it from shell etc
 (global-set-key "\C-ct" 'run-this-unit-test)
 
-
 (defun zen-test-this-module ()
   "Runs the unit tests for the current python module we are sitting
 in, doesn't remember previous test"
@@ -311,6 +300,3 @@ in, doesn't remember previous test"
         (kill-buffer "*Async Shell Command*"))
   (let ((package (get-current-python-package)))
     (shell-command (concat "runtests " package "&"))))
-
-
-;; command line quickly to zenpack

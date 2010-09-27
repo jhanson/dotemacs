@@ -15,7 +15,8 @@
 ;;(load "smarty-mode")
 
 ;; set the c style for my curly braces and such
-(setq c-default-style "k&r")
+;;(setq c-default-style "k&r")
+(setq c-default-style "java")
 
 ;; flymake php syntax
 (defun flymake-php-init ()

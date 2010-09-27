@@ -8,6 +8,8 @@
 ;; make ctrl z undo, as well as ctrl x ctrl u
 (global-set-key "\C-z" 'undo)
 (global-set-key "\C-x\C-u" 'undo)
+;; was suspend frame i kept hitting accidently
+(global-set-key "\C-x\C-z" 'repeat)
 
 ;; auto indent after new line
 (define-key global-map (kbd "RET") 'newline-and-indent)

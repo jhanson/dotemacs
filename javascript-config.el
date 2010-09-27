@@ -80,6 +80,7 @@ to run in flymake mode so I think this is a better option"
              ))
 ;; for jscomint, tells it where my js file is
 (setq inferior-js-program-command "java org.mozilla.javascript.tools.shell.Main")
+;;(setq inferior-js-program-command "v8")
 
 ;; list of my JS libraries I need to load by default.
 (defvar js-comint-libraries  '("/Users/joseph/Library/JavaScript/env.js",

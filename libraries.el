@@ -4,13 +4,13 @@
 ;; don't question opening in the same buffer
 (put 'dired-find-alternate-file 'disabled nil)
 
-;;; Org Mode 
+;;; Org Mode
 ;; org mode short cuts
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 
 ;; log the time when done
 (setq org-log-done t)
-;; show blocked tasks 
+;; show blocked tasks
 (setq org-agenda-dim-blocked-tasks t)
 
 ;;; IDO Mode
@@ -57,6 +57,12 @@
 (add-to-list 'ecb-source-path
              "~/dev/sandbox/Products")
 
+
+;;; $Id: startup-template.el,v 0.5 1993/05/31 23:49:29 ceder Exp $
+;;; Support for the elisp library elib.
+(setq load-path (append (list "/Applications/Emacs.app/Contents/Resources/site-lisp/elib")
+            load-path))
+
 ;; automatically show eclispse style code browser
 ;;(ecb-activate)
 
@@ -88,3 +94,15 @@
 
 ;; magit
 (setq magit-git-executable "/usr/local/git/bin/git")
+;; regular vc git
+(add-to-list 'vc-handled-backends 'Git)
+(autoload 'mo-git-blame-file "mo-git-blame" nil t)
+(autoload 'mo-git-blame-current "mo-git-blame" nil t)
+(global-set-key "\C-cg" 'mo-git-blame-current)
+(setq mo-git-blame-git-executable "/usr/local/git/bin/git")
+
+;; protobuff
+(autoload 'protobuf-mode "protobuf-mode" nil t)
+(setq auto-mode-alist (cons '("\\.proto$" . protobuf-mode) auto-mode-alist))
+
+;; TODO repurpose thrift-mode to be protobuf with flymake
