@@ -27,7 +27,7 @@
 ;;
 ;; Another stab at making braces and quotes pair like in
 ;; TextMate:
-;; 
+;;
 ;; * Opening braces/quotes are autopaired;
 ;; * Closing braces/quotes are autoskipped;
 ;; * Backspacing an opening brace/quote autodeletes its adjacent pair.
@@ -154,7 +154,7 @@
 ;; * Quote pairing/skipping inside comments is not perfect...
 ;; * Autopair is perfectly compatible with `delete-selection-mode'. To
 ;;   do so, add the following to your .emacs.
-;; 
+;;
 ;;   (put 'autopair-insert-opening 'delete-selection t)
 ;;   (put 'autopair-skip-close-maybe 'delete-selection t)
 ;;   (put 'autopair-insert-or-skip-quote 'delete-selection t)
@@ -198,7 +198,7 @@ It's a Common-lisp-style even-numbered property list, each pair
 of elements being of the form (TYPE , PAIRS). PAIRS is a mixed
 list whose elements are cons cells, which look like cells look
 like (OPENING . CLOSING). Autopair pairs these like
-parenthesis. 
+parenthesis.
 
 TYPE can be one of:
 
@@ -292,7 +292,7 @@ list, or call it from your handlers.")
 (defvar autopair-handle-wrap-action-fns '()
   "Autopair wrap handlers to run *instead* of the default handler.
 
-Each element is a function taking four arguments (ACTION, PAIR, 
+Each element is a function taking four arguments (ACTION, PAIR,
 POS-BEFORE and REGION-BEFORE), which are the three elements of the
 `autopair-wrap-action' variable, which see.
 
@@ -431,7 +431,7 @@ A list of four elements is returned:
                               (key-binding fallback-keys))))
     (when autopair-autowrap
       (autopair-set-wrapping-action))
-    
+
     (setq this-original-command beyond-cua)
     ;; defer to "paredit-mode" if that is installed and running
     (when (and (featurep 'paredit)
@@ -510,7 +510,7 @@ returned) and uplisting stops there."
     (error nil)))
 
 ;; interactive commands and their associated predicates
-;; 
+;;
 (defun autopair-insert-or-skip-quote ()
   (interactive)
   (let* ((syntax-triplet (autopair-syntax-ppss))
@@ -522,7 +522,7 @@ returned) and uplisting stops there."
          (inside-string (and (eq where-sym :string)
                              (fourth orig-info)))
          (escaped-p (autopair-escaped-p syntax-info))
-         
+
          )
     (cond (;; decides whether to skip the quote...
            ;;
@@ -579,7 +579,7 @@ returned) and uplisting stops there."
 
 (defun autopair-in-unterminated-string-p (autopair-triplet)
   (and (eq last-input-event (fourth (third autopair-triplet)))
-       (condition-case nil (progn (scan-sexps (ninth (third autopair-triplet)) 1) nil) (error t))))     
+       (condition-case nil (progn (scan-sexps (ninth (third autopair-triplet)) 1) nil) (error t))))
 
 
 (defun autopair-insert-opening ()
@@ -677,12 +677,12 @@ returned) and uplisting stops there."
                             ;; `autopair-forward') returned an error.
                             ;; typically we don't want to autopair,
                             ;; unless one of the following occurs:
-                            ;; 
+                            ;;
                             (cond (;; 1. The error is *not* of type "containing
                                    ;;    expression ends prematurely", which means
                                    ;;    we're in the "too-many-openings" situation
                                    ;;    and thus want to autopair.
-                                   (not (string-match "prematurely" (second err)))  
+                                   (not (string-match "prematurely" (second err)))
                                    t)
                                   (;; 2. We stopped at a closing parenthesis. Do
                                    ;; autopair if we're in a mixed parens situation,
@@ -693,14 +693,14 @@ returned) and uplisting stops there."
                                    ;; also different from the expected. The second
                                    ;; `scan-lists' places point at the closing of the
                                    ;; last list we forwarded over.
-                                   ;; 
+                                   ;;
                                    (condition-case err
                                        (prog1
                                            (eq (char-after (scan-lists (point) -1 0))
                                                last-input-event)
                                          (goto-char (scan-lists (point) -1 -1)))
                                      (error t))
-                                   
+
                                    (or
                                     ;; mixed () ] for input (, yes autopair
                                     (not (eq expected-closing (char-after (third err))))
@@ -735,7 +735,7 @@ returned) and uplisting stops there."
                (message "[autopair] error running `autopair-handle-wrap-action-fns', switching autopair off")
                (autopair-mode -1))))
     (setq autopair-wrap-action nil))
-  
+
   (when (and autopair-action
              (notany #'null autopair-action))
     (condition-case err

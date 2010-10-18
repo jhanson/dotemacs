@@ -29,3 +29,9 @@
 
 ;; usually bound to M-SPC which is taken by OSX
 (global-set-key (kbd "M-m") 'just-one-space)
+
+(defun switch-to-previous-buffer()
+  "Goes to the last buffer"
+  (interactive)
+  (switch-to-buffer (other-buffer)))
+(global-set-key (kbd "\C-q") 'switch-to-previous-buffer)

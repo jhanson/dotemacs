@@ -6,6 +6,7 @@
 ;; cpy files as python (stupid plone)
 (setq auto-mode-alist (cons '("\\.cpy$" . python-mode) auto-mode-alist))
 
+
 ;; all of this stuff automatically cleans up files and turns
 ;; tabs to spaces when i save
 (defun untabify-buffer ()
@@ -22,8 +23,8 @@
   "Hooks which run on file write for programming modes"
   (prog1 nil
     (set-buffer-file-coding-system 'utf-8-unix)
-    (untabify-buffer)
-    (delete-trailing-whitespace)))
+    (untabify-buffer)))
+    ;;(delete-trailing-whitespace)))
 
 (defun ws ()
   "Make sure there is a space after every comma"
@@ -62,20 +63,39 @@
   (goto-char (point-max)))
 (global-set-key (kbd "\C-c 6") 'switch-to-zope)
 
+(defun switch-to-jetty ()
+  "Switchs to my zope.output file, where i keep my zope instance"
+  (interactive)
+  (switch-to-buffer "jetty.out")
+  (goto-char (point-max)))
+(global-set-key (kbd "\C-c 2") 'switch-to-jetty)
+
+
 (defun switch-to-zendmd ()
   (interactive)
-  (switch-to-buffer "zendmd.out")
-  (goto-char (point-max)))
+  (if (get-buffer "zendmd.out")
+      (progn
+        (switch-to-buffer "zendmd.out")
+        (goto-char (point-max)))
+    (message "zendmd.out doesn't exist")))
 (global-set-key (kbd "\C-c 1") 'switch-to-zendmd)
 
 (defun zen-goto-sandbox ()
-  (interactive)
   "Goes to the shell and cd's into the sandbox directory"
+  (interactive)
   (shell)
   (goto-char (point-max))
   (insert (concat "cd " main-sandbox))
   (comint-send-input))
 (global-set-key (kbd "\C-c 3") 'zen-goto-sandbox)
+
+(defun switch-to-irc ()
+  "Goes to the irc session, "
+  (interactive)
+  (if (get-buffer "#zenoss")
+      (switch-to-buffer "#zenoss")
+    (message "#zenoss does not exist")))
+(global-set-key (kbd "\C-c 4") 'switch-to-irc)
 
 (defun restart-zope ()
   "Restarts your zope server and takes you to the output.
@@ -184,7 +204,7 @@ dev/sandbox/3.0Products) and will restart zope "
   (progn
     (let ((current-svn-url (svn-current-project)))
       (browse-url  (replace-regexp-in-string "svn/" "trac/log/" current-svn-url)))))
- (global-set-key "\C-xvf" 'svn-browse-change-log)g
+ (global-set-key "\C-xvf" 'svn-browse-change-log)
 
 (defun svn-project-diff()
   "Shows me the differences in my current sandbox"
