@@ -3,8 +3,6 @@
 (add-to-list 'load-path "~/emacs")
 (add-to-list 'load-path "~/.emacs.d/")
 
-(defvar load-extra-libraries nil "Whether or not we want to load a lot of unecessary, but cool emacs libraries")
-
 (load "funcs.el")
 (load "environment.el")
 (load "libraries.el")
@@ -14,7 +12,7 @@
 (load "python-config.el")
 (load "javascript-config.el")
 (load "java-config.el")
-
+(load "erlang-config.el")
 ;; always start with a shell
 (shell)
 
@@ -38,4 +36,4 @@
  )
 
 
-(put 'narrow-to-page 'disabled nil)
+
