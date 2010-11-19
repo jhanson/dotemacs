@@ -110,7 +110,7 @@
 ;; set the color theme
 (require 'color-theme)
 (load-file "~/emacs/color-theme-blackboard.el")
-(color-theme-tangotango)
+(color-theme-blackboard)
 
 ;; i like blinking cursors
 (blink-cursor-mode t)

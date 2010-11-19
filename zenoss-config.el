@@ -23,8 +23,8 @@
   "Hooks which run on file write for programming modes"
   (prog1 nil
     (set-buffer-file-coding-system 'utf-8-unix)
-    (untabify-buffer)))
-    ;;(delete-trailing-whitespace)))
+    (untabify-buffer)
+    (delete-trailing-whitespace)))
 
 (defun ws ()
   "Make sure there is a space after every comma"
@@ -56,46 +56,47 @@
 (add-hook 'js2-mode-hook 'progmodes-hooks)
 
 ;; zope functions
+(defun quick-switch-to-buffer (name)
+  (if (get-buffer name)
+      (progn
+        (switch-to-buffer name)
+        (goto-char (point-max)))
+    (message (concat name  " doesn't exist"))))
+
 (defun switch-to-zope ()
   "Switchs to my zope.output file, where i keep my zope instance"
   (interactive)
-  (switch-to-buffer "zope.out")
-  (goto-char (point-max)))
+  (quick-switch-to-buffer "zope.out"))
+
 (global-set-key (kbd "\C-c 6") 'switch-to-zope)
 
-(defun switch-to-jetty ()
-  "Switchs to my zope.output file, where i keep my zope instance"
+(defun switch-to-zep ()
+  "switches to zep"
   (interactive)
-  (switch-to-buffer "jetty.out")
-  (goto-char (point-max)))
-(global-set-key (kbd "\C-c 2") 'switch-to-jetty)
+  (quick-switch-to-buffer "zep.out"))
+(global-set-key (kbd "\C-c 2") 'switch-to-zep)
 
+(defun switch-to-zenhub ()
+  "switches to zenhub"
+  (interactive)
+  (quick-switch-to-buffer "zenhub.out"))
+(global-set-key (kbd "\C-c 3") 'switch-to-zenhub)
 
 (defun switch-to-zendmd ()
   (interactive)
-  (if (get-buffer "zendmd.out")
-      (progn
-        (switch-to-buffer "zendmd.out")
-        (goto-char (point-max)))
-    (message "zendmd.out doesn't exist")))
+  (quick-switch-to-buffer "zendmd.out"))
 (global-set-key (kbd "\C-c 1") 'switch-to-zendmd)
 
-(defun zen-goto-sandbox ()
-  "Goes to the shell and cd's into the sandbox directory"
+(defun switch-to-dsa ()
   (interactive)
-  (shell)
-  (goto-char (point-max))
-  (insert (concat "cd " main-sandbox))
-  (comint-send-input))
-(global-set-key (kbd "\C-c 3") 'zen-goto-sandbox)
+  (quick-switch-to-buffer "dsa.out"))
+(global-set-key (kbd "\C-c 4") 'switch-to-dsa)
 
 (defun switch-to-irc ()
   "Goes to the irc session, "
   (interactive)
-  (if (get-buffer "#zenoss")
-      (switch-to-buffer "#zenoss")
-    (message "#zenoss does not exist")))
-(global-set-key (kbd "\C-c 4") 'switch-to-irc)
+  (quick-switch-to-buffer "#zenoss"))
+(global-set-key (kbd "\C-c 9") 'switch-to-irc)
 
 (defun restart-zope ()
   "Restarts your zope server and takes you to the output.
@@ -119,7 +120,9 @@ This assumes that you have your zope instance in a shell file called zope.out"
 (defvar trac-public-url "http://dev.zenoss.org/trac/ticket/" "Where tickets are on the public trac")
 (defvar trac-svn-log "http://dev.zenoss.org/trac/log/sandboxen/jhanson/")
 (defvar svn-sandbox-url "http://dev.zenoss.org/svn/sandboxen/jhanson/")
-(defvar main-sandbox "~/dev/sandbox/Products")
+(defvar main-sandbox "~/dev/sandbox/trunk")
+(defvar svn-enterprise-url "http://dev.zenoss.com/svnint/sandboxen/jhanson/")
+(defvar svn-enterprise-sandbox "~/dev/sandbox/enterprise_zenpacks")
 
 (defun zen-view-revisions ()
   "Browse to the svn log revision changes of the given word"
@@ -148,7 +151,7 @@ This assumes that you have your zope instance in a shell file called zope.out"
   "Will copy svn trunk to the new branch name and switch the dev/sandbox to the new checkout"
   (interactive "sName of Sandbox: ")
   (let* ((new-trunk (concat svn-sandbox-url name))
-         (command (concat "svn cp -m \"copying trunk\" http://dev.zenoss.org/svn/trunk/Products " new-trunk)))
+         (command (concat "svn cp -m \"copying trunk\" http://dev.zenoss.org/svn/trunk/ " new-trunk)))
     (progn
       (shell-command command "svn-output")
       (svn-switch-sandboxen name)
@@ -156,6 +159,53 @@ This assumes that you have your zope instance in a shell file called zope.out"
       (zen-switch-to-sandbox))))
 
 (global-set-key "\C-xvn" 'svn-create-new-sandbox)
+
+
+;; new enterprise
+(defun svn-create-new-enterprise(name)
+  "Will copy svn enterprise to a new branch and switch to it"
+  (interactive "sName of Enterprise Sandbox: ")
+  (let* ((new-trunk (concat svn-enterprise-url name))
+         (command (concat "svn cp -m \"copying trunk\" http://dev.zenoss.com/svnint/trunk/enterprise/zenpacks " new-trunk)))
+    (progn
+      (shell-command command "svn-output")
+      (shell-command (concat "svn switch "  new-trunk " ~/dev/sandbox/enterprise_zenpacks")))))
+(global-set-key "\C-xve" 'svn-create-new-enterprise)
+
+(defun svn-merge-enterprise()
+  "Preps merging enterprise to trunk"
+  (interactive)
+  (progn
+    (shell-command (concat "svn info " svn-enterprise-sandbox) "current-project-output")
+    (switch-to-buffer "current-project-output")
+    ;; go to the svn output, find the string and copy it to the buffer
+    (beginning-of-buffer)
+    (search-forward "URL: http")
+    (backward-word 1)
+    (kill-line )
+    (kill-buffer "current-project-output")
+    ;; message the most recent thing we killed (the url of our svn)
+    (let ((sandbox-url (car kill-ring-yank-pointer)))
+      ;; get the revision
+      (shell-command (concat "svn log " sandbox-url " | head -n 1000") "svn-log-output")
+      (switch-to-buffer "svn-log-output")
+      (beginning-of-buffer)
+      ;; phrase i always use to create a branch
+      (search-forward "copying trunk")
+      ;; go back two lines to the revision number
+      (back-to-indentation)
+      (previous-line 2)
+      ;; don't need the r in the revision number
+      (forward-char 1)
+      (copy-word 1)
+      (kill-buffer "svn-log-output")
+      ;; switch to trunk
+      (shell-command "svn switch http://dev.zenoss.com/svnint/trunk/enterprise/zenpacks ~/dev/sandbox/enterprise_zenpacks")
+      (shell)
+      (insert "cd ~/dev/sandbox/enterprise_zenpacks")
+      (comint-send-input)
+      (insert (concat "svn merge -r " (car kill-ring-yank-pointer) ":HEAD " sandbox-url))
+      )))
 
 (defun svn-list-projects ()
   "Outputs a list of all the svn sandboxen I have"
@@ -166,20 +216,13 @@ This assumes that you have your zope instance in a shell file called zope.out"
   "Will switch my Products to my sandbox (always checked out in
 dev/sandbox/Products) and will restart zope "
   (interactive)
-  (shell-command "rm ~/zenoss/Products && ln -s ~/dev/sandbox/Products/ ~/zenoss/Products")
+  (shell-command "rm ~/zenoss/Products && ln -s ~/dev/sandbox/trunk/Products/ ~/zenoss/Products")
   (restart-zope))
 
 (defun zen-switch-to-trunk ()
   "Changes the zenoss/Products to trunk and restarts zope"
   (interactive)
-  (shell-command "rm ~/zenoss/Products && ln -s ~/dev/Products/ ~/zenoss/Products")
-  (restart-zope))
-
-(defun zen-switch-to-3.0 ()
-  "Will switch my Products to my 3.0 branch (always checked out in
-dev/sandbox/3.0Products) and will restart zope "
-  (interactive)
-  (shell-command "rm ~/zenoss/Products && ln -s ~/dev/sandbox/3.0/Products/ ~/zenoss/Products")
+  (shell-command "rm ~/zenoss/Products && ln -s ~/dev/trunk/Products/ ~/zenoss/Products")
   (restart-zope))
 
 (defun zen-reload-tags ()
@@ -259,7 +302,7 @@ this does not actually execute the command"
       (copy-word 1)
       (kill-buffer "svn-log-output")
       (shell)
-      (insert "cd ~/dev/Products")
+      (insert "cd ~/dev/trunk")
       (comint-send-input)
       (delete-other-windows)
       (insert (concat "svn merge -r " (car kill-ring-yank-pointer) ":HEAD " current-svn-url " .")))))
@@ -282,7 +325,7 @@ Products.Zuul etc "
          (zenpack  (nth 6 pieces)))
     (if (string-match "ZenPack" zenpack)
         zenpack
-      (concat (nth 5 pieces) "." (nth 6 pieces)))))
+      (concat (nth 6 pieces) "." (nth 7 pieces)))))
 
 (defvar last-single-unit-test-command "")
 
@@ -320,3 +363,58 @@ in, doesn't remember previous test"
         (kill-buffer "*Async Shell Command*"))
   (let ((package (get-current-python-package)))
     (shell-command (concat "runtests " package "&"))))
+
+
+;; queue shortcuts
+(defun zenoss-show-queues ()
+  "Runs show queues"
+  (interactive)
+  (let ((queue-command "/Users/joseph/Cellar/rabbitmq/2.1.0/sbin/rabbitmqctl"))
+    (shell-command (concat queue-command " list_queues -p /zenoss"))))
+(global-set-key "\C-cq" 'zenoss-show-queues)
+
+
+(defun zenoss-startup-shells ()
+  "Sets up the various shells that I usually have running at any given point."
+  (interactive)
+  (let ((shell-list '( "zope.out" "zep.out" "zendmd.out" "dsa.out" "zenhub.out")))
+    (mapcar
+     (lambda (shell-name)
+       (if (not (get-buffer shell-name))
+             (progn
+               (shell)
+               (rename-buffer shell-name)))) shell-list)
+    ;; get zope up and running
+    (switch-to-zope)
+    ;; incase already running
+    (comint-interrupt-subjob)
+    (insert "cd ~/dev/sandbox/trunk/Products")
+    (comint-send-input)
+    (insert "runzope")
+    (comint-send-input)
+
+    ;; get zep up and running
+    (switch-to-zep)
+    (comint-interrupt-subjob)
+    (insert "cd ~/dev/sandbox/zep")
+    (comint-send-input)
+    (insert "mvn jetty:run")
+    (comint-send-input)
+
+    ;; zenhub
+    (switch-to-zenhub)
+    (comint-interrupt-subjob)
+    (insert "zenhub run -c -v10")
+    (comint-send-input)
+
+    ;; dsa
+    (quick-switch-to-buffer "dsa.out")
+    (comint-interrupt-subjob)
+    (insert "mvn jetty:run")
+    (comint-send-input)
+
+    ;; zendmd
+    (switch-to-zendmd)
+    (insert "zendmd")
+    (comint-send-input)
+    ))

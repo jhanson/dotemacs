@@ -35,3 +35,7 @@
   (interactive)
   (switch-to-buffer (other-buffer)))
 (global-set-key (kbd "\C-q") 'switch-to-previous-buffer)
+
+;; delete pair (will delete matching "" or ())
+(global-set-key "\M-sd" 'delete-pair)
+(global-set-key "\M-sf" 'flyspell-correct-word-before-point)

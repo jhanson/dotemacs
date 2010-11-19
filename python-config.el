@@ -34,4 +34,5 @@
              ))
 
 ;; make trailing whitespace ugly
-(setq-default show-trailing-whitespace nil)
+(setq-default show-trailing-whitespace t)
+

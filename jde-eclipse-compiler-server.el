@@ -28,7 +28,7 @@
 
 
 ;;; Commentary:
-;; 
+;;
 ;; * Eclipse java compiler
 ;;
 ;; This library adds the option of using the eclipse java compiler as
@@ -89,7 +89,7 @@
 
 ;;  Set for Current Session Save for Future Sessions
 ;;  Reset Reset to Saved Erase Customization   Finish
-;; 
+;;
 ;; jde-compiler: Hide Value
 ;; '(("eclipse java compiler server" "/org.eclipse.jdt.core_3.0.0/org.eclipse.jdt.core_3.1.1.jar"))
 ;;    State: this option has been set and saved.  (mismatch)
@@ -118,9 +118,9 @@
 ;; 1) jde-ecj-flymake-init : This is the simple, robust and painfully slow
 ;;    method, in which flymake forks a new jvm process each time it
 ;;    decides to error check the buffer.
-;; 
+;;
 ;; To use this funtion set the java line in
-;; `flymake-allowed-file-name-masks' to 
+;; `flymake-allowed-file-name-masks' to
 ;; (\"\\.java\\'\" jde-ecj-flymake-init jde-ecj-flymake-cleanup)"
 
 ;; 2) jde-ecj-server-flymake-init: This method involves flymake
@@ -146,7 +146,7 @@
 ;; the faces `flymake-errline' and `flymake-warnline' to change this
 ;; behavior. Red and yellow underlines for errors and warnings work
 ;; well:
-;; 
+;;
 ;; (custom-set-faces
 ;; ...
 ;;  '(flymake-errline ((((class color)) (:underline "OrangeRed"))))
@@ -156,7 +156,7 @@
 ;;
 ;; ChangeLog
 ;; 0.3 - bug fixes from James Ahlborn <jahlborn@healthmarketscience.com>
-;;       deleted unnecessary \n at the end of a bsh-eval string that was causing bsh-buffer-eval to fail occasionally. 
+;;       deleted unnecessary \n at the end of a bsh-eval string that was causing bsh-buffer-eval to fail occasionally.
 ;; 0.2 - Eclipse 3.2 and later support the -Xemacs option which makes
 ;;       it possible to the hook eclipse compiler into flymake.
 ;; 0.1 - Initial version
@@ -190,7 +190,7 @@ compile.el version by checking if
                     2 3 nil 2 1 (6 compilation-error-face)
                     )
                   compilation-error-regexp-alist))
-      
+
       (setq compilation-error-regexp-alist
             (cons '("----------\n\\([0-9]+. WARNING in \\(.*\\)\n (at line \\([0-9]+\\))\n\\(\\(.*\n\\)+?\\).*^+\n\\(.*\n\\)\\)"
                     2 3 nil 1 1 (6 compilation-warning-face)
@@ -205,70 +205,70 @@ compile.el version by checking if
 
 (defmethod jde-compile-run-server ((this jde-compile-ejc-server))
     (let* ((directory-sep-char ?/)
-	   (args
-	    (append
+       (args
+        (append
              (list
               "-Xemacs"
               "-noExit"
 ;;               "-sourcepath"
 ;;               (mapconcat 'identity (jde-expand-wildcards-and-normalize jde-sourcepath) ":")
               )
-	    (jde-compile-get-args this)))
-	   (source-path
-	    (jde-normalize-path buffer-file-name))
-	   (arg-array (concat "new String[] {\"" source-path "\"")))
-    
+        (jde-compile-get-args this)))
+       (source-path
+        (jde-normalize-path buffer-file-name))
+       (arg-array (concat "new String[] {\"" source-path "\"")))
+
       (if args
-	  (setq arg-array
-		(concat
-		 arg-array
-		 ","
-		 (mapconcat
-		  (lambda (arg)
-		    (concat "\"" arg "\""))
-		  args
-		  ","))))
+      (setq arg-array
+        (concat
+         arg-array
+         ","
+         (mapconcat
+          (lambda (arg)
+            (concat "\"" arg "\""))
+          args
+          ","))))
 
       (setq arg-array (concat arg-array "}"))
-     
-	
+
+
       (save-excursion
-	(set-buffer (oref (oref this buffer) buffer))
+    (set-buffer (oref (oref this buffer) buffer))
 
-	(insert "CompileServer output:\n")
-	(insert "\n")
+    (insert "CompileServer output:\n")
+    (insert "\n")
 
-	(let (flag temp)
-	  (setq temp
-	    (mapconcat
-	     (lambda (x)
-	       (if (and flag
-			jde-compile-option-hide-classpath)
-		   (progn
-		     (setq flag nil)
-		     "...")
-		 (if (not (string= x "-classpath"))
-		     x
-		   (progn
-		     (setq flag t)
-		     x)))) args " "))
+    (let (flag temp)
+      (setq temp
+        (mapconcat
+         (lambda (x)
+           (if (and flag
+            jde-compile-option-hide-classpath)
+           (progn
+             (setq flag nil)
+             "...")
+         (if (not (string= x "-classpath"))
+             x
+           (progn
+             (setq flag t)
+             x)))) args " "))
 
-	  (insert temp " "))
-	(insert source-path "\n"))
+      (insert temp " "))
+    (insert source-path "\n"))
 
       (if (not (jde-bsh-running-p))
-	  (progn
-	    (bsh-launch (oref 'jde-bsh the-bsh))
-	    (bsh-eval (oref 'jde-bsh the-bsh) (jde-create-prj-values-str))))
+      (progn
+        (bsh-launch (oref 'jde-bsh the-bsh))
+        (bsh-eval (oref 'jde-bsh the-bsh) (jde-create-prj-values-str))))
       (bsh-eval (oref 'jde-bsh the-bsh)
                    (format "addClassPath(\"%s\");" (oref this :path)))
       (bsh-buffer-eval
        (oref 'jde-bsh the-bsh)
        (concat
-	(format
+    (format
          "if ((new org.eclipse.jdt.internal.compiler.batch.Main(new java.io.PrintWriter(System.out), new java.io.PrintWriter(System.out), true)).compile(%s)) { print (\"0\");} else {print (\"1\");};"
          arg-array)
-	"\n")
+    "\n")
        (oref this buffer))))
 
 
@@ -305,12 +305,12 @@ and, if jikes is not on the command path of the Emacs
 environment, specify the path of the jikes executable."
   :group 'jde-project
   :type '(list
-	  (radio-button-choice
-	   :format "%t \n%v"
-	   :tag "Compiler type"
+      (radio-button-choice
+       :format "%t \n%v"
+       :tag "Compiler type"
            (item "javac")
-	   (item "javac server")
-	   (list :format "%v"
+       (item "javac server")
+       (list :format "%v"
                  (const "eclipse java compiler server")
                  (file :tag "Path to  ecj.jar (or jdt core jar)"))
            (list :format "%v"
@@ -321,54 +321,54 @@ environment, specify the path of the jikes executable."
 
 (defun jde-compile-get-javac ()
   (let* ((jdk-version (jde-java-version))
-	 (jdk-split-version (split-string jdk-version "[.]"))
-	 (jdk-major-version (nth 0 jdk-split-version))
-	 (jdk-minor-version (nth 1 jdk-split-version))
-	 (compiler
-	  (find-if
-	   (lambda (compiler-x)
-	     (let* ((compiler-split-version (split-string (oref compiler-x :version) "[.]"))
-		    (compiler-major-version (nth 0 compiler-split-version))
-		    (compiler-minor-version (nth 1 compiler-split-version)))
-	       (and
-		(string= jdk-major-version compiler-major-version)
-		(string= jdk-minor-version compiler-minor-version))))
-	   jde-compile-javac-compilers)))
+     (jdk-split-version (split-string jdk-version "[.]"))
+     (jdk-major-version (nth 0 jdk-split-version))
+     (jdk-minor-version (nth 1 jdk-split-version))
+     (compiler
+      (find-if
+       (lambda (compiler-x)
+         (let* ((compiler-split-version (split-string (oref compiler-x :version) "[.]"))
+            (compiler-major-version (nth 0 compiler-split-version))
+            (compiler-minor-version (nth 1 compiler-split-version)))
+           (and
+        (string= jdk-major-version compiler-major-version)
+        (string= jdk-minor-version compiler-minor-version))))
+       jde-compile-javac-compilers)))
     (unless compiler
       (let ((latest-javac (car (last jde-compile-javac-compilers))))
-	(if
-	    (yes-or-no-p
-	     (format "The JDE does not recognize JDK %s javac. Assume JDK %s javac?"
-		     jdk-version (oref latest-javac :version)))
-	    (setq compiler latest-javac))))
+    (if
+        (yes-or-no-p
+         (format "The JDE does not recognize JDK %s javac. Assume JDK %s javac?"
+             jdk-version (oref latest-javac :version)))
+        (setq compiler latest-javac))))
     (if compiler
-	(if (string= (car jde-compiler) "javac server")
-	    (oset compiler :use-server-p t)
-	  (progn
-	    (oset compiler :use-server-p nil)
-	    (oset compiler
-		  :path
-		  (let ((compiler-path
+    (if (string= (car jde-compiler) "javac server")
+        (oset compiler :use-server-p t)
+      (progn
+        (oset compiler :use-server-p nil)
+        (oset compiler
+          :path
+          (let ((compiler-path
                          (if (listp (car jde-compiler))
                              (substitute-in-file-name (nth 1 (car jde-compiler)))
                            "")))
-		    (if (string= compiler-path "")
-			(setq compiler-path (jde-get-jdk-prog 'javac))
-		      (if (file-exists-p compiler-path)
-			  compiler-path
-			(error (format "Invalid compiler path %s"
-				       compiler-path)))))))))
+            (if (string= compiler-path "")
+            (setq compiler-path (jde-get-jdk-prog 'javac))
+              (if (file-exists-p compiler-path)
+              compiler-path
+            (error (format "Invalid compiler path %s"
+                       compiler-path)))))))))
     compiler))
-	   
-	     
+
+
 (defun jde-compile-get-jikes ()
   (let ((compiler-path
          (substitute-in-file-name (nth 1 (car jde-compiler)))))
 
     (if (string= compiler-path "")
-	(if (executable-find "jikes")
-	    (setq compiler-path "jikes")
-	  (error "Cannot find jikes"))
+    (if (executable-find "jikes")
+        (setq compiler-path "jikes")
+      (error "Cannot find jikes"))
       )
 
   (jde-compile-jikes
@@ -430,7 +430,8 @@ To use this funtion set the java line in `flymake-allowed-file-name-masks' to
                            'jde-ecj-create-temp-file))
              (local-file  (file-relative-name
                            temp-file
-                           (file-name-directory buffer-file-name))))		
+                           (file-name-directory buffer-file-name))))
+
         (list "java" (append  (jde-compile-classpath-arg (jde-compile-get-the-compiler))
                               (list "-jar" (oref  (jde-compile-get-ejc) path) "-Xemacs")
                               jde-ecj-command-line-args
@@ -459,7 +460,7 @@ orginal file."
   (let* ((true-dir-name (file-truename dir-name))
          (true-tmp-dir (file-truename (flymake-get-temp-dir))))
     (when (equal true-tmp-dir (substring true-dir-name 0 (length true-tmp-dir)))
-      (while (not (equal true-tmp-dir true-dir-name)) 
+      (while (not (equal true-tmp-dir true-dir-name))
         (mapcar 'jde-ecj-safe-delete-file (directory-files true-dir-name t))
         (flymake-safe-delete-directory true-dir-name)
         (setq true-dir-name (file-name-directory (directory-file-name true-dir-name)))))))
@@ -519,7 +520,7 @@ To use this funtion set the java line in `flymake-allowed-file-name-masks' to
                                        ",")))
 
       (setq arg-array (concat arg-array "\"" temp-file "\"}"))
-        
+
 
       (list (cons (oref (oref  (oref 'jde-bsh the-bsh) buffer) process) ;; server process
                   "jde-eclipse-compiler-server-done")  ;; output end marker
@@ -547,7 +548,7 @@ the end of output marker `flymake-process-server-end-marker' in
 the output stream."
   (let* ((source-buffer     (process-buffer process))
          (cleanup-f         (flymake-get-cleanup-function (buffer-file-name source-buffer))))
-    
+
     (flymake-log 2 "server process %d \"exited\" with output %s" (process-id process) output)
     (condition-case err
         (progn
@@ -559,7 +560,7 @@ the output stream."
           (setq flymake-processes (delq process flymake-processes))
           (set-process-buffer process flymake-server-process-saved-buffer)
           (set-process-filter process flymake-server-process-saved-filter)
-            
+
           (when (buffer-live-p source-buffer)
             (with-current-buffer source-buffer
 
@@ -575,15 +576,15 @@ the output stream."
 ;;
 ;; flymake modifications to allow it to converse with a running
 ;; process instead of always starting a new "make" process
-;; 
+;;
 (defun jde-ecj-flymake-start-syntax-check-process (cmd args dir)
   "Start syntax check process."
   (let* ((process nil))
     (condition-case err
-	(progn
-	  (when dir
-	    (let ((default-directory dir))
-	      (flymake-log 3 "starting process on dir %s" default-directory)))
+    (progn
+      (when dir
+        (let ((default-directory dir))
+          (flymake-log 3 "starting process on dir %s" default-directory)))
 
           (cond
            ((and (listp cmd) (processp (car cmd)))
@@ -602,24 +603,24 @@ the output stream."
                          (process-id process) (process-command process)
                          default-directory)))
 
-	  (set-process-filter process 'flymake-process-filter)
+      (set-process-filter process 'flymake-process-filter)
           (push process flymake-processes)
 
           (setq flymake-is-running t)
           (setq flymake-last-change-time nil)
           (setq flymake-check-start-time (flymake-float-time))
 
-	  (flymake-report-status nil "*")
+      (flymake-report-status nil "*")
 
-	  process)
+      process)
       (error
        (let* ((err-str (format "Failed to launch syntax check process  with args : %s"
-			       (error-message-string err)))
-	      (source-file-name buffer-file-name)
-	      (cleanup-f        (flymake-get-cleanup-function source-file-name)))
-	 (flymake-log 0 err-str)
-	 (funcall cleanup-f)
-	 (flymake-report-fatal-status "PROCERR" err-str))))))
+                   (error-message-string err)))
+          (source-file-name buffer-file-name)
+          (cleanup-f        (flymake-get-cleanup-function source-file-name)))
+     (flymake-log 0 err-str)
+     (funcall cleanup-f)
+     (flymake-report-fatal-status "PROCERR" err-str))))))
 
 
 (defun jde-ecj-flymake-process-filter (process output)

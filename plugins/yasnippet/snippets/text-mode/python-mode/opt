@@ -1,0 +1,5 @@
+#name : parser add option
+# --
+parser.add_option("${1:optionletter}", "--${2:name}",
+                  dest="$2", default='${3:default}',
+                  help="${4:description}")

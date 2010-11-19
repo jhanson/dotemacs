@@ -6,7 +6,6 @@
 (autoload 'js2-mode "js2" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 
-
 ;; jslint settings
 (defvar jslint-global-vars "/*global Ext, Zenoss, _t*/")
 (defvar jslint-global-config "/*jslint browser:true, devel:true, nomen:false, white:false, onevar:true, eqeqeq:false, plusplus:false*/"
@@ -79,14 +78,13 @@ to run in flymake mode so I think this is a better option"
              (local-set-key "\M-p" 'backward-paragraph)
              ))
 ;; for jscomint, tells it where my js file is
-(setq inferior-js-program-command "java org.mozilla.javascript.tools.shell.Main")
-;;(setq inferior-js-program-command "v8")
+;; (setq inferior-js-program-command "java org.mozilla.javascript.tools.shell.Main")
+(setq inferior-js-program-command "v8")
 
 ;; list of my JS libraries I need to load by default.
 (defvar js-comint-libraries  '("/Users/joseph/Library/JavaScript/env.js",
     "/Users/joseph/zenoss/lib/python/zenoss/extjs/src/ext-all-debug.js",
     "/Users/joseph/zenoss/lib/python/zenoss/extjs/src/adapters/ext/ext-base-debug.js"))
-
 
 (defun js-comint-load-libraries ()
   "iterate through each JS library i need open and loads it in the running comint shell
