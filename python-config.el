@@ -24,6 +24,39 @@
 (load "python-pylint.el")
 (load "python-pep8.el")
 
+
+;; make trailing whitespace ugly
+(setq-default show-trailing-whitespace t)
+
+;; open directory returned from python package
+(defun open-python-directory (python-package)
+  "Will attempt to open the directory from the python import"
+  (interactive "sPython Package: ")
+  (let ((directory nil))
+    (if (string-match "Products." python-package)
+        (setq directory (concat main-sandbox "/" (mapconcat 'identity (split-string python-package "\\.")  "/"))))
+    ;; most likely enterprise
+    (if (string-match "ZenPacks." python-package)
+        (progn
+          ;; TODO
+          ;; split by /
+          ;; join the first three (zenpack name)
+          ;; then add the mapconcat crap
+        (setq directory (concat svn-enterprise-sandbox "/" python-package "/" (mapconcat 'identity (split-string python-package "\\.")  "/"))))
+
+    ;; find out if it is a directory
+    (if (file-exists-p (concat directory ".py"))
+        (find-file (concat directory ".py")))
+    (if (file-exists-p directory)
+        (find-file  directory)
+      (message (concat directory " does not exist")))
+      )))
+
+(defun open-python-directory-from-region (start end)
+  "opens the directory of the package you have highlighted"
+  (interactive "r")
+  (open-python-directory (buffer-substring start end)))
+
 (add-hook 'python-mode-hook '(lambda ()
              (drag-stuff-mode t)
              (flyspell-prog-mode)
@@ -31,8 +64,7 @@
              (define-key python-mode-map "\C-ci" 'python-pep8)
              (define-key python-mode-map "\M-n" 'forward-paragraph)
              (define-key python-mode-map "\M-p" 'backward-paragraph)
+             (define-key python-mode-map "\C-cp" 'open-python-directory-from-region)
              ))
 
-;; make trailing whitespace ugly
-(setq-default show-trailing-whitespace t)
-
+;; set up zendmd as a comint inferior process

@@ -83,9 +83,8 @@
 ;; (setq mo-git-blame-git-executable "/usr/local/git/bin/git")
 
 ;; drag stuff
-(load-file "~/emacs/drag-stuff.el")
-(drag-stuff-mode t)
-
+(require 'drag-stuff)
+(drag-stuff-global-mode t)
 
 (load-file "~/.emacs.d/auto-complete.el")
 (load-file "~/.emacs.d/auto-complete-config.el")
@@ -111,5 +110,11 @@ functions, and some types.  It also provides indentation that is
 \(fn)" t nil)
 
 (add-to-list (quote auto-mode-alist) (cons "\\.go$" (function go-mode)))
+
+;; actionscript mode
+(autoload (quote actionscript-mode) "actionscript-mode" "actionscript mode" t nil)
+(add-to-list (quote auto-mode-alist) (cons "\\.as$" (function actionscript-mode)))
+(add-to-list (quote auto-mode-alist) (cons "\\.mxml$" (function actionscript-mode)))
+
 (put 'narrow-to-page 'disabled nil)
 

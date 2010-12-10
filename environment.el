@@ -13,7 +13,7 @@
         )
 
 (setenv "PYTHONPATH"
-        "/Users/joseph/zenoss/lib/python"
+        "/Users/joseph/zenoss/lib/python:/Users/joseph/dev/sandbox/trunk/Products"
         )
 (setenv "JAVA_HOME"
         "/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Home"
@@ -181,3 +181,5 @@
 ;; display time mode (shows time and load in the menu bar)
 (display-time-mode 1)
 
+;; always show rainbow mode in css mode
+(add-hook 'css-mode-hook 'rainbow-mode)

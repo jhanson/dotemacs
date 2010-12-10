@@ -262,6 +262,20 @@ dev/sandbox/Products) and will restart zope "
     (delete-other-windows)))
  (global-set-key "\C-xvo" 'svn-project-diff)
 
+(defun svn-enterprise-diff()
+  "Shows me the differences in my current enterprise sandbox"
+  (interactive)
+  (progn
+    (maybe-kill-buffer "*VC-DIFF-PROJECT-ENTERPRISE*")
+    (shell-command
+     (concat "svn diff " svn-enterprise-sandbox)
+     "*VC-DIFF-PROJECT-ENTERPRISE*")
+    (switch-to-buffer "*VC-DIFF-PROJECT-ENTERPRISE*")
+    (diff-mode)
+    ;; fullscreen it
+    (delete-other-windows)))
+ (global-set-key "\C-xvt" 'svn-enterprise-diff)
+
 (defun svn-current-project ()
   "Messages a string of what the current svn project URL is, also saves it as the most recent kill"
   (interactive)
@@ -364,16 +378,6 @@ in, doesn't remember previous test"
   (let ((package (get-current-python-package)))
     (shell-command (concat "runtests " package "&"))))
 
-
-;; queue shortcuts
-(defun zenoss-show-queues ()
-  "Runs show queues"
-  (interactive)
-  (let ((queue-command "/Users/joseph/Cellar/rabbitmq/2.1.0/sbin/rabbitmqctl"))
-    (shell-command (concat queue-command " list_queues -p /zenoss"))))
-(global-set-key "\C-cq" 'zenoss-show-queues)
-
-
 (defun zenoss-startup-shells ()
   "Sets up the various shells that I usually have running at any given point."
   (interactive)
@@ -385,36 +389,44 @@ in, doesn't remember previous test"
                (shell)
                (rename-buffer shell-name)))) shell-list)
     ;; get zope up and running
-    (switch-to-zope)
-    ;; incase already running
-    (comint-interrupt-subjob)
-    (insert "cd ~/dev/sandbox/trunk/Products")
-    (comint-send-input)
-    (insert "runzope")
-    (comint-send-input)
+    (switch-to-zope)))
 
-    ;; get zep up and running
-    (switch-to-zep)
-    (comint-interrupt-subjob)
-    (insert "cd ~/dev/sandbox/zep")
-    (comint-send-input)
-    (insert "mvn jetty:run")
-    (comint-send-input)
+(defun get-guid-in-zendmd (start end)
+  "Looks up the guid that is highlighted by switching to the dmd output and eval'ing it there"
+  (interactive "r")
+  (let ((guid (buffer-substring start end)))
+    (if (get-buffer "zendmd.out")
+        (progn
+          (switch-to-buffer "zendmd.out")
+          (goto-char (point-max))
+          (insert (concat "lookupGuid(\"" guid "\")"))
+          (comint-send-input)
+          (sleep-for .5)
+          (goto-char (point-max))
+          ;; message the result
+          (previous-line 2)
+          (back-to-indentation)
+          (copy-line)
+          (message (car kill-ring-yank-pointer))
+          (switch-to-buffer (other-buffer))
+          ))))
 
-    ;; zenhub
-    (switch-to-zenhub)
-    (comint-interrupt-subjob)
-    (insert "zenhub run -c -v10")
-    (comint-send-input)
+;; queue shortcuts
+(defun zenoss-show-queues ()
+  "Runs show queues"
+  (interactive)
+  (let ((queue-command "/Users/joseph/Cellar/rabbitmq/2.1.0/sbin/rabbitmqctl"))
+    (shell-command (concat queue-command " list_queues -p /zenoss"))))
+(global-set-key "\C-cq" 'zenoss-show-queues)
 
-    ;; dsa
-    (quick-switch-to-buffer "dsa.out")
-    (comint-interrupt-subjob)
-    (insert "mvn jetty:run")
-    (comint-send-input)
+(defun zenoss-dump-queues ()
+  "Runs show queues"
+  (interactive)
+  (let ((queue-buffer-name "*queue-output*"))
+    (if (get-buffer queue-buffer-name)
+        (kill-buffer queue-buffer-name))
+    (shell-command "zenqdump&" queue-buffer-name)
+    (switch-to-buffer-other-window queue-buffer-name)))
+(global-set-key "\C-cw" 'zenoss-dump-queues)
 
-    ;; zendmd
-    (switch-to-zendmd)
-    (insert "zendmd")
-    (comint-send-input)
-    ))
+

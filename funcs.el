@@ -177,3 +177,13 @@ This always runs on the current buffer"
   (other-window 1))
 
 (global-set-key (kbd "C-c s") 'swap-windows)
+
+(defun google-query (search-term)
+  "Queries google for a term in your browser of choice"
+  (interactive "sGoogle Query: ")
+  (let ((google-url "http://www.google.com/search?hl=en&q="))
+    (browse-url (concat google-url search-term))))
+(global-set-key (kbd "C-c g") 'google-query)
+
+;; emacs lisp watch command (runs a function every X seconds)
+;; and a way to kill it, probably would be a little buffer like itunes
