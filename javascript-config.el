@@ -147,7 +147,7 @@ This assumes the shell to be open and is called *js*"
   (set (make-local-variable 'indent-line-function) 'my-js2-indent-function)
   (define-key js2-mode-map [(return)] 'newline-and-indent)
   (define-key js2-mode-map [(backspace)] 'c-electric-backspace)
-  (define-key js2-mode-map [(control d)] 'c-electric-delete-forward)
+  (define-key js2-mode-map [(control d)] 'c-electric-delete-forward))
 
 ;; Add the hook so this is all loaded when JS2-mode is loaded
 (add-hook 'js2-mode-hook 'my-js2-mode-hook)
@@ -160,16 +160,16 @@ This assumes the shell to be open and is called *js*"
 (defun javascript-moz-setup () (moz-minor-mode 1))
 
 ;; reload current page function
-(defun maybe-reload-page ()
+(defun refresh-browser-page ()
   "If you have the mozrepl running this will reload the page
-from emacs, this is only useful to me in js mode"
+from emacs, otherwise it will prompt you"
   (interactive)
-  (if (get-buffer "*MozRepl*")
-      (progn
-        (comint-send-string (inferior-moz-process)
-                      "content.location.reload();"))
-    (message "must start mozrepl before reloading the page")))
-(global-set-key  "\C-cu" 'maybe-reload-page)
+  ;; will start the process if it is not ready
+  (comint-send-string (inferior-moz-process)
+                      "content.location.reload();")
+  (message "refreshed page"))
+
+(global-set-key  "\C-cu" 'refresh-browser-page)
 
 ;; jslint compile mode (like pep8)
 

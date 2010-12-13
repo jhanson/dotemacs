@@ -82,10 +82,10 @@
   (quick-switch-to-buffer "zenhub.out"))
 (global-set-key (kbd "\C-c 3") 'switch-to-zenhub)
 
-(defun switch-to-zendmd ()
-  (interactive)
-  (quick-switch-to-buffer "zendmd.out"))
-(global-set-key (kbd "\C-c 1") 'switch-to-zendmd)
+;; (defun switch-to-zendmd ()
+;;   (interactive)
+;;   (quick-switch-to-buffer "zendmd.out"))
+;; (global-set-key (kbd "\C-c 1") 'switch-to-zendmd)
 
 (defun switch-to-dsa ()
   (interactive)
@@ -381,7 +381,7 @@ in, doesn't remember previous test"
 (defun zenoss-startup-shells ()
   "Sets up the various shells that I usually have running at any given point."
   (interactive)
-  (let ((shell-list '( "zope.out" "zep.out" "zendmd.out" "dsa.out" "zenhub.out")))
+  (let ((shell-list '( "zope.out" "zep.out" "dsa.out" "zenhub.out")))
     (mapcar
      (lambda (shell-name)
        (if (not (get-buffer shell-name))
@@ -395,21 +395,9 @@ in, doesn't remember previous test"
   "Looks up the guid that is highlighted by switching to the dmd output and eval'ing it there"
   (interactive "r")
   (let ((guid (buffer-substring start end)))
-    (if (get-buffer "zendmd.out")
-        (progn
-          (switch-to-buffer "zendmd.out")
-          (goto-char (point-max))
-          (insert (concat "lookupGuid(\"" guid "\")"))
-          (comint-send-input)
-          (sleep-for .5)
-          (goto-char (point-max))
-          ;; message the result
-          (previous-line 2)
-          (back-to-indentation)
-          (copy-line)
-          (message (car kill-ring-yank-pointer))
-          (switch-to-buffer (other-buffer))
-          ))))
+    (progn
+      (zendmd-send-string (concat "lookupGuid(\"" guid "\")"))
+      (switch-to-zendmd))))
 
 ;; queue shortcuts
 (defun zenoss-show-queues ()
@@ -429,4 +417,4 @@ in, doesn't remember previous test"
     (switch-to-buffer-other-window queue-buffer-name)))
 (global-set-key "\C-cw" 'zenoss-dump-queues)
 
-
+;; zenoss status global minor mode

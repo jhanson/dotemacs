@@ -68,3 +68,8 @@
              ))
 
 ;; set up zendmd as a comint inferior process
+(require 'zendmd-comint)
+(setq inferior-zendmd-program-command "/Users/joseph/zenoss/bin/zendmd")
+(add-hook 'python-mode-hook '(lambda ()
+                               (zendmd-minor-mode 1)))
+(global-set-key (kbd "\C-c 1") 'switch-to-zendmd)
