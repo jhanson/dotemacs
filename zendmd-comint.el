@@ -30,41 +30,28 @@
 ;;   USA
 
 ;;; Commentary:
-;;; Zendmd lets you run the zendmd process as an inferior python process
+;;; zendmd-comint lets you run the zendmd process as an inferior python process
 ;;; and send your python code directly to it. It also allows you to execute
 ;;; the current script as a zendmd script and see the output.
-;;; TODO credit for js-comint and moz repl for inspiration and python.el stole their code pretty much
+;;; The zendmd-minor-mode will replace your "send to python" commands in python with
+;;; suitable "send to zendmd" commands.
 
-;; TODO: Usage
 ;;  Usage:
-;;  Put js-comint.el in your load path
-;;  Add (require 'js-comint) to your .emacs
-;;  Set inferior-js-program-command to the execution command for running your javascript REPL
-;;  (setq inferior-js-program-command "/path/to/executable <args>")
-;;  Do: M-x run-js
+;;  1. Put zendmd-comint.el in your load path
+;;  2. Add (require 'zendmd-comint) to your .emacs
+;;  3. Set inferior-zendmd-program-command to the execution command for running your zendmd
+;;  (setq inferior-zendmd-program-command "/path/to/executable <args>")
+;;  Do: M-x inferior-zendmd-start-process
 ;;  Away you go.
 
-;;  I've added the following couple of lines to my .emacs to take advantage of
-;;  cool keybindings for sending things to the javascript interpreter inside
-;;  of Steve Yegge's most excellent js2-mode.
-
-;; (add-hook 'js2-mode-hook '(lambda ()
-;;              (local-set-key "\C-x\C-e" 'js-send-last-sexp)
-;;              (local-set-key "\C-\M-x" 'js-send-last-sexp-and-go)
-;;              (local-set-key "\C-cb" 'js-send-buffer)
-;;              (local-set-key "\C-c\C-b" 'js-send-buffer-and-go)
-;;              (local-set-key "\C-cl" 'js-load-file-and-go)
-;;              ))
-
-;;  This is version 0.0.1, so I've only tested it on my own version of emacs which is currently:
-;;  GNU Emacs 22.0.90.1 (i386-apple-darwin8.8.1, Carbon Version 1.6.0) of 2006-10-28
-;;  Not sure if it'll work anywhere else, but it doesn't require anything apple-ish, just emacs-ish.
+;;  To use the minor mode add a hook in your python mode like the following:
+;;   (add-hook 'python-mode-hook '(lambda ()
+;;                               (zendmd-minor-mode 1)))
 
 ;;; History:
 ;;
 
 ;;; Todo:
-;;; - fix comments
 ;;; - somehow get it not to spit out input from emacs (like python doesn't)
 ;;; - get ipython colors to not be garbled
 ;;; -
@@ -183,7 +170,7 @@ information etc.  If PROC is non-nil, check the buffer for that process."
       (save-match-data (re-search-backward "In" nil t)))))
 
 (defun zendmd-send-region-and-go (start end)
-  "Send the current region to the inferior Javascript process."
+  "Send the current region to the inferior Zendmd process."
   (interactive "r")
   (inferior-zendmd-start-process inferior-zendmd-program-command t)
   (zendmd-send-region start end)
@@ -196,17 +183,17 @@ information etc.  If PROC is non-nil, check the buffer for that process."
   (zendmd-send-region-and-go (save-excursion (backward-sexp) (point)) (point)))
 
 (defun zendmd-send-last-sexp ()
-  "Send the previous sexp to the inferior Javascript process."
+  "Send the previous sexp to the inferior zendmd process."
   (interactive)
   (zendmd-send-region (save-excursion (backward-sexp) (point)) (point)))
 
 (defun zendmd-send-buffer ()
-  "Send the buffer to the inferior Javascript process."
+  "Send the buffer to the inferior zendmd process."
   (interactive)
   (zendmd-send-region (point-min) (point-max)))
 
 (defun zendmd-send-buffer-and-go ()
-  "Send the buffer to the inferior Javascript process."
+  "Send the buffer to the inferior zendmd process."
   (interactive)
   (zendmd-send-region-and-go (point-min) (point-max)))
 
@@ -235,14 +222,6 @@ module-qualified names."
      (format "execfile(%S)" file-name)))
   (message "%s loaded" file-name))
 
-(defun zendmd-load-file-and-go (filename)
-  "Load a file in the javascript interpreter."
-  (interactive "f")
-  (let ((filename (expand-file-name filename)))
-    (inferior-zendmd-start-process inferior-zendmd-program-command t)
-    (comint-send-string inferior-zendmd-buffer (concat "load(\"" filename "\")\n"))
-    (switch-to-zendmd)))
-
 (defun zendmd-execute-current-script ()
   "Runs the current script through the zendmd --script"
   (interactive)
@@ -257,8 +236,7 @@ module-qualified names."
         (shell-command cmd buff-name))))
 
 (defun switch-to-zendmd ()
-  "Switch to the zendmd process buffer.
-With argument, position cursor at end of buffer."
+  "Switch to the zendmd process buffer."
   (interactive)
   (if (or (and inferior-zendmd-buffer (get-buffer inferior-zendmd-buffer))
           (inferior-zendmd-start-process inferior-zendmd-program-command))
@@ -279,19 +257,20 @@ With argument, position cursor at end of buffer."
 The following commands are available:
 \\{inferior-zendmd-mode-map}
 
-A javascript process can be fired up with M-x inferior-zendmd-start-process.
+A zendmd process can be fired up with M-x inferior-zendmd-start-process.
 
 Customization: Entry to this mode runs the hooks on comint-mode-hook and
 inferior-zendmd-mode-hook (in that order).
 
-You can send text to the inferior Javascript process from othber buffers containing
-Javascript source.
-    switch-to-zendmd switches the current buffer to the Javascript process buffer.
-    zendmd-send-region sends the current region to the Javascript process.
+You can send text to the inferior zendmd process from othber buffers containing
+zendmd source.
+    switch-to-zendmd switches the current buffer to the zendmd process buffer.
+    zendmd-send-region sends the current region to the zendmd process.
 
 
 "
-(use-local-map inferior-zendmd-mode-map))
+  (use-local-map inferior-zendmd-mode-map))
+
 (provide 'zendmd-comint)
 
 ;;
