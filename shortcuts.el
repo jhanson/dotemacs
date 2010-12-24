@@ -15,7 +15,7 @@
 (define-key global-map (kbd "RET") 'newline-and-indent)
 
 ;; short cut to shell
-(global-set-key (kbd "\C-c 5") 'shell)
+(global-set-key (kbd "\C-c 5") 'eshell)
 
 ;; shortcuts i like
 (global-set-key (kbd "\C-c \C-t") 'lisp-complete-symbol)
@@ -39,3 +39,4 @@
 ;; delete pair (will delete matching "" or ())
 (global-set-key "\M-sd" 'delete-pair)
 (global-set-key "\M-sf" 'flyspell-correct-word-before-point)
+

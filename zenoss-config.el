@@ -102,19 +102,32 @@
   "Restarts your zope server and takes you to the output.
 This assumes that you have your zope instance in a shell file called zope.out"
   (interactive)
+  (let (old-buffer (buffer-name (current-buffer)))
+    (progn
+      (switch-to-zope)
+      ;; stop the previous instance
+      (comint-interrupt-subjob)
+      (goto-char (point-max))
+      ;; new instance command
+      (insert "runzope")
+      ;; press Enter
+      (comint-send-input)
+      ;; Go back to where i was
+      (switch-to-buffer old-buffer)
+      (message "Restarted ur zopez"))))
+(global-set-key "\C-x\C-r" 'restart-zope)
+
+(defun restart-zep ()
+  "Restarts the zep process"
+  (interactive)
   (progn
-    (switch-to-zope)
-    ;; stop the previous instance
+    (switch-to-zep)
     (comint-interrupt-subjob)
     (goto-char (point-max))
-    ;; new instance command
-    (insert "runzope")
-    ;; press Enter
+    (insert "mvn clean jetty:run")
     (comint-send-input)
-    ;; Go back to where i was
-    (switch-to-buffer (other-buffer))
-    (message "Restarted ur zopez")))
-(global-set-key "\C-x\C-r" 'restart-zope)
+    (message "restarted ur zeps")))
+(global-set-key "\C-x\C-t" 'restart-zep)
 
 ;; Trac functions
 (defvar trac-public-url "http://dev.zenoss.org/trac/ticket/" "Where tickets are on the public trac")
@@ -201,9 +214,10 @@ This assumes that you have your zope instance in a shell file called zope.out"
       (kill-buffer "svn-log-output")
       ;; switch to trunk
       (shell-command "svn switch http://dev.zenoss.com/svnint/trunk/enterprise/zenpacks ~/dev/sandbox/enterprise_zenpacks")
-      (shell)
+      (or (switch-to-buffer "*eshell*")
+           (eshell))
       (insert "cd ~/dev/sandbox/enterprise_zenpacks")
-      (comint-send-input)
+      (eshell-send-input)
       (insert (concat "svn merge -r " (car kill-ring-yank-pointer) ":HEAD " sandbox-url))
       )))
 
@@ -217,13 +231,23 @@ This assumes that you have your zope instance in a shell file called zope.out"
 dev/sandbox/Products) and will restart zope "
   (interactive)
   (shell-command "rm ~/zenoss/Products && ln -s ~/dev/sandbox/trunk/Products/ ~/zenoss/Products")
-  (restart-zope))
+  (shell-command "rm ~/zenoss/zep && ln -s ~/dev/sandbox/trunk/zep/ ~/zenoss/zep")
+  (shell-command "rm ~/zenoss/protocols && ln -s ~/dev/sandbox/trunk/protocols ~/zenoss/protocols")
+  (shell-command "cd ~/zenoss/protocols/python && make")
+  (shell-command "cd ~/zenoss/protocols/python && python setup.py develop")
+  (restart-zope)
+  (restart-zep))
 
 (defun zen-switch-to-trunk ()
   "Changes the zenoss/Products to trunk and restarts zope"
   (interactive)
   (shell-command "rm ~/zenoss/Products && ln -s ~/dev/trunk/Products/ ~/zenoss/Products")
-  (restart-zope))
+  (shell-command "rm ~/zenoss/zep && ln -s ~/dev/trunk/zep ~/zenoss/zep")
+  (shell-command "rm ~/zenoss/protocols && ln -s ~/dev/trunk/protocols ~/zenoss/protocols")
+  (shell-command "cd ~/zenoss/protocols/python && make")
+  (shell-command "cd ~/zenoss/protocols/python && python setup.py develop")
+  (restart-zope)
+  (restart-zep))
 
 (defun zen-reload-tags ()
   "Re-creates the tags file and then reloads it"
@@ -315,7 +339,7 @@ this does not actually execute the command"
       (forward-char 1)
       (copy-word 1)
       (kill-buffer "svn-log-output")
-      (shell)
+      (eshell)
       (insert "cd ~/dev/trunk")
       (comint-send-input)
       (delete-other-windows)

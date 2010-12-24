@@ -183,3 +183,14 @@
 
 ;; always show rainbow mode in css mode
 (add-hook 'css-mode-hook 'rainbow-mode)
+
+;; eshell variables
+(eshell)
+(add-to-list 'eshell-visual-commands "htop")
+(add-to-list 'eshell-visual-commands "vim")
+
+
+;; pianobar Customization:
+(setq pianobar-program-command "/Users/joseph/src/pianobar/pianobar")
+(setq pianobar-username "jrh0090@gmail.com")
+(setq pianobar-password "hellojed")

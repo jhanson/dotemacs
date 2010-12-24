@@ -84,8 +84,9 @@
 
 ;; drag stuff
 (require 'drag-stuff)
-(drag-stuff-global-mode t)
-
+(add-hook 'org-mode-hook '(lambda ()
+                           (drag-stuff-mode 0)
+                           ))
 (load-file "~/.emacs.d/auto-complete.el")
 (load-file "~/.emacs.d/auto-complete-config.el")
 (require 'auto-complete-config)
@@ -98,6 +99,10 @@
 ;; protobuff
 (autoload 'protobuf-mode "protobuf-mode" nil t)
 (setq auto-mode-alist (cons '("\\.proto$" . protobuf-mode) auto-mode-alist))
+
+;; markdown
+(autoload 'markdown-mode "markdown-mode" nil t)
+(setq auto-mode-alist (cons '("\\.md$" . markdown-mode) auto-mode-alist))
 
 ;; go mode
 (autoload (quote go-mode) "go-mode" "\
