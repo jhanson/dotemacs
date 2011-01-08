@@ -38,21 +38,21 @@
 (yas/load-directory "~/emacs/plugins/yasnippet/snippets")
 
 ;; browse the kill ring
-(require 'browse-kill-ring)
+;;(require 'browse-kill-ring)
 
 ;; winring
-(require 'winring)
+;;(require 'winring)
 
-;; cedet
-(load-file "~/emacs/cedet-1.0pre7/common/cedet.el")
-(global-ede-mode t)
+;; ;; cedet
+;; (load-file "~/emacs/cedet-1.0pre7/common/cedet.el")
+;; (global-ede-mode t)
 
-;; ecb
-(add-to-list 'load-path
-             "~/emacs/ecb-snap/")
-(require 'ecb)
-(add-to-list 'ecb-source-path
-             "~/dev/sandbox/Products")
+;; ;; ecb
+;; (add-to-list 'load-path
+;;              "~/emacs/ecb-snap/")
+;; (require 'ecb)
+;; (add-to-list 'ecb-source-path
+;;              "~/dev/sandbox/Products")
 
 
 ;;; $Id: startup-template.el,v 0.5 1993/05/31 23:49:29 ceder Exp $

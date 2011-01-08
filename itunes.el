@@ -199,8 +199,8 @@ This uses the elispify function."
   (let ((info (itunes-get-info-sexp)))
     (when info
       (message (concat (itunes-info-val "name"  ) " / "
-               (itunes-info-val "album" ) " / "
-               (itunes-info-val "artist"))))))
+                       (itunes-info-val "album" ) " / "
+                       (itunes-info-val "artist"))))))
 ;; (itunes-now-playing)
 ;; (global-set-key [f6] 'itunes-now-playing)
 
@@ -234,7 +234,7 @@ This uses the elispify function."
   (interactive)
   (let ((thiswin (selected-window)))
     (if (get-buffer-window (itunes-buff))
-      (itunes-window-hide)
+        (itunes-window-hide)
       (progn
         (itunes-window-show)
         (sit-for 0)
@@ -246,7 +246,7 @@ This uses the elispify function."
   "Update the itunes window if visible."
   (interactive)
   (if (get-buffer-window (itunes-buff))
-    (itunes-window-paint-prep (itunes-get-info-sexp))))
+      (itunes-window-paint-prep (itunes-get-info-sexp))))
 ;; (itunes-window-update)
 
 ;;;;;
@@ -260,7 +260,7 @@ This uses the elispify function."
   (let ((val (cadr (assoc key info))))
     ;; some unknowns are "0"s
     (if (and val (not (equal val 0)))
-      val
+        val
       default)))
 
 ;; (itunes-info-val "track count" "??")
@@ -321,7 +321,7 @@ This is the function you want to customize."
   "Format the RATING as 0-5 stars."
   (if (numberp rating)
       (make-string (/ (max 0 (min 100 rating)) 20) ?*)
-      ""))
+    ""))
 ;; (itunes-fmt-rating 100)
 
 (defun itunes-elide (str len)
@@ -330,9 +330,9 @@ This is the function you want to customize."
     (setq str (format "%s" str)))
   (let ((strlen (length str)))
     (if (<= strlen len)
-      str ;; no trim
+        str ;; no trim
       (if (<= len 15)
-        (substring str 0 len) ;; hard trunc
+          (substring str 0 len) ;; hard trunc
         (concat (substring str 0 (- len 3)) "...")))))
 ;; (itunes-elide "12345678901234567890" 17)
 
@@ -361,7 +361,7 @@ This is the function you want to customize."
     (define-key map "<"     'itunes-rating-)
     (define-key map ">"     'itunes-rating+)
     (flet ((define-rating-key (key value)
-         (define-key map key `(lambda () (interactive) (itunes-rating-set ,value)))))
+             (define-key map key `(lambda () (interactive) (itunes-rating-set ,value)))))
       (define-rating-key "!" 1)
       (define-rating-key "@" 2)
       (define-rating-key "#" 3)
@@ -374,7 +374,7 @@ This is the function you want to customize."
           `(lambda () (interactive)
              (itunes-volume-set (* 10 ,v))))
         (setq v (1+ v))))
-      ;;
+    ;;
     (define-key map [right] 'itunes-next-track)
     (define-key map [left]  'itunes-prev-track)
     ;;

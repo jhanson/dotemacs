@@ -11,11 +11,9 @@
 (load "php-config.el")
 (load "python-config.el")
 (load "javascript-config.el")
-(load "java-config.el")
-(load "erlang-config.el")
-;; always start with a shell
-(shell)
-
+;;(load "java-config.el")
+;;(load "erlang-config.el")
+;; irc.efnet.org
 
 (custom-set-variables
   ;; custom-set-variables was added by Custom.

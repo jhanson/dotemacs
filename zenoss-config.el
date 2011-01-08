@@ -119,14 +119,14 @@ This assumes that you have your zope instance in a shell file called zope.out"
 
 (defun restart-zep ()
   "Restarts the zep process"
-  (interactive)
-  (progn
-    (switch-to-zep)
-    (comint-interrupt-subjob)
-    (goto-char (point-max))
-    (insert "mvn clean jetty:run")
-    (comint-send-input)
-    (message "restarted ur zeps")))
+  (interactive))
+  ;; (progn
+  ;;   (switch-to-zep)
+  ;;   (comint-interrupt-subjob)
+  ;;   (goto-char (point-max))
+  ;;   (insert "mvn clean jetty:run")
+  ;;   (comint-send-input)
+  ;;   (message "restarted ur zeps")))
 (global-set-key "\C-x\C-t" 'restart-zep)
 
 ;; Trac functions
@@ -253,8 +253,8 @@ dev/sandbox/Products) and will restart zope "
   "Re-creates the tags file and then reloads it"
   (interactive)
   (progn
-    (shell-command (concat "find ~/dev/sandbox/Products -type f | egrep \"(\.js|\.py)\"  | grep -v '.svn' | grep -v '.pyc' | xargs etags  ~/dev/sandbox/Products/TAGS " main-sandbox))
-    (visit-tags-table main-sandbox)))
+    (shell-command (concat "find ~/dev/sandbox/trunk/Products -type f | egrep \"(\.js|\.py)\"  | grep -v '.svn' | grep -v '.pyc' | xargs etags  ~/dev/sandbox/trunk/Products/TAGS " main-sandbox))
+    (visit-tags-table (concat main-sandbox "/Products"))))
 
 (defun zen-kill-zenoss ()
   (interactive)
@@ -341,7 +341,7 @@ this does not actually execute the command"
       (kill-buffer "svn-log-output")
       (eshell)
       (insert "cd ~/dev/trunk")
-      (comint-send-input)
+      (eshell-send-input)
       (delete-other-windows)
       (insert (concat "svn merge -r " (car kill-ring-yank-pointer) ":HEAD " current-svn-url " .")))))
 

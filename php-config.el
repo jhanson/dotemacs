@@ -1,4 +1,3 @@
-;; get rid of auto indent in C mode, hurting me more than helping me now
 (require 'cc-mode)
 (add-to-list 'c-mode-common-hook
           (lambda () (setq c-syntactic-indentation 1)))
@@ -12,7 +11,6 @@
 ;; (setq php-manual-path "~/php-manual")
 ;;by default it is alt-tab, didn't really plan that one out
 (define-key php-mode-map "\C-c\C-t" 'php-complete-function)
-;;(load "smarty-mode")
 
 ;; set the c style for my curly braces and such
 ;;(setq c-default-style "k&r")
