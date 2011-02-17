@@ -54,8 +54,6 @@
 ;; (add-to-list 'ecb-source-path
 ;;              "~/dev/sandbox/Products")
 
-
-;;; $Id: startup-template.el,v 0.5 1993/05/31 23:49:29 ceder Exp $
 ;;; Support for the elisp library elib.
 (setq load-path (append (list "/Applications/Emacs.app/Contents/Resources/site-lisp/elib")
                         load-path))
@@ -123,3 +121,6 @@ functions, and some types.  It also provides indentation that is
 
 (put 'narrow-to-page 'disabled nil)
 
+;; anything.el
+(require 'anything)
+(require 'anything-config)

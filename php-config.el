@@ -1,9 +1,13 @@
+(setq auto-mode-alist (cons '("\\.ctp$" . php-mode) auto-mode-alist))
 (require 'cc-mode)
 (add-to-list 'c-mode-common-hook
           (lambda () (setq c-syntactic-indentation 1)))
 
 (add-to-list 'c-mode-common-hook
-          (lambda () (setq c-auto-newline 0)))
+          (lambda ()
+            (setq c-auto-newline 0)
+            (c-toggle-auto-newline -1)
+            ))
 
 ;; newest version of php-mode. The one in packages was like 4 years old
 (load "php-mode")
@@ -13,8 +17,8 @@
 (define-key php-mode-map "\C-c\C-t" 'php-complete-function)
 
 ;; set the c style for my curly braces and such
-;;(setq c-default-style "k&r")
-(setq c-default-style "java")
+(setq c-default-style "k&r")
+;;(setq c-default-style "java")
 
 ;; flymake php syntax
 (defun flymake-php-init ()

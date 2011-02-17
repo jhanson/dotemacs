@@ -1,3 +1,12 @@
+;; trying out python mode
+;; (add-to-list 'load-path "~/emacs/python-mode")
+;; ;; make sure we explicitly load it
+;; (require 'python-mode)
+;; (setq auto-mode-alist (cons '("\\.py$" . python-mode) auto-mode-alist))
+;; (setq interpreter-mode-alist (cons '("python" . python-mode)
+;;                                    interpreter-mode-alist))
+;; (autoload 'python-mode "python-mode" "Python editing mode." t)
+
 (defun zen-list-tags ()
   "Lists the tags of our current buffer, will let you jump to definition from new buffer"
   (interactive)

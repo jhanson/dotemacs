@@ -1,3 +1,8 @@
+;; turn this into a function
+;;mvn clean jetty:run -Dzep.jdbc.dbname=zenoss_zep_dev -Dlogback.configurationFile=src/test/resources/dev-logback.xml -Djava.compiler=NONE
+;; -Xnoagent -Djava.compiler=NONE -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005
+;; -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005
+
 ;; associate .tpl files with html-mode
 (setq auto-mode-alist (cons '("\\.tpl$" . nxml-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.pt$" . nxml-mode) auto-mode-alist))
@@ -214,10 +219,10 @@ This assumes that you have your zope instance in a shell file called zope.out"
       (kill-buffer "svn-log-output")
       ;; switch to trunk
       (shell-command "svn switch http://dev.zenoss.com/svnint/trunk/enterprise/zenpacks ~/dev/sandbox/enterprise_zenpacks")
-      (or (switch-to-buffer "*eshell*")
-           (eshell))
+      (or (switch-to-buffer "*shell*")
+           (shell))
       (insert "cd ~/dev/sandbox/enterprise_zenpacks")
-      (eshell-send-input)
+      (comint-send-input)
       (insert (concat "svn merge -r " (car kill-ring-yank-pointer) ":HEAD " sandbox-url))
       )))
 
@@ -255,6 +260,9 @@ dev/sandbox/Products) and will restart zope "
   (progn
     (shell-command (concat "find ~/dev/sandbox/trunk/Products -type f | egrep \"(\.js|\.py)\"  | grep -v '.svn' | grep -v '.pyc' | xargs etags  ~/dev/sandbox/trunk/Products/TAGS " main-sandbox))
     (visit-tags-table (concat main-sandbox "/Products"))))
+(defun svn-revert-mergeinfos ()
+  (interactive)
+  (insert "svn st | awk '/ M/ {if ($2 != \".\") print $2}' | xargs svn revert"))
 
 (defun zen-kill-zenoss ()
   (interactive)
@@ -339,9 +347,9 @@ this does not actually execute the command"
       (forward-char 1)
       (copy-word 1)
       (kill-buffer "svn-log-output")
-      (eshell)
+      (shell)
       (insert "cd ~/dev/trunk")
-      (eshell-send-input)
+      (comint-send-input)
       (delete-other-windows)
       (insert (concat "svn merge -r " (car kill-ring-yank-pointer) ":HEAD " current-svn-url " .")))))
 
@@ -441,4 +449,16 @@ in, doesn't remember previous test"
     (switch-to-buffer-other-window queue-buffer-name)))
 (global-set-key "\C-cw" 'zenoss-dump-queues)
 
-;; zenoss status global minor mode
+;;TODO  review board auto-posting
+;; sudo easy_install RBTools
+;; 12:56 PM
+;; then from your sandbox directory, run:
+;; $ svn log --stop-on-copy
+;; 12:56 PM
+;; get the first revision on the branch and the last revision
+;; 12:57 PM
+;; run: post-review --username=jhanson --password=zenoss -d --revision-range=FIRST:LAST -o
+;; 12:57 PM
+;; you will want this file created on your dev system:
+;; $ cat ~/.reviewboardrc
+;; REVIEWBOARD_URL = "http://devsvcs.zenoss.loc/reviews"

@@ -15,7 +15,8 @@
 (define-key global-map (kbd "RET") 'newline-and-indent)
 
 ;; short cut to shell
-(global-set-key (kbd "\C-c 5") 'eshell)
+(global-set-key (kbd "\C-c 5") 'shell)
+(global-set-key (kbd "\C-c 7") 'eshell)
 
 ;; shortcuts i like
 (global-set-key (kbd "\C-c \C-t") 'lisp-complete-symbol)
@@ -40,3 +41,20 @@
 (global-set-key "\M-sd" 'delete-pair)
 (global-set-key "\M-sf" 'flyspell-correct-word-before-point)
 
+(require 'recentf)
+
+;; enable recent files mode.
+(recentf-mode t)
+
+; 50 files ought to be enough.
+(setq recentf-max-saved-items 50)
+
+(defun ido-recentf-open ()
+  "Use `ido-completing-read' to \\[find-file] a recent file"
+  (interactive)
+  (if (find-file (ido-completing-read "Find recent file: " recentf-list))
+      (message "Opening file...")
+    (message "Aborting")))
+;; get rid of `toggle-read-only' and replace it with something
+;; more useful.
+(global-set-key (kbd "C-x C-q") 'ido-recentf-open)

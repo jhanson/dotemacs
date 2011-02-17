@@ -1,4 +1,3 @@
-
 ;;; php-mode.el --- major mode for editing PHP code
 
 ;; Copyright (C) 1999, 2000, 2001, 2003, 2004 Turadg Aleahmad
@@ -316,7 +315,7 @@ See `php-beginning-of-defun'."
   (set (make-local-variable 'c-opt-cpp-prefix) php-tags-key)
 
   (c-set-offset 'cpp-macro 0)
-  
+
 ;;   (c-lang-defconst c-block-stmt-1-kwds php php-block-stmt-1-kwds)
 ;;   (c-lang-defvar c-block-stmt-1-kwds (c-lang-const c-block-stmt-1-kwds))
   (set (make-local-variable 'c-block-stmt-1-key) php-block-stmt-1-key)

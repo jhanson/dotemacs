@@ -19,7 +19,9 @@
         "/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Home"
         )
 (setenv "PS1" "\\u:\\w$ ")
-
+(setenv "CATALINA_HOME"
+        "/opt/apache-tomcat-6.0.29/"
+        )
 ;; to have my .profile variables in emacs, not sure why this is necessary
 (shell-command "source ~/.profile")
 
@@ -110,7 +112,7 @@
 ;; set the color theme
 (require 'color-theme)
 (load-file "~/emacs/color-theme-blackboard.el")
-(color-theme-blackboard)
+(load-file "~/emacs/naquadah-theme.el")
 
 ;; i like blinking cursors
 (blink-cursor-mode t)
@@ -143,10 +145,10 @@
       ;;(set-default-font "-apple-Consolas-medium-normal-normal-*-*-*-*-*-m-0-iso10646-1")
       (set-default-font "-apple-Menlo-bold-normal-normal-*-*-*-*-*-m-0-iso10646-1")
       ;; fixing meta for mac (makes command Meta)
-      (setq mac-option-key-is-meta nil)
-      (setq mac-command-key-is-meta t)
-      (setq mac-command-modifier 'meta)
-      (setq mac-option-modifier nil)
+      ;; (setq mac-option-key-is-meta nil)
+      ;; (setq mac-command-key-is-meta t)
+      ;; (setq mac-command-modifier 'meta)
+      ;; (setq mac-option-modifier nil)
 
       ;; now delete forward deletes a char
       (global-set-key (kbd "<kp-delete>") 'delete-char)
@@ -158,6 +160,17 @@
       ;; control Itunes with the f6 key
       (load-file "~/emacs/osx-osascript.el")
       (load-file "~/emacs/itunes.el")
+
+      ;; growl notifications from emacs
+      (defvar growl-program "/usr/local/bin/growlnotify")
+      (defun growl (title message)
+        (start-process "growl" " growl"
+                       growl-program
+                       title
+                       "-a" "Emacs")
+        (process-send-string " growl" message)
+        (process-send-string " growl" "\n")
+        (process-send-eof " growl"))
 
       ;; fullscreen on mac
       (defun mac-maximize-frame ()
@@ -185,12 +198,10 @@
 (add-hook 'css-mode-hook 'rainbow-mode)
 
 ;; eshell variables
-(eshell)
-(add-to-list 'eshell-visual-commands "htop")
-(add-to-list 'eshell-visual-commands "vim")
+(shell)
+;; (add-to-list 'eshell-visual-commands "htop")
+;; (add-to-list 'eshell-visual-commands "vim")
 
 
 ;; pianobar Customization:
 (setq pianobar-program-command "/Users/joseph/src/pianobar/pianobar")
-(setq pianobar-username "jrh0090@gmail.com")
-(setq pianobar-password "hellojed")

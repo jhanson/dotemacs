@@ -52,9 +52,9 @@
 ;;
 
 ;;; Todo:
+;;; - show python syntax highlighting like sql mode does
 ;;; - somehow get it not to spit out input from emacs (like python doesn't)
 ;;; - get ipython colors to not be garbled
-;;; -
 ;;; Code:
 
 (require 'comint)
