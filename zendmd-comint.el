@@ -251,7 +251,8 @@ module-qualified names."
     (define-key m "\C-cl" 'zendmd-load-file)
     m))
 
-(define-derived-mode inferior-zendmd-mode comint-mode "Inferior ZenDMD"
+
+(define-derived-mode inferior-zendmd-mode comint-mode "zendmd"
   "Major mode for interacting with an inferior zendmd process.
 
 The following commands are available:
@@ -269,6 +270,16 @@ zendmd source.
 
 
 "
+  ;; piggy back on python keywords
+  (set (make-local-variable 'font-lock-defaults)
+       '(python-font-lock-keywords nil nil nil nil
+                   (font-lock-syntactic-keywords
+                    . python-font-lock-syntactic-keywords)
+                   ))
+  (set (make-local-variable 'parse-sexp-lookup-properties) t)
+  (set (make-local-variable 'parse-sexp-ignore-comments) t)
+  (set (make-local-variable 'comment-start) "# ")
+
   (use-local-map inferior-zendmd-mode-map))
 
 (provide 'zendmd-comint)
