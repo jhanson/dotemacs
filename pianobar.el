@@ -1,4 +1,4 @@
-;;; pianobar-comint.el --- Run pianobar as an inferior process for Zenoss development
+;;; pianobar.el --- Run Pandora as an inferior process in emacs by using pianobar
 
 ;;; Copyright (C) 2010 Joseph Hanson
 
@@ -16,6 +16,23 @@
 
 ;;; Right now pianobar expects a lot of the interaction to be from
 ;;; the pianobar inferior process.
+
+;; INSTALLATION
+;; ================
+
+;; Installation instructions:
+;;
+;; 1. Put this file in your emacs load path OR add the following to
+;;    your .emacs file (modifying the path appropriately):
+;;
+;;    (add-to-list 'load-path "/path/to/pianobar.el")
+;;
+;; 2. Add the following to your .emacs file to load this file
+;;    automatically when M-x pianobar is run:
+;;
+;;    (autoload 'pianobar "pianobar" nil t)
+;;
+
 
 ;; License
 ;; =========
@@ -91,7 +108,7 @@ Call `pianobar-key-setup' when changed to have a correct keymap.")
   "Run an inferior pianobar process, input and output via buffer `*pianobar*'.
 If there is a process already running in `*pianobar*', switch to that buffer.
 With argument, allows you to edit the command line (default is value
-of `inferior-pianobar-program-command').
+of `pianobar-program-command').
 Runs the hook `pianobar-mode-hook' \(after the `comint-mode-hook'
 is run).
 \(Type \\[describe-mode] in the process buffer for a list of commands.)"
@@ -145,6 +162,7 @@ See variable `inferior-pianobar-buffer'.  Starts a new process if necessary."
           (pop-to-buffer pianobar-buffer)
         (push-mark)
         (goto-char (point-max)))))
+
 
 (defun pianobar-maybe-message (string)
   "This will message the user if the user is not
@@ -365,10 +383,25 @@ message when the song changes."
 ;; globally set the pianobar interactions
 (pianobar-key-setup)
 
+;;;###autoload
+(defun pianobar ()
+  "Run an inferior pianobar process, input and output via buffer `*pianobar*'.
+If there is a process already running in `*pianobar*', switch to that buffer.
+With argument, allows you to edit the command line (default is value
+of `pianobar-program-command').
+Runs the hook `pianobar-mode-hook' \(after the `comint-mode-hook'
+is run).
+\(Type \\[describe-mode] in the process buffer for a list of commands.)"
+  (interactive)
+  (pianobar-proc)
+  (switch-to-pianobar))
+
+
+
 (define-derived-mode pianobar-mode comint-mode "pianobar"
   "Major mode for interacting with an inferior pianobar process.
 
-A pianobar process can be fired up with M-x pianobar-start-process.
+A pianobar process can be fired up with M-x pianobar.
 
 Since pianobar can no read direct input from the buffer to issue a command
 you must first press the \\{pianobar-key} (usually f7) and then press one

@@ -28,8 +28,12 @@
   "Hooks which run on file write for programming modes"
   (prog1 nil
     (set-buffer-file-coding-system 'utf-8-unix)
-    (untabify-buffer)
-    (delete-trailing-whitespace)))
+    (untabify-buffer)))
+    ;;(delete-trailing-whitespace)))
+
+;; make trailing whitespace ugly
+(setq-default show-trailing-whitespace nil)
+
 
 (defun ws ()
   "Make sure there is a space after every comma"
@@ -85,12 +89,8 @@
   "switches to zenhub"
   (interactive)
   (quick-switch-to-buffer "zenhub.out"))
-(global-set-key (kbd "\C-c 3") 'switch-to-zenhub)
 
-;; (defun switch-to-zendmd ()
-;;   (interactive)
-;;   (quick-switch-to-buffer "zendmd.out"))
-;; (global-set-key (kbd "\C-c 1") 'switch-to-zendmd)
+(global-set-key (kbd "\C-c 3") 'eshell)
 
 (defun switch-to-dsa ()
   (interactive)
@@ -124,14 +124,14 @@ This assumes that you have your zope instance in a shell file called zope.out"
 
 (defun restart-zep ()
   "Restarts the zep process"
-  (interactive))
-  ;; (progn
-  ;;   (switch-to-zep)
-  ;;   (comint-interrupt-subjob)
-  ;;   (goto-char (point-max))
-  ;;   (insert "mvn clean jetty:run")
-  ;;   (comint-send-input)
-  ;;   (message "restarted ur zeps")))
+  (interactive)
+  (progn
+    (switch-to-zep)
+    (comint-interrupt-subjob)
+    (goto-char (point-max))
+    (insert "mvn clean jetty:run")
+    (comint-send-input)
+    (message "restarted ur zeps")))
 (global-set-key "\C-x\C-t" 'restart-zep)
 
 ;; Trac functions
@@ -153,7 +153,6 @@ This assumes that you have your zope instance in a shell file called zope.out"
   (browse-url (concat trac-public-url (current-word t))))
 
 ;; SVN helper functions
-
 (defun svn-switch-sandboxen (name)
   (let ((command (concat "svn switch " svn-sandbox-url name " " main-sandbox)))
     (shell-command command "svn-output")
@@ -448,6 +447,34 @@ in, doesn't remember previous test"
     (shell-command "zenqdump&" queue-buffer-name)
     (switch-to-buffer-other-window queue-buffer-name)))
 (global-set-key "\C-cw" 'zenoss-dump-queues)
+
+(defun dired-zenpack ()
+  "Opens up dired in the selected enterprise zenpack"
+  (interactive)
+  (let ((dir svn-enterprise-sandbox)
+        (zenpacks (directory-files "~/dev/sandbox/enterprise_zenpacks")))
+    (dired (concat dir "/" (ido-completing-read "Find ZenPacks: " zenpacks)))
+    ))
+
+(defun cd-zenpack ()
+  "Switches to the shell and changes to the zenpack directory. This only works
+for enterprise zenpacks and relies on the svn-enterprise-sandbox variable being set to that
+directory."
+  (interactive)
+  (let* ((dir svn-enterprise-sandbox)
+        (zenpacks (directory-files dir))
+        ;; the selected zenpack
+        (zenpack  (ido-completing-read "Find ZenPacks: " zenpacks))
+        (directory (concat dir "/" zenpack "/" (replace-regexp-in-string "\\." "\/" zenpack))))
+    (shell)
+    (goto-char (point-max))
+    (insert (concat "cd " directory))
+    (comint-send-input)
+    ))
+(global-set-key "\C-cd" 'cd-zenpack)
+
+;; make zendmd font lock
+
 
 ;;TODO  review board auto-posting
 ;; sudo easy_install RBTools

@@ -36,6 +36,15 @@
      (mode-line ((t (:background "grey75" :foreground "black"))))
      (highlight ((t (:background "#222222"))))
      (highline-face ((t (:background "SeaGreen"))))
+     ;; diff mode
+     (diff-added ((t (:foreground "#73d216"))))
+     (diff-changed ((t (:foreground "#fcaf3e"))))
+     (diff-removed ((t (:foreground "#ef2929"))))
+     (diff-hunk-header ((t (:bold t))))
+     (diff-function ((t (:foreground "#fcaf3e"))))
+     (diff-header ((t (:background "#2e3436"))))
+     (diff-file-header ((t (:foreground "#eeeeec"))))
+
      (italic ((t (nil))))
      (left-margin ((t (nil))))
      (text-cursor ((t (:background "yellow" :foreground "black"))))
@@ -73,7 +82,7 @@
      (font-lock-doc-face ((t (:foreground "#888a85"))))
      (font-lock-keyword-face ((t (:foreground "#729fcf" :bold t))))
      (font-lock-string-face ((t (:foreground "#ad7fa8" :italic t))))
-     
+
      (font-lock-type-face ((t (:foreground "#8ae234" :bold t))))
      (font-lock-variable-name-face ((t (:foreground "#eeeeec"))))
      (font-lock-warning-face ((t (:bold t :foreground "#f57900"))))

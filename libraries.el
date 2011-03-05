@@ -60,6 +60,8 @@
 
 ;; automatically show eclispse style code browser
 ;;(ecb-activate)
+
+
 ;;; This was installed by package-install.el.
 ;;; This provides support for the package system and
 ;;; interfacing with ELPA, the package archive.
@@ -70,7 +72,6 @@
      (expand-file-name "~/.emacs.d/elpa/package.el"))
   (package-initialize))
 
-(require 'undo-tree)
 ;; ;; magit
 ;; (setq magit-git-executable "/usr/local/git/bin/git")
 ;; ;; regular vc git

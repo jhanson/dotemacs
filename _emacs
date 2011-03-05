@@ -11,6 +11,12 @@
 (load "php-config.el")
 (load "python-config.el")
 (load "javascript-config.el")
+(if (eq system-type 'darwin)
+    (load "mac-config.el")
+    )
+(if (eq system-type 'gnu/linux)
+    (load "linux-config.el")
+    )
 ;;(load "java-config.el")
 ;;(load "erlang-config.el")
 ;; irc.efnet.org

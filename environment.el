@@ -2,26 +2,8 @@
 ;;;;
 ;;;;
 
-;; load up my path from the system (todo figure out why this doesnt do
-;; this automatically)
-(setenv "PATH"
-        "/Users/joseph/zenoss/bin:/opt/local/bin:/opt/local/sbin:/opt/subversion/bin:/opt/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/Xcode3.1.4/usr/bin:/usr/local/mysql/bin/:/usr/local/git/bin/:/opt/local/lib/postgresql84/bin:/Users/joseph/source/go/bin"
-        )
 
-(setenv "ZENHOME"
-        "/Users/joseph/zenoss"
-        )
 
-(setenv "PYTHONPATH"
-        "/Users/joseph/zenoss/lib/python:/Users/joseph/dev/sandbox/trunk/Products"
-        )
-(setenv "JAVA_HOME"
-        "/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Home"
-        )
-(setenv "PS1" "\\u:\\w$ ")
-(setenv "CATALINA_HOME"
-        "/opt/apache-tomcat-6.0.29/"
-        )
 ;; to have my .profile variables in emacs, not sure why this is necessary
 (shell-command "source ~/.profile")
 
@@ -41,8 +23,10 @@
 (setq sgml-basic-offset 4)
 
 ;; only for x windows
-(setq x-select-enable-clipboard t)
-(setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
+(if (functionp 'x-cut-buffer-or-selection-value)
+    (progn
+      (setq x-select-enable-clipboard t)
+      (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)))
 
 ;; Add color to a shell running in emacs 'M-x shell'
 (autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
@@ -109,10 +93,6 @@
 ;; always load the which-func mode (only works for python)
 (which-func-mode t)
 
-;; set the color theme
-(require 'color-theme)
-(load-file "~/emacs/color-theme-blackboard.el")
-(load-file "~/emacs/naquadah-theme.el")
 
 ;; i like blinking cursors
 (blink-cursor-mode t)
@@ -138,53 +118,6 @@
 ;; use ibuffer to list buffer contents
 (global-set-key (kbd "\C-x\C-b") 'ibuffer)
 
-;; mac specific settings
-(if (eq system-type 'darwin)
-    (progn
-      ;; mac only font
-      ;;(set-default-font "-apple-Consolas-medium-normal-normal-*-*-*-*-*-m-0-iso10646-1")
-      (set-default-font "-apple-Menlo-bold-normal-normal-*-*-*-*-*-m-0-iso10646-1")
-      ;; fixing meta for mac (makes command Meta)
-      ;; (setq mac-option-key-is-meta nil)
-      ;; (setq mac-command-key-is-meta t)
-      ;; (setq mac-command-modifier 'meta)
-      ;; (setq mac-option-modifier nil)
-
-      ;; now delete forward deletes a char
-      (global-set-key (kbd "<kp-delete>") 'delete-char)
-
-      ;; end by default goes to the end of the buffer
-      (global-set-key (kbd "<end>") 'move-end-of-line)
-      (global-set-key (kbd "<home>") 'back-to-indentation)
-
-      ;; control Itunes with the f6 key
-      (load-file "~/emacs/osx-osascript.el")
-      (load-file "~/emacs/itunes.el")
-
-      ;; growl notifications from emacs
-      (defvar growl-program "/usr/local/bin/growlnotify")
-      (defun growl (title message)
-        (start-process "growl" " growl"
-                       growl-program
-                       title
-                       "-a" "Emacs")
-        (process-send-string " growl" message)
-        (process-send-string " growl" "\n")
-        (process-send-eof " growl"))
-
-      ;; fullscreen on mac
-      (defun mac-maximize-frame ()
-        (interactive)
-        (set-frame-position (selected-frame) 0 0)
-        (set-frame-size (selected-frame) 1000 1000))
-      (mac-maximize-frame)))
-
-;; ubuntu (vmware) specific settings
-(if (eq system-type 'gnu/linux)
-    (progn
-      (set-default-font "-bitstream-Bitstream Charter-bold-normal-normal-*-16-*-*-*-*-0-iso10646-1")
-      ))
-
 ;; never use the message box (evil!)
 (defalias 'message-box 'message)
 
@@ -198,10 +131,9 @@
 (add-hook 'css-mode-hook 'rainbow-mode)
 
 ;; eshell variables
-(shell)
-;; (add-to-list 'eshell-visual-commands "htop")
-;; (add-to-list 'eshell-visual-commands "vim")
+(eshell)
+(add-to-list 'eshell-visual-commands "htop")
+(add-to-list 'eshell-visual-commands "vim")
 
 
 ;; pianobar Customization:
-(setq pianobar-program-command "/Users/joseph/src/pianobar/pianobar")

@@ -34,8 +34,7 @@
 (load "python-pep8.el")
 
 
-;; make trailing whitespace ugly
-(setq-default show-trailing-whitespace t)
+
 
 ;; open directory returned from python package
 (defun open-python-directory (python-package)
