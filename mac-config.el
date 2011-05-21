@@ -1,7 +1,7 @@
 ;; load up my path from the system (todo figure out why this doesnt do
 ;; this automatically)
 (setenv "PATH"
-        "/Users/joseph/zenoss/bin:/opt/local/bin:/opt/local/sbin:/opt/subversion/bin:/opt/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/Xcode3.1.4/usr/bin:/usr/local/mysql/bin/:/usr/local/git/bin/:/opt/local/lib/postgresql84/bin:/Users/joseph/source/go/bin"
+        "/Users/joseph/zenoss/bin:/opt/local/bin:/opt/local/sbin:/opt/subversion/bin:/opt/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/Xcode3.1.4/usr/bin:/usr/local/mysql/bin/:/usr/local/git/bin/:/opt/local/lib/postgresql84/bin:/Users/joseph/source/go/bin:/Users/joseph/bin"
         )
 
 (setenv "ZENHOME"
@@ -16,9 +16,8 @@
         )
 (setenv "PS1" "\\u:\\w$ ")
 ;; mac only font
-;;(set-default-font "-apple-Consolas-medium-normal-normal-*-*-*-*-*-m-0-iso10646-1")
 (set-default-font "-apple-Menlo-bold-normal-normal-*-*-*-*-*-m-0-iso10646-1")
-;; fixing meta for mac (makes command Meta) 
+;; fixing meta for mac (makes command Meta)
 ;; (setq mac-option-key-is-meta nil)
 ;; (setq mac-command-key-is-meta t)
 ;; (setq mac-command-modifier 'meta)
@@ -44,9 +43,9 @@
                  "-a" "Emacs")
   (process-send-string " growl" message)
   (process-send-string " growl" "\n")
-  (load-file "~/emacs/pianobar.el")
-  (setq pianobar-program-command "/Users/joseph/src/pianobar/pianobar")  
   (process-send-eof " growl"))
+
+
 
 ;; fullscreen on mac
 (defun mac-maximize-frame ()
@@ -59,3 +58,11 @@
 (require 'color-theme)
 (load-file "~/emacs/color-theme-blackboard.el")
 (color-theme-blackboard)
+;; drag a file to emacs to open it
+(define-key global-map [ns-drag-file] 'ns-find-file)
+
+(set-frame-parameter (selected-frame) 'alpha '(99 85))
+(add-to-list 'exec-path "/usr/local/mysql/bin")
+(add-to-list 'exec-path "/opt/local/sbin")
+(add-to-list 'exec-path (getenv "PATH"))
+(setq ns-pop-up-frames nil) ;; keep OSX from opening more windows

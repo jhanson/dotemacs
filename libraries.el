@@ -125,3 +125,16 @@ functions, and some types.  It also provides indentation that is
 ;; anything.el
 (require 'anything)
 (require 'anything-config)
+
+;; slime
+(setq inferior-lisp-program "/opt/local/bin/sbcl")
+(require 'slime)
+(slime-setup)
+
+
+;; evernote
+(add-to-list 'load-path "~/emacs/evernote-mode/")
+(require 'evernote-mode)
+
+;; dired plus
+(require 'dired+)

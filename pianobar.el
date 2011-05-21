@@ -64,6 +64,7 @@
 ;;
 
 ;;; Todo:
+;;; - filter for auto reject songs
 ;;; - implement "a"
 ;;; Code:
 
@@ -97,7 +98,11 @@ Call `pianobar-key-setup' when changed to have a correct keymap.")
   :group 'pianobar)
 
 (defcustom pianobar-password nil
-  "Password for pando"
+  "Password for pandora"
+  :group 'pianobar)
+
+(defcustom pianobar-station nil
+  "First station for pandora"
   :group 'pianobar)
 
 (autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
@@ -130,11 +135,21 @@ is run).
           (sleep-for 0 1)
           (setq pianobar-buffer "*pianobar*")
           (if pianobar-username
-              (comint-simple-send (pianobar-proc) pianobar-username))
+              (comint-simple-send (pianobar-proc) pianobar-username)
+            ;; if they don't log in auto matically then switch to the process
+            (switch-to-pianobar)
+            )
           (if pianobar-password
-              (comint-simple-send (pianobar-proc) pianobar-password))
+              (comint-simple-send (pianobar-proc) pianobar-password)
+            (switch-to-pianobar)
+            )
+          (if pianobar-station
+              (comint-simple-send (pianobar-proc) pianobar-station)
+            (switch-to-pianobar)
+            )
           (add-hook 'comint-output-filter-functions
                     'pianobar-comint-output-filter-function nil t)
+          (add-hook 'comint-preoutput-filter-functions 'pianobar-preoutput-filter nil t)
           ;; make them select the station
           (switch-to-pianobar)
           (run-hooks 'pianobar-mode-hook))))
@@ -320,6 +335,10 @@ the user it looks a little better. TODO remove backslashes"
   string)
   ;;(replace-in-string (replace-in-string string "|>" "" ) "\n" ""))
 
+(defun pianobar-preoutput-filter (str)
+  "removes the 2k junk"
+  (replace-regexp-in-string "\033\\[2K" "" str))
+
 (defun pianobar-comint-output-filter-function (string)
   "Watch output and keep our current song up to date, also
 message when the song changes."
@@ -395,8 +414,6 @@ is run).
   (interactive)
   (pianobar-proc)
   (switch-to-pianobar))
-
-
 
 (define-derived-mode pianobar-mode comint-mode "pianobar"
   "Major mode for interacting with an inferior pianobar process.

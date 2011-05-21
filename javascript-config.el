@@ -1,5 +1,3 @@
-;; lightweight javascript editing mode
-;; this is useful when there is javascript and html in the same page
 (load "espresso")
 
 ;; js2 javascript IDE

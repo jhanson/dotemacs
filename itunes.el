@@ -32,7 +32,7 @@
 ;;  2005-02-18:  mb : added rating support
 
 (require 'osx-osascript)
-
+(require 'cl)
 ;;
 (defvar itunes-volume-step 5
   "*Amount to step the volume by.")

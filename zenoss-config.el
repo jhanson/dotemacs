@@ -1,7 +1,3 @@
-;; turn this into a function
-;;mvn clean jetty:run -Dzep.jdbc.dbname=zenoss_zep_dev -Dlogback.configurationFile=src/test/resources/dev-logback.xml -Djava.compiler=NONE
-;; -Xnoagent -Djava.compiler=NONE -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005
-;; -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005
 
 ;; associate .tpl files with html-mode
 (setq auto-mode-alist (cons '("\\.tpl$" . nxml-mode) auto-mode-alist))
@@ -28,12 +24,11 @@
   "Hooks which run on file write for programming modes"
   (prog1 nil
     (set-buffer-file-coding-system 'utf-8-unix)
-    (untabify-buffer)))
-    ;;(delete-trailing-whitespace)))
+    (untabify-buffer))
+    (delete-trailing-whitespace))
 
 ;; make trailing whitespace ugly
-(setq-default show-trailing-whitespace nil)
-
+(setq-default show-trailing-whitespace t)
 
 (defun ws ()
   "Make sure there is a space after every comma"
@@ -90,7 +85,7 @@
   (interactive)
   (quick-switch-to-buffer "zenhub.out"))
 
-(global-set-key (kbd "\C-c 3") 'eshell)
+(global-set-key (kbd "\C-c 3") 'switch-to-zenhub)
 
 (defun switch-to-dsa ()
   (interactive)
@@ -129,17 +124,30 @@ This assumes that you have your zope instance in a shell file called zope.out"
     (switch-to-zep)
     (comint-interrupt-subjob)
     (goto-char (point-max))
-    (insert "mvn clean jetty:run")
+    (insert "zb.sh")
     (comint-send-input)
     (message "restarted ur zeps")))
 (global-set-key "\C-x\C-t" 'restart-zep)
 
+(defun restart-dsa ()
+  "Restarts the dsa process"
+  (interactive)
+  (progn
+    (switch-to-dsa)
+    (comint-interrupt-subjob)
+    (goto-char (point-max))
+    (insert "mvn clean jetty:run")
+    (comint-send-input)
+    (message "restarted dsa")))
+
 ;; Trac functions
-(defvar trac-public-url "http://dev.zenoss.org/trac/ticket/" "Where tickets are on the public trac")
-(defvar trac-svn-log "http://dev.zenoss.org/trac/log/sandboxen/jhanson/")
-(defvar svn-sandbox-url "http://dev.zenoss.org/svn/sandboxen/jhanson/")
+(defvar trac-public-url "http://dev.zenoss.com/tracint/ticket/" "Where tickets are on the public trac")
+(defvar trac-svn-log "http://dev.zenoss.com/tracint/log/sandboxen/jhanson/")
+
 (defvar main-sandbox "~/dev/sandbox/trunk")
 (defvar svn-enterprise-url "http://dev.zenoss.com/svnint/sandboxen/jhanson/")
+(defvar svn-sandbox-url "http://dev.zenoss.com/svnint/sandboxen/core/jhanson/")
+(defvar svn-core-trunk "http://dev.zenoss.com/svnint/trunk/core")
 (defvar svn-enterprise-sandbox "~/dev/sandbox/enterprise_zenpacks")
 
 (defun zen-view-revisions ()
@@ -154,7 +162,8 @@ This assumes that you have your zope instance in a shell file called zope.out"
 
 ;; SVN helper functions
 (defun svn-switch-sandboxen (name)
-  (let ((command (concat "svn switch " svn-sandbox-url name " " main-sandbox)))
+  (let ((command (concat "svn switch " svn-sandbox-url name " " main-sandbox " ")))
+    (maybe-kill-buffer "svn-output")
     (shell-command command "svn-output")
     (switch-to-buffer-other-window "svn-output")))
 
@@ -168,15 +177,14 @@ This assumes that you have your zope instance in a shell file called zope.out"
   "Will copy svn trunk to the new branch name and switch the dev/sandbox to the new checkout"
   (interactive "sName of Sandbox: ")
   (let* ((new-trunk (concat svn-sandbox-url name))
-         (command (concat "svn cp -m \"copying trunk\" http://dev.zenoss.org/svn/trunk/ " new-trunk)))
+         (command (concat "svn cp -m \"copying trunk\" " svn-core-trunk " " new-trunk)))
     (progn
+      (maybe-kill-buffer "svn-output")
       (shell-command command "svn-output")
       (svn-switch-sandboxen name)
       ;; this will restart zope for me
       (zen-switch-to-sandbox))))
-
 (global-set-key "\C-xvn" 'svn-create-new-sandbox)
-
 
 ;; new enterprise
 (defun svn-create-new-enterprise(name)
@@ -239,8 +247,7 @@ dev/sandbox/Products) and will restart zope "
   (shell-command "rm ~/zenoss/protocols && ln -s ~/dev/sandbox/trunk/protocols ~/zenoss/protocols")
   (shell-command "cd ~/zenoss/protocols/python && make")
   (shell-command "cd ~/zenoss/protocols/python && python setup.py develop")
-  (restart-zope)
-  (restart-zep))
+  (restart-zope))
 
 (defun zen-switch-to-trunk ()
   "Changes the zenoss/Products to trunk and restarts zope"
@@ -250,8 +257,7 @@ dev/sandbox/Products) and will restart zope "
   (shell-command "rm ~/zenoss/protocols && ln -s ~/dev/trunk/protocols ~/zenoss/protocols")
   (shell-command "cd ~/zenoss/protocols/python && make")
   (shell-command "cd ~/zenoss/protocols/python && python setup.py develop")
-  (restart-zope)
-  (restart-zep))
+  (restart-zope))
 
 (defun zen-reload-tags ()
   "Re-creates the tags file and then reloads it"
@@ -259,6 +265,7 @@ dev/sandbox/Products) and will restart zope "
   (progn
     (shell-command (concat "find ~/dev/sandbox/trunk/Products -type f | egrep \"(\.js|\.py)\"  | grep -v '.svn' | grep -v '.pyc' | xargs etags  ~/dev/sandbox/trunk/Products/TAGS " main-sandbox))
     (visit-tags-table (concat main-sandbox "/Products"))))
+
 (defun svn-revert-mergeinfos ()
   (interactive)
   (insert "svn st | awk '/ M/ {if ($2 != \".\") print $2}' | xargs svn revert"))
@@ -277,7 +284,7 @@ dev/sandbox/Products) and will restart zope "
   (interactive)
   (progn
     (let ((current-svn-url (svn-current-project)))
-      (browse-url  (replace-regexp-in-string "svn/" "trac/log/" current-svn-url)))))
+      (browse-url  (replace-regexp-in-string "svnint/" "tracint/log/" current-svn-url)))))
  (global-set-key "\C-xvf" 'svn-browse-change-log)
 
 (defun svn-project-diff()
@@ -452,7 +459,7 @@ in, doesn't remember previous test"
   "Opens up dired in the selected enterprise zenpack"
   (interactive)
   (let ((dir svn-enterprise-sandbox)
-        (zenpacks (directory-files "~/dev/sandbox/enterprise_zenpacks")))
+        (zenpacks (directory-files svn-enterprise-sandbox)))
     (dired (concat dir "/" (ido-completing-read "Find ZenPacks: " zenpacks)))
     ))
 
@@ -471,21 +478,22 @@ directory."
     (insert (concat "cd " directory))
     (comint-send-input)
     ))
-(global-set-key "\C-cd" 'cd-zenpack)
+(global-set-key "\C-cf" 'cd-zenpack)
 
-;; make zendmd font lock
+(defun zenoss-dev-restart ()
+  "Restarts the zep jetty service, zope and then dsa"
+  (interactive)
+  (progn
+    (restart-zep)
+    (restart-dsa)
+    (restart-zope)))
+(global-set-key "\C-cr" 'zenoss-dev-restart)
+
+;; short cut aliases
+(add-hook 'shell-mode-hook '(lambda ()
+                              (comint-simple-send (current-buffer) "source ~/.aliasrc")
+                              (local-set-key "\M-ss" 'dirs)
+                              ))
 
 
-;;TODO  review board auto-posting
-;; sudo easy_install RBTools
-;; 12:56 PM
-;; then from your sandbox directory, run:
-;; $ svn log --stop-on-copy
-;; 12:56 PM
-;; get the first revision on the branch and the last revision
-;; 12:57 PM
-;; run: post-review --username=jhanson --password=zenoss -d --revision-range=FIRST:LAST -o
-;; 12:57 PM
-;; you will want this file created on your dev system:
-;; $ cat ~/.reviewboardrc
-;; REVIEWBOARD_URL = "http://devsvcs.zenoss.loc/reviews"
+;; add processes up to mode line ?

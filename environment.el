@@ -2,11 +2,6 @@
 ;;;;
 ;;;;
 
-
-
-;; to have my .profile variables in emacs, not sure why this is necessary
-(shell-command "source ~/.profile")
-
 ;; always show matching parenthesis
 (show-paren-mode t)
 
@@ -137,3 +132,5 @@
 
 
 ;; pianobar Customization:
+(require 'pianobar)
+(setq pianobar-program-command "/opt/local/bin/pianobar")

@@ -33,9 +33,6 @@
 (load "python-pylint.el")
 (load "python-pep8.el")
 
-
-
-
 ;; open directory returned from python package
 (defun open-python-directory (python-package)
   "Will attempt to open the directory from the python import"
@@ -86,3 +83,5 @@
 ;; ropemacs
 ;; (require 'pymacs)
 ;; (pymacs-load "ropemacs" "rope-")
+
+
