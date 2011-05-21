@@ -1,0 +1,6 @@
+#name : tt 
+# --
+import time
+starttime = time.time()
+endtime = time.time()
+print "Total Time: %f " % (endtime - starttime)
