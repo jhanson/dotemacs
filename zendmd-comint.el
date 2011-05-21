@@ -270,12 +270,14 @@ zendmd source.
 
 
 "
-  ;; piggy back on python keywords
-  (set (make-local-variable 'font-lock-defaults)
-       '(python-font-lock-keywords nil nil nil nil
-                   (font-lock-syntactic-keywords
-                    . python-font-lock-syntactic-keywords)
-                   ))
+  ;; piggy back on python keywords if it is loaded
+  (if (boundp 'python-font-lock-keywords)
+	  (progn
+		(set (make-local-variable 'font-lock-defaults)
+			 '(python-font-lock-keywords nil nil nil nil
+										 (font-lock-syntactic-keywords
+										  . python-font-lock-syntactic-keywords)
+										 ))))
   (set (make-local-variable 'parse-sexp-lookup-properties) t)
   (set (make-local-variable 'parse-sexp-ignore-comments) t)
   (set (make-local-variable 'comment-start) "# ")
