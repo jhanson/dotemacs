@@ -10,7 +10,7 @@
 (setq tab-width 4)
 (setq css-indent-level 4)
 
-;; supposedly this makes all tabs spaces (i think it lies)
+;; supposedly this makes all tabs spaces
 (setq indent-tabs-mode nil)
 (setq default-tab-width 4)
 
@@ -88,7 +88,6 @@
 ;; always load the which-func mode (only works for python)
 (which-func-mode t)
 
-
 ;; i like blinking cursors
 (blink-cursor-mode t)
 
@@ -131,6 +130,3 @@
 (add-to-list 'eshell-visual-commands "vim")
 
 
-;; pianobar Customization:
-(require 'pianobar)
-(setq pianobar-program-command "/opt/local/bin/pianobar")

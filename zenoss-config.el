@@ -13,7 +13,8 @@
 (defun untabify-buffer ()
   "Untabify current buffer"
   (interactive)
-  (untabify (point-min) (point-max)))
+  (if (not (string= major-mode "makefile-gmake-mode"))
+      (untabify (point-min) (point-max))))
 
 (defun progmodes-hooks ()
   "Hooks for programming modes"
@@ -65,7 +66,7 @@
       (progn
         (switch-to-buffer name)
         (goto-char (point-max)))
-    (message (concat name  " doesn't exist"))))
+    (shell name)))
 
 (defun switch-to-zope ()
   "Switchs to my zope.output file, where i keep my zope instance"
@@ -87,10 +88,10 @@
 
 (global-set-key (kbd "\C-c 3") 'switch-to-zenhub)
 
-(defun switch-to-dsa ()
+(defun switch-to-analytics ()
   (interactive)
-  (quick-switch-to-buffer "dsa.out"))
-(global-set-key (kbd "\C-c 4") 'switch-to-dsa)
+  (quick-switch-to-buffer "analytics.out"))
+(global-set-key (kbd "\C-c 4") 'switch-to-analytics)
 
 (defun switch-to-irc ()
   "Goes to the irc session, "
@@ -127,7 +128,7 @@ This assumes that you have your zope instance in a shell file called zope.out"
     (insert "zb.sh")
     (comint-send-input)
     (message "restarted ur zeps")))
-(global-set-key "\C-x\C-t" 'restart-zep)
+
 
 (defun restart-dsa ()
   "Restarts the dsa process"
@@ -146,9 +147,12 @@ This assumes that you have your zope instance in a shell file called zope.out"
 
 (defvar main-sandbox "~/dev/sandbox/trunk")
 (defvar svn-enterprise-url "http://dev.zenoss.com/svnint/sandboxen/jhanson/")
+(defvar svn-reporting-url "http://dev.zenoss.com/svnint/sandboxen/jhanson/reporting/")
 (defvar svn-sandbox-url "http://dev.zenoss.com/svnint/sandboxen/core/jhanson/")
 (defvar svn-core-trunk "http://dev.zenoss.com/svnint/trunk/core")
 (defvar svn-enterprise-sandbox "~/dev/sandbox/enterprise_zenpacks")
+(defvar svn-reporting-sandbox "~/dev/sandbox/reporting")
+
 
 (defun zen-view-revisions ()
   "Browse to the svn log revision changes of the given word"
@@ -197,6 +201,15 @@ This assumes that you have your zope instance in a shell file called zope.out"
       (shell-command (concat "svn switch "  new-trunk " ~/dev/sandbox/enterprise_zenpacks")))))
 (global-set-key "\C-xve" 'svn-create-new-enterprise)
 
+(defun svn-create-new-reporting(name)
+  "Will copy svn reporting to a new branch and switch to it"
+  (interactive "sName of Reporting Sandbox: ")
+  (let* ((new-trunk (concat svn-reporting-url name))
+         (command (concat "svn cp -m \"copying trunk\" http://dev.zenoss.com/svnint/trunk/enterprise/reporting " new-trunk)))
+    (progn
+      (shell-command command "svn-output")
+      (shell-command (concat "svn switch "  new-trunk " ~/dev/sandbox/reporting")))))
+
 (defun svn-merge-enterprise()
   "Preps merging enterprise to trunk"
   (interactive)
@@ -229,6 +242,42 @@ This assumes that you have your zope instance in a shell file called zope.out"
       (or (switch-to-buffer "*shell*")
            (shell))
       (insert "cd ~/dev/sandbox/enterprise_zenpacks")
+      (comint-send-input)
+      (insert (concat "svn merge -r " (car kill-ring-yank-pointer) ":HEAD " sandbox-url))
+      )))
+
+(defun svn-merge-reporting()
+  "Preps merging reporting to trunk"
+  (interactive)
+  (progn
+    (shell-command (concat "svn info " svn-reporting-sandbox) "current-project-output")
+    (switch-to-buffer "current-project-output")
+    ;; go to the svn output, find the string and copy it to the buffer
+    (beginning-of-buffer)
+    (search-forward "URL: http")
+    (backward-word 1)
+    (kill-line )
+    (kill-buffer "current-project-output")
+    ;; message the most recent thing we killed (the url of our svn)
+    (let ((sandbox-url (car kill-ring-yank-pointer)))
+      ;; get the revision
+      (shell-command (concat "svn log " sandbox-url " | head -n 1000") "svn-log-output")
+      (switch-to-buffer "svn-log-output")
+      (beginning-of-buffer)
+      ;; phrase i always use to create a branch
+      (search-forward "copying trunk")
+      ;; go back two lines to the revision number
+      (back-to-indentation)
+      (previous-line 2)
+      ;; don't need the r in the revision number
+      (forward-char 1)
+      (copy-word 1)
+      (kill-buffer "svn-log-output")
+      ;; switch to trunk
+      (shell-command "svn switch http://dev.zenoss.com/svnint/trunk/enterprise/reporting ~/dev/sandbox/reporting")
+      (or (switch-to-buffer "*shell*")
+           (shell))
+      (insert "cd ~/dev/sandbox/reporting")
       (comint-send-input)
       (insert (concat "svn merge -r " (car kill-ring-yank-pointer) ":HEAD " sandbox-url))
       )))
@@ -357,7 +406,7 @@ this does not actually execute the command"
       (insert "cd ~/dev/trunk")
       (comint-send-input)
       (delete-other-windows)
-      (insert (concat "svn merge -r " (car kill-ring-yank-pointer) ":HEAD " current-svn-url " .")))))
+      (insert (concat "svn up && svn revert -R . && svn merge -r " (car kill-ring-yank-pointer) ":HEAD " current-svn-url " .")))))
 
 ;; zenoss specific mysql (i don't use it for anything else)
 (setq sql-mysql-program "/usr/local/mysql/bin/mysql" )
@@ -437,23 +486,6 @@ in, doesn't remember previous test"
       (zendmd-send-string (concat "lookupGuid(\"" guid "\")"))
       (switch-to-zendmd))))
 
-;; queue shortcuts
-(defun zenoss-show-queues ()
-  "Runs show queues"
-  (interactive)
-  (let ((queue-command "/Users/joseph/Cellar/rabbitmq/2.1.0/sbin/rabbitmqctl"))
-    (shell-command (concat queue-command " list_queues -p /zenoss"))))
-(global-set-key "\C-cq" 'zenoss-show-queues)
-
-(defun zenoss-dump-queues ()
-  "Runs show queues"
-  (interactive)
-  (let ((queue-buffer-name "*queue-output*"))
-    (if (get-buffer queue-buffer-name)
-        (kill-buffer queue-buffer-name))
-    (shell-command "zenqdump&" queue-buffer-name)
-    (switch-to-buffer-other-window queue-buffer-name)))
-(global-set-key "\C-cw" 'zenoss-dump-queues)
 
 (defun dired-zenpack ()
   "Opens up dired in the selected enterprise zenpack"
@@ -480,20 +512,17 @@ directory."
     ))
 (global-set-key "\C-cf" 'cd-zenpack)
 
-(defun zenoss-dev-restart ()
-  "Restarts the zep jetty service, zope and then dsa"
-  (interactive)
-  (progn
-    (restart-zep)
-    (restart-dsa)
-    (restart-zope)))
-(global-set-key "\C-cr" 'zenoss-dev-restart)
 
 ;; short cut aliases
 (add-hook 'shell-mode-hook '(lambda ()
                               (comint-simple-send (current-buffer) "source ~/.aliasrc")
                               (local-set-key "\M-ss" 'dirs)
                               ))
+(defun reload-reports ()
+  "Reloads all of the jaspersoft reports"
+  (interactive)
+  (let ((shell-command-window "*RELOAD-REPORTS*"))
+    (maybe-kill-buffer shell-command-window)
+    (shell-command (concat "cd " svn-reporting-sandbox "/analytics/ && ./reload_reports.sh&") shell-command-window)))
+(global-set-key "\C-x\C-t" 'reload-reports)
 
-
-;; add processes up to mode line ?

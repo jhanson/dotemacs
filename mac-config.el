@@ -11,9 +11,11 @@
 (setenv "PYTHONPATH"
         "/Users/joseph/zenoss/lib/python:/Users/joseph/dev/sandbox/trunk/Products"
         )
+
 (setenv "JAVA_HOME"
         "/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Home"
         )
+
 (setenv "PS1" "\\u:\\w$ ")
 ;; mac only font
 (set-default-font "-apple-Menlo-bold-normal-normal-*-*-*-*-*-m-0-iso10646-1")
@@ -45,7 +47,8 @@
   (process-send-string " growl" "\n")
   (process-send-eof " growl"))
 
-
+(load-file "~/emacs/pianobar.el")
+(setq pianobar-program-command "/Users/joseph/src/pianobar/pianobar")
 
 ;; fullscreen on mac
 (defun mac-maximize-frame ()
@@ -57,7 +60,7 @@
 ;; set the color theme
 (require 'color-theme)
 (load-file "~/emacs/color-theme-blackboard.el")
-(color-theme-blackboard)
+;;(color-theme-blackboard)
 ;; drag a file to emacs to open it
 (define-key global-map [ns-drag-file] 'ns-find-file)
 

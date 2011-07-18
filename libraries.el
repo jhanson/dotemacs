@@ -43,16 +43,6 @@
 ;; winring
 ;;(require 'winring)
 
-;; ;; cedet
-;; (load-file "~/emacs/cedet-1.0pre7/common/cedet.el")
-;; (global-ede-mode t)
-
-;; ;; ecb
-;; (add-to-list 'load-path
-;;              "~/emacs/ecb-snap/")
-;; (require 'ecb)
-;; (add-to-list 'ecb-source-path
-;;              "~/dev/sandbox/Products")
 
 ;;; Support for the elisp library elib.
 (setq load-path (append (list "/Applications/Emacs.app/Contents/Resources/site-lisp/elib")
@@ -136,5 +126,9 @@ functions, and some types.  It also provides indentation that is
 (add-to-list 'load-path "~/emacs/evernote-mode/")
 (require 'evernote-mode)
 
-;; dired plus
+;; extended dired mode
 (require 'dired+)
+
+;; w3m
+(add-to-list 'load-path "~/emacs/w3m/")
+(require 'w3m)

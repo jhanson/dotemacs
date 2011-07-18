@@ -1,6 +1,17 @@
 
+;; cedet
+(load-file "~/emacs/cedet-1.0pre7/common/cedet.el")
+(global-ede-mode t)
+
+;; ecb
+(add-to-list 'load-path
+             "~/emacs/ecb-snap/")
+(require 'ecb)
+(add-to-list 'ecb-source-path
+             "~/dev/sandbox/Products")
 
 (add-to-list 'load-path (expand-file-name "~/emacs/jdee-2.4.0.1/lisp/"))
+
 (require 'jde)
 
 ;; maven code

@@ -8,7 +8,6 @@
                (c-toggle-auto-newline -1)
                ))
 
-;; newest version of php-mode. The one in packages was like 4 years old
 (autoload (quote php-mode) "php-mode" "php mode" t nil)
 (add-to-list (quote auto-mode-alist) (cons "\\.php$" (function php-mode)))
 (setq auto-mode-alist (cons '("\\.ctp$" . php-mode) auto-mode-alist))
@@ -40,6 +39,6 @@
                             ;; flymake short cuts
                             (define-key php-mode-map '[M-S-up] 'flymake-goto-prev-error)
                             (define-key php-mode-map '[M-S-down] 'flymake-goto-next-error)
-                            (define-key php-mode-map "\C-c\C-t" 'php-complete-function)             
+                            (define-key php-mode-map "\C-c\C-t" 'php-complete-function)
                             ))
 

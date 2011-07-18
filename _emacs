@@ -1,9 +1,14 @@
-
 ;; local directory of plugins
 (add-to-list 'load-path "~/emacs")
 (add-to-list 'load-path "~/.emacs.d/")
 
 (load "funcs.el")
+(if (eq system-type 'darwin)
+    (load "mac-config.el")
+    )
+(if (eq system-type 'gnu/linux)
+    (load "linux-config.el")
+    )
 (load "environment.el")
 (load "libraries.el")
 (load "zenoss-config.el")
@@ -11,15 +16,13 @@
 (load "php-config.el")
 (load "python-config.el")
 (load "javascript-config.el")
-(if (eq system-type 'darwin)
-    (load "mac-config.el")
-    )
-(if (eq system-type 'gnu/linux)
-    (load "linux-config.el")
-    )
-;;(load "java-config.el")
-;;(load "erlang-config.el")
+
+;; (load "java-config.el")
+(load "erlang-config.el")
+
 ;; irc.efnet.org
+(load "watch-queue.el")
+
 
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
@@ -41,3 +44,5 @@
 
 
 
+;; start up the named buffers
+(zenoss-startup-shells)
