@@ -1,0 +1,3 @@
+#name : die_print_r
+# --
+die_print_r(${1:output});
