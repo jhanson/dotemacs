@@ -153,6 +153,24 @@ This assumes that you have your zope instance in a shell file called zope.out"
 (defvar svn-enterprise-sandbox "~/dev/sandbox/enterprise_zenpacks")
 (defvar svn-reporting-sandbox "~/dev/sandbox/reporting")
 
+;; short cuts for eshell
+(defun zenoss-shortcut-directory (directory)
+  (insert (concat "cd " directory))
+  (if (string= major-mode "eshell-mode")
+      (eshell-send-input)
+    (comint-send-input)))
+
+(defun cdp ()
+  (interactive)
+  (zenoss-shortcut-directory (concat main-sandbox "/Products")))
+
+(defun cdj ()
+  (interactive)
+  (zenoss-shortcut-directory (concat main-sandbox "/Products/ZenUI3/browser/resources/js")))
+
+(defun cde ()
+  (interactive)
+  (zenoss-shortcut-directory (concat svn-enterprise-sandbox)))
 
 (defun zen-view-revisions ()
   "Browse to the svn log revision changes of the given word"
@@ -408,8 +426,7 @@ this does not actually execute the command"
       (delete-other-windows)
       (insert (concat "svn up && svn revert -R . && svn merge -r " (car kill-ring-yank-pointer) ":HEAD " current-svn-url " .")))))
 
-;; zenoss specific mysql (i don't use it for anything else)
-(setq sql-mysql-program "/usr/local/mysql/bin/mysql" )
+
 
 (defun maybe-kill-buffer (buffer-name)
   "Kills the buffer if it exist"
@@ -505,19 +522,15 @@ directory."
         ;; the selected zenpack
         (zenpack  (ido-completing-read "Find ZenPacks: " zenpacks))
         (directory (concat dir "/" zenpack "/" (replace-regexp-in-string "\\." "\/" zenpack))))
-    (shell)
+    (eshell)
     (goto-char (point-max))
     (insert (concat "cd " directory))
-    (comint-send-input)
+    (eshell-send-input)
     ))
 (global-set-key "\C-cf" 'cd-zenpack)
 
 
-;; short cut aliases
-(add-hook 'shell-mode-hook '(lambda ()
-                              (comint-simple-send (current-buffer) "source ~/.aliasrc")
-                              (local-set-key "\M-ss" 'dirs)
-                              ))
+
 (defun reload-reports ()
   "Reloads all of the jaspersoft reports"
   (interactive)

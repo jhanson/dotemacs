@@ -1,6 +1,5 @@
 
 ;; cedet
-(load-file "~/emacs/cedet-1.0pre7/common/cedet.el")
 (global-ede-mode t)
 
 ;; ecb
@@ -16,8 +15,6 @@
 
 ;; maven code
 (require 'compile)
-
-
 
 (defvar mvn-command-history nil
   "Maven command history variable")

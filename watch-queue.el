@@ -1,5 +1,5 @@
 (defvar queue-watch-is-watching-queues 'nil)
-(defvar queue-watch-command "/Users/joseph/Cellar/rabbitmq/2.1.0/sbin/rabbitmqctl list_queues -p /zenoss")
+(defvar queue-watch-command "sudo rabbitmqctl list_queues -p /zenoss")
 (defvar queue-watch-buffer "*WATCH-QUEUES*")
 (defvar queue-watch-repeat-interval "2 seconds")
 

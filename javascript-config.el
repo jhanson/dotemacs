@@ -1,5 +1,6 @@
 (load "espresso")
-
+;; (load "closure-lint-mode.el")
+;; (setq closure-lint-gjs-lint "/Users/joseph/zenoss/bin/gjslint")
 ;; js2 javascript IDE
 (autoload 'js2-mode "js2" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
@@ -67,6 +68,7 @@ to run in flymake mode so I think this is a better option"
              (local-set-key "\M-p" 'backward-paragraph)
              (drag-stuff-mode t)
              (setq js2-bounce-indent-p nil)
+             ;; (closure-lint-mode)
              (yas/minor-mode-on)
              ))
 (add-hook 'espresso-mode-hook
@@ -150,7 +152,6 @@ This assumes the shell to be open and is called *js*"
 ;; Add the hook so this is all loaded when JS2-mode is loaded
 (add-hook 'js2-mode-hook 'my-js2-mode-hook)
 
-
 ;; mozrepl
 (autoload 'inferior-moz-mode "moz" "MozRepl Inferior Mode" t)
 (autoload 'moz-minor-mode "moz" "MozRepl Minor Mode" t)
@@ -166,27 +167,5 @@ from emacs, otherwise it will prompt you"
   (comint-send-string (inferior-moz-process)
                       "content.location.reload();")
   (message "refreshed page"))
-
 (global-set-key  "\C-cu" 'refresh-browser-page)
 
-;; jslint compile mode (like pep8)
-
-
-;; flymake using gjslint
-;; (require 'flymake)
-
-;; (defun flymake-gjslint-init ()
-;;   "Initialize flymake for gjslint"
-;;   (let* ((temp-file (flymake-init-create-temp-buffer-copy
-;;                      'flymake-create-temp-inplace)))
-;;     (list "/Users/joseph/zenoss/bin/gjslint" (list temp-file "--nosummary"))))
-
-;; (add-to-list 'flymake-allowed-file-name-masks
-;;              '(".+\\.js$"
-;;                flymake-gjslint-init
-;;                flymake-simple-cleanup
-;;                flymake-get-real-file-name))
-
-;; (add-to-list 'flymake-err-line-patterns
-;;              '("^Line \\([[:digit:]]+\\), E:[[:digit:]]+: "
-;;                nil 1 nil))

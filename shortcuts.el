@@ -15,8 +15,8 @@
 (define-key global-map (kbd "RET") 'newline-and-indent)
 
 ;; short cut to shell
-(global-set-key (kbd "\C-c 5") 'shell)
-(global-set-key (kbd "\C-c 7") 'eshell)
+(global-set-key (kbd "\C-c 5") 'eshell)
+(global-set-key (kbd "\C-c 7") 'shell)
 
 ;; shortcuts i like
 (global-set-key (kbd "\C-c \C-t") 'lisp-complete-symbol)

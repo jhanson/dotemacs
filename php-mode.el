@@ -262,11 +262,11 @@ See `php-beginning-of-defun'."
         t
       (goto-char here)
       (setq php-warned-bad-indent t)
-      ;; (lwarn 'php-indent :warning
-      ;;        "\n\t%s\n\t%s\n\t%s\n"
-      ;;        "Indentation fails badly with mixed HTML and PHP."
-      ;;        "Look for an Emacs Lisp library that supports \"multiple"
-      ;;        "major modes\" like mumamo, mmm-mode or multi-mode.")
+      (lwarn 'php-indent :warning
+             "\n\t%s\n\t%s\n\t%s\n"
+             "Indentation fails badly with mixed HTML and PHP."
+             "Look for an Emacs Lisp library that supports \"multiple"
+             "major modes\" like mumamo, mmm-mode or multi-mode.")
       nil)))
 
 (defun php-cautious-indent-region (start end &optional quiet)
@@ -315,7 +315,7 @@ See `php-beginning-of-defun'."
   (set (make-local-variable 'c-opt-cpp-prefix) php-tags-key)
 
   (c-set-offset 'cpp-macro 0)
-
+  
 ;;   (c-lang-defconst c-block-stmt-1-kwds php php-block-stmt-1-kwds)
 ;;   (c-lang-defvar c-block-stmt-1-kwds (c-lang-const c-block-stmt-1-kwds))
   (set (make-local-variable 'c-block-stmt-1-key) php-block-stmt-1-key)

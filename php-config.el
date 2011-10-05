@@ -7,7 +7,7 @@
                (setq c-auto-newline 0)
                (c-toggle-auto-newline -1)
                ))
-
+(load "pi-php-mode.el")
 (autoload (quote php-mode) "php-mode" "php mode" t nil)
 (add-to-list (quote auto-mode-alist) (cons "\\.php$" (function php-mode)))
 (setq auto-mode-alist (cons '("\\.ctp$" . php-mode) auto-mode-alist))
@@ -41,4 +41,4 @@
                             (define-key php-mode-map '[M-S-down] 'flymake-goto-next-error)
                             (define-key php-mode-map "\C-c\C-t" 'php-complete-function)
                             ))
-
+(load "pi-php-mode.el")

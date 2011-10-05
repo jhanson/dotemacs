@@ -53,6 +53,7 @@
 ;;; Code:
 
 (require 'comint)
+(require 'python)
 
 (defcustom inferior-zendmd-program-command "zendmd" "command used to invoke zendmd, the default assumes it is on your path"
   :group 'inferior-zendmd)
@@ -269,10 +270,8 @@ zendmd source.
   (if (boundp 'python-font-lock-keywords)
       (progn
         (set (make-local-variable 'font-lock-defaults)
-             '(python-font-lock-keywords nil nil nil nil
-                                         (font-lock-syntactic-keywords
-                                          . python-font-lock-syntactic-keywords)
-                                         ))))
+       '(python-font-lock-keywords nil nil nil nil
+         ))))
   (set (make-local-variable 'parse-sexp-lookup-properties) t)
   (set (make-local-variable 'parse-sexp-ignore-comments) t)
   (set (make-local-variable 'comment-start) "# ")

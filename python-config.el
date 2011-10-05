@@ -55,7 +55,8 @@
 
 (add-hook 'python-mode-hook '(lambda ()
              (drag-stuff-mode t)
-             (flyspell-prog-mode)
+             ;; commenting out flyspell mode for now it slows down the buffer too much
+             ;; (flyspell-prog-mode
              (define-key python-mode-map "\C-co" 'zen-list-tags)
              (define-key python-mode-map "\C-ci" 'python-pep8)
              (define-key python-mode-map "\M-n" 'forward-paragraph)

@@ -35,10 +35,14 @@
 (add-to-list 'load-path "~/emacs/plugins/yasnippet/")
 (require 'yasnippet) ;; not yasnippet-bundle
 (yas/initialize)
-(yas/load-directory "~/emacs/plugins/yasnippet/snippets")
 
+(defun reload-snippets ()
+  "Convenience method for reloading the ya snippet plugins"
+  (interactive)
+  (yas/load-directory "~/emacs/plugins/yasnippet/snippets"))
+(reload-snippets)
 ;; browse the kill ring
-;;(require 'browse-kill-ring)
+(require 'browse-kill-ring)
 
 ;; winring
 ;;(require 'winring)
@@ -105,6 +109,11 @@ functions, and some types.  It also provides indentation that is
 
 (add-to-list (quote auto-mode-alist) (cons "\\.go$" (function go-mode)))
 
+
+
+;; sass mode
+(add-to-list (quote auto-mode-alist) (cons "\\.scss$" (function sass-mode)))
+
 ;; actionscript mode
 (autoload (quote actionscript-mode) "actionscript-mode" "actionscript mode" t nil)
 (add-to-list (quote auto-mode-alist) (cons "\\.as$" (function actionscript-mode)))
@@ -112,23 +121,19 @@ functions, and some types.  It also provides indentation that is
 
 (put 'narrow-to-page 'disabled nil)
 
-;; anything.el
-(require 'anything)
-(require 'anything-config)
-
-;; slime
-(setq inferior-lisp-program "/opt/local/bin/sbcl")
-(require 'slime)
-(slime-setup)
-
-
-;; evernote
-(add-to-list 'load-path "~/emacs/evernote-mode/")
-(require 'evernote-mode)
-
 ;; extended dired mode
 (require 'dired+)
 
 ;; w3m
-(add-to-list 'load-path "~/emacs/w3m/")
-(require 'w3m)
+;; (add-to-list 'load-path "~/emacs/w3m/")
+;; (require 'w3m)
+(setq max-specpdl-size 50000)
+(setq max-lisp-eval-depth 5000)
+
+;; haskell mode
+(add-to-list 'load-path "~/emacs/haskell-mode")
+(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+(autoload 'haskell-mode "haskell-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.hs\\'" . haskell-mode))
+

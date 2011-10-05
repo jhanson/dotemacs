@@ -121,9 +121,6 @@
 ;; display time mode (shows time and load in the menu bar)
 (display-time-mode 1)
 
-;; always show rainbow mode in css mode
-(add-hook 'css-mode-hook 'rainbow-mode)
-
 ;; eshell variables
 (eshell)
 (add-to-list 'eshell-visual-commands "htop")

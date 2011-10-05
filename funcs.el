@@ -177,9 +177,3 @@ This always runs on the current buffer"
   (other-window 1))
 
 (global-set-key (kbd "C-c s") 'swap-windows)
-
-
-
-
-;; emacs lisp watch command (runs a function every X seconds)
-;; and a way to kill it, probably would be a little buffer like itunes
