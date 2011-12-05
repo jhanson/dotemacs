@@ -9,9 +9,11 @@
         )
 
 (setenv "PYTHONPATH"
-        "/Users/joseph/zenoss/lib/python:/Users/joseph/dev/sandbox/trunk/Products"
+        "/Users/joseph/zenoss/lib/python:/Users/joseph/dev/sandbox/trunk/Products:/Users/joseph/zenoss"
         )
-
+(setenv "INSTANCE_HOME"
+        "/Users/joseph/zenoss"
+        )
 (setenv "JAVA_HOME"
         "/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Home"
         )
@@ -51,7 +53,7 @@
 ;; set the color theme
 (require 'color-theme)
 (load-file "~/emacs/color-theme-blackboard.el")
-(color-theme-blackboard)
+(color-theme-sanityinc-solarized-dark)
 ;; drag a file to emacs to open it
 (define-key global-map [ns-drag-file] 'ns-find-file)
 

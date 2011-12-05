@@ -113,6 +113,7 @@ functions, and some types.  It also provides indentation that is
 
 ;; sass mode
 (add-to-list (quote auto-mode-alist) (cons "\\.scss$" (function sass-mode)))
+(add-hook 'sass-mode-hook 'rainbow-mode)
 
 ;; actionscript mode
 (autoload (quote actionscript-mode) "actionscript-mode" "actionscript mode" t nil)

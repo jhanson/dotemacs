@@ -5,7 +5,7 @@
 ;;; Author: Joseph Hanson <jhanson@zenoss.com>
 ;;; Maintainer: Joseph Hanson <jhanson@zenoss.com>>
 ;;; Created: 12/12/10
-;;; Version: 0.0.1
+;;; Version: 0.0.2
 ;;; Package-Requires: (comint)
 ;;; Keywords: python
 
@@ -47,9 +47,11 @@
 ;;  To use the minor mode add a hook in your python mode like the following:
 ;;   (add-hook 'python-mode-hook '(lambda ()
 ;;                               (zendmd-minor-mode 1)))
-
+;;; TODO:
+;;  Update load file to keep keep context into account
 ;;; History:
-;;
+;;  0.0.2 - Updated send region to take into account the current global and local scope so dmd
+;;          can be used inside of a sent region
 ;;; Code:
 
 (require 'comint)
@@ -139,15 +141,19 @@ see `python-send-region' from which this was largely copied from."
   (interactive "r")
   (inferior-zendmd-start-process inferior-zendmd-program-command t)
   (let* ((f (make-temp-file "py"))
-     (command (format "emacs.eexecfile(%S)" f))
-     (orig-start (copy-marker start)))
+         ;; use regular execfile instead of emacs defined eexecfile
+         ;; since we can pass in globals and locals
+         (command (format "execfile(%S, globals(), locals())" f))
+         ;;(command (format "emacs.eexecfile(%S)" f))
+
+         (orig-start (copy-marker start)))
     (when (save-excursion
-        (goto-char start)
-        (/= 0 (current-indentation))) ; need dummy block
+            (goto-char start)
+            (/= 0 (current-indentation))) ; need dummy block
       (save-excursion
-    (goto-char orig-start)
-    ;; Wrong if we had indented code at buffer start.
-    (set-marker orig-start (line-beginning-position 0)))
+        (goto-char orig-start)
+        ;; Wrong if we had indented code at buffer start.
+        (set-marker orig-start (line-beginning-position 0)))
       (write-region "if True:\n" nil f nil 'nomsg))
     (write-region start end f t 'nomsg)
     (zendmd-send-command command)

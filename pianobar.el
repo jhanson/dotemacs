@@ -123,36 +123,36 @@ is run).
                     (read-string "Run pianobar: " pianobar-program-command)
                   pianobar-program-command)))
 
-    (if (not (comint-check-proc pianobar-buffer))
-        (save-excursion
-          (let ((cmdlist (split-string cmd)))
-            (set-buffer (apply 'make-comint "pianobar" (car cmdlist)
-                               nil (cdr cmdlist)))
-            (pianobar-mode))
+  (if (not (comint-check-proc pianobar-buffer))
+      (save-excursion
+        (let ((cmdlist (split-string cmd)))
+          (set-buffer (apply 'make-comint "pianobar" (car cmdlist)
+                             nil (cdr cmdlist)))
+          (pianobar-mode))
 
-          (accept-process-output (get-buffer-process pianobar-buffer) 5)
-          ;; give it a second to start up
-          (sleep-for 0 1)
-          (setq pianobar-buffer "*pianobar*")
-          (if pianobar-username
-              (comint-simple-send (pianobar-proc) pianobar-username)
-            ;; if they don't log in auto matically then switch to the process
-            (switch-to-pianobar)
-            )
-          (if pianobar-password
-              (comint-simple-send (pianobar-proc) pianobar-password)
-            (switch-to-pianobar)
-            )
-          (if pianobar-station
-              (comint-simple-send (pianobar-proc) pianobar-station)
-            (switch-to-pianobar)
-            )
-          (add-hook 'comint-output-filter-functions
-                    'pianobar-comint-output-filter-function nil t)
-          (add-hook 'comint-preoutput-filter-functions 'pianobar-preoutput-filter nil t)
-          ;; make them select the station
+        (accept-process-output (get-buffer-process pianobar-buffer) 5)
+        ;; give it a second to start up
+        (sleep-for 0 1)
+        (setq pianobar-buffer "*pianobar*")
+        (if pianobar-username
+            (comint-simple-send (pianobar-proc) pianobar-username)
+          ;; if they don't log in auto matically then switch to the process
           (switch-to-pianobar)
-          (run-hooks 'pianobar-mode-hook))))
+          )
+        (if pianobar-password
+            (comint-simple-send (pianobar-proc) pianobar-password)
+          (switch-to-pianobar)
+          )
+        (if pianobar-station
+            (comint-simple-send (pianobar-proc) pianobar-station)
+          (switch-to-pianobar)
+          )
+        (add-hook 'comint-output-filter-functions
+                  'pianobar-comint-output-filter-function nil t)
+        (add-hook 'comint-preoutput-filter-functions 'pianobar-preoutput-filter nil t)
+        ;; make them select the station
+        (switch-to-pianobar)
+        (run-hooks 'pianobar-mode-hook))))
 
 (defun pianobar-send-string (string)
   "Evaluate string in from pianobar process."
@@ -165,8 +165,8 @@ See variable `inferior-pianobar-buffer'.  Starts a new process if necessary."
   (unless (comint-check-proc pianobar-buffer)
     (pianobar-start-process pianobar-program-command))
   (get-buffer-process (if (derived-mode-p 'pianobar-mode)
-              (current-buffer)
-            pianobar-buffer)))
+                          (current-buffer)
+                        pianobar-buffer)))
 
 (defun switch-to-pianobar ()
   "Switch to the pianobar process buffer."

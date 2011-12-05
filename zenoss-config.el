@@ -539,3 +539,10 @@ directory."
     (shell-command (concat "cd " svn-reporting-sandbox "/analytics/ && ./reload_reports.sh&") shell-command-window)))
 (global-set-key "\C-x\C-t" 'reload-reports)
 
+;; ext minor mode with link to documentation xtype lookup
+;; 1. doc lookup example: http://docs.sencha.com/touch/2-0/#!/api/Ext.Function-method-bind
+;; 2. xtype lookup to class lookup
+;; 3. register yas/snippets for new classes etc like skeleton
+;; 4. jump to source file give a configured extjs root directory
+;; 5. jsduck options and function
+;; 6. syntax highlighting for config options

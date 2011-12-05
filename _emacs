@@ -13,16 +13,14 @@
 (load "libraries.el")
 (load "zenoss-config.el")
 (load "shortcuts.el")
-(load "php-config.el")
+;; (load "php-config.el")
 (load "python-config.el")
 (load "javascript-config.el")
 
 ;; (load "java-config.el")
-(load "erlang-config.el")
+;; (load "erlang-config.el")
 
-;; irc.efnet.org
-(load "watch-queue.el")
-
+;; (load "watch-queue.el")
 
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
@@ -41,8 +39,3 @@
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
  )
-
-
-
-;; start up the named buffers
-(zenoss-startup-shells)
