@@ -59,7 +59,5 @@
 ;; more useful.
 (global-set-key (kbd "C-x C-q") 'ido-recentf-open)
 
-;; oh emacs, how could I ever control x, control c you!
-(global-unset-key (kbd "C-x C-c"))
 ;; minimize is just annoying
 (global-unset-key (kbd "C-x C-z"))

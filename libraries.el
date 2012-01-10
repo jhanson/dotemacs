@@ -44,27 +44,9 @@
 ;; browse the kill ring
 (require 'browse-kill-ring)
 
-;; winring
-;;(require 'winring)
-
-
 ;;; Support for the elisp library elib.
 (setq load-path (append (list "/Applications/Emacs.app/Contents/Resources/site-lisp/elib")
                         load-path))
-
-;; automatically show eclispse style code browser
-;;(ecb-activate)
-
-
-;;; This was installed by package-install.el.
-;;; This provides support for the package system and
-;;; interfacing with ELPA, the package archive.
-;;; Move this code earlier if you want to reference
-;;; packages in your .emacs.
-(when
-    (load
-     (expand-file-name "~/.emacs.d/elpa/package.el"))
-  (package-initialize))
 
 ;; ;; magit
 ;; (setq magit-git-executable "/usr/local/git/bin/git")
@@ -128,8 +110,8 @@ functions, and some types.  It also provides indentation that is
 ;; w3m
 ;; (add-to-list 'load-path "~/emacs/w3m/")
 ;; (require 'w3m)
-(setq max-specpdl-size 50000)
-(setq max-lisp-eval-depth 5000)
+(setq max-specpdl-size 500000)
+(setq max-lisp-eval-depth 50000)
 
 ;; haskell mode
 (add-to-list 'load-path "~/emacs/haskell-mode")
@@ -137,4 +119,5 @@ functions, and some types.  It also provides indentation that is
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
 (autoload 'haskell-mode "haskell-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.hs\\'" . haskell-mode))
+
 

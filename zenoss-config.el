@@ -145,7 +145,7 @@ This assumes that you have your zope instance in a shell file called zope.out"
 (defvar trac-public-url "http://dev.zenoss.com/tracint/ticket/" "Where tickets are on the public trac")
 (defvar trac-svn-log "http://dev.zenoss.com/tracint/log/sandboxen/jhanson/")
 
-(defvar main-sandbox "~/dev/sandbox/trunk")
+(defvar main-sandbox "~/dev/trunk")
 (defvar svn-enterprise-url "http://dev.zenoss.com/svnint/sandboxen/jhanson/")
 (defvar svn-reporting-url "http://dev.zenoss.com/svnint/sandboxen/jhanson/reporting/")
 (defvar svn-sandbox-url "http://dev.zenoss.com/svnint/sandboxen/core/jhanson/")

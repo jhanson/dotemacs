@@ -1,24 +1,25 @@
 ;; load up my path from the system (todo figure out why this doesnt do
 ;; this automatically)
 (setenv "PATH"
-        "/Users/joseph/zenoss/bin:/opt/local/bin:/opt/local/sbin:/opt/subversion/bin:/opt/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/Xcode3.1.4/usr/bin:/usr/local/mysql/bin/:/usr/local/git/bin/:/Library/PostgreSQL/9.1/bin:/Users/joseph/source/go/bin:/Users/joseph/bin"
+		"/Users/jhanson/zenoss/bin:/Developer/usr/bin:/usr/local/sbin:/opt/apache-maven-3.0.3/bin:/opt/subversion/bin:/usr/local/mysql/bin:/usr/local/mysql-5.5.19-osx10.6-x86_64/bin/:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin"        
         )
 
 (setenv "ZENHOME"
-        "/Users/joseph/zenoss"
+        "/Users/jhanson/zenoss"
         )
 
 (setenv "PYTHONPATH"
-        "/Users/joseph/zenoss/lib/python:/Users/joseph/dev/sandbox/trunk/Products:/Users/joseph/zenoss"
+        "/Users/jhanson/zenoss/lib/python:/Users/jhanson/dev/trunk/Products"
         )
 (setenv "INSTANCE_HOME"
-        "/Users/joseph/zenoss"
+        "/Users/jhanson/zenoss"
         )
 (setenv "JAVA_HOME"
         "/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Home"
         )
 
 (setenv "PS1" "\\u:\\w$ ")
+
 ;; mac only font
 (set-default-font "-apple-Menlo-bold-normal-normal-*-*-*-*-*-m-0-iso10646-1")
 
@@ -84,7 +85,10 @@
 ;; zenoss specific mysql (i don't use it for anything else)
 (setq sql-mysql-program "/usr/local/mysql/bin/mysql" )
 
-(setq sql-postgres-program "/Library/PostgreSQL/9.1/bin/psql")
+(setq mac-option-key-is-meta nil)
+(setq mac-command-key-is-meta t)
+(setq mac-command-modifier 'meta)
+(setq mac-option-modifier nil)
 
 ;; short cut aliases
 (add-hook 'shell-mode-hook '(lambda ()
