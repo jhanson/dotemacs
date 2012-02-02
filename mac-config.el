@@ -1,7 +1,7 @@
 ;; load up my path from the system (todo figure out why this doesnt do
 ;; this automatically)
 (setenv "PATH"
-		"/Users/jhanson/zenoss/bin:/Developer/usr/bin:/usr/local/sbin:/opt/apache-maven-3.0.3/bin:/opt/subversion/bin:/usr/local/mysql/bin:/usr/local/mysql-5.5.19-osx10.6-x86_64/bin/:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin"        
+        "/Users/jhanson/zenoss/bin:/Developer/usr/bin:/usr/local/sbin:/opt/apache-maven-3.0.3/bin:/opt/subversion/bin:/usr/local/mysql/bin:/usr/local/mysql-5.5.19-osx10.6-x86_64/bin/:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin"
         )
 
 (setenv "ZENHOME"
@@ -33,6 +33,7 @@
 ;; control Itunes with the f6 key
 (load-file "~/emacs/osx-osascript.el")
 (load-file "~/emacs/itunes.el")
+(load-file "~/emacs/osx-spotify.el")
 
 ;; growl notifications from emacs
 (defvar growl-program "/usr/local/bin/growlnotify")
@@ -54,7 +55,8 @@
 ;; set the color theme
 (require 'color-theme)
 (load-file "~/emacs/color-theme-blackboard.el")
-(color-theme-sanityinc-solarized-dark)
+(color-theme-blackboard)
+
 ;; drag a file to emacs to open it
 (define-key global-map [ns-drag-file] 'ns-find-file)
 
@@ -94,3 +96,4 @@
 (add-hook 'shell-mode-hook '(lambda ()
                               (local-set-key "\M-ss" 'dirs)
                               ))
+

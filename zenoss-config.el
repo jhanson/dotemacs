@@ -150,7 +150,7 @@ This assumes that you have your zope instance in a shell file called zope.out"
 (defvar svn-reporting-url "http://dev.zenoss.com/svnint/sandboxen/jhanson/reporting/")
 (defvar svn-sandbox-url "http://dev.zenoss.com/svnint/sandboxen/core/jhanson/")
 (defvar svn-core-trunk "http://dev.zenoss.com/svnint/trunk/core")
-(defvar svn-enterprise-sandbox "~/dev/sandbox/enterprise_zenpacks")
+(defvar svn-enterprise-sandbox "~/dev/enterprise_zenpacks")
 (defvar svn-reporting-sandbox "~/dev/sandbox/reporting")
 
 ;; short cuts for eshell
@@ -440,10 +440,10 @@ Products.Zuul etc "
   (interactive)
   (let* ((file-name (buffer-file-name (current-buffer)))
          (pieces (split-string file-name "/"))
-         (zenpack  (nth 6 pieces)))
+         (zenpack  (nth 5 pieces)))
     (if (string-match "ZenPack" zenpack)
         zenpack
-      (concat (nth 6 pieces) "." (nth 7 pieces)))))
+      (concat (nth 5 pieces) "." (nth 6 pieces)))))
 
 (defvar last-single-unit-test-command "")
 

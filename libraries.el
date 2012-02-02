@@ -120,4 +120,7 @@ functions, and some types.  It also provides indentation that is
 (autoload 'haskell-mode "haskell-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.hs\\'" . haskell-mode))
 
+(autoload 'sass-mode "sass-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.scss\\'" . sass-mode))
+
 

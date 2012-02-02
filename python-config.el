@@ -72,8 +72,5 @@
 (global-set-key (kbd "\C-c 1") 'switch-to-zendmd)
 
 
-;; ropemacs
-;; (require 'pymacs)
-;; (pymacs-load "ropemacs" "rope-")
 
 
