@@ -48,15 +48,6 @@
 (setq load-path (append (list "/Applications/Emacs.app/Contents/Resources/site-lisp/elib")
                         load-path))
 
-;; ;; magit
-;; (setq magit-git-executable "/usr/local/git/bin/git")
-;; ;; regular vc git
-;; (add-to-list 'vc-handled-backends 'Git)
-;; (autoload 'mo-git-blame-file "mo-git-blame" nil t)
-;; (autoload 'mo-git-blame-current "mo-git-blame" nil t)
-;; (global-set-key "\C-cg" 'mo-git-blame-current)
-;; (setq mo-git-blame-git-executable "/usr/local/git/bin/git")
-
 ;; drag stuff
 (require 'drag-stuff)
 (add-hook 'org-mode-hook '(lambda ()
@@ -107,9 +98,6 @@ functions, and some types.  It also provides indentation that is
 ;; extended dired mode
 (require 'dired+)
 
-;; w3m
-;; (add-to-list 'load-path "~/emacs/w3m/")
-;; (require 'w3m)
 (setq max-specpdl-size 500000)
 (setq max-lisp-eval-depth 50000)
 
@@ -122,5 +110,3 @@ functions, and some types.  It also provides indentation that is
 
 (autoload 'sass-mode "sass-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.scss\\'" . sass-mode))
-
-

@@ -1,0 +1,4 @@
+# -*- coding: utf-8 -*-
+# name: re
+# --
+import Globals; Globals.reload()

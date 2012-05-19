@@ -50,12 +50,12 @@
 (setq pianobar-program-command "/opt/local/bin/pianobar")
 (setq pianobar-username "jrh0090@gmail.com")
 
-
-
 ;; set the color theme
-(require 'color-theme)
-(load-file "~/emacs/color-theme-blackboard.el")
-(color-theme-blackboard)
+;; (require 'color-theme)
+;; (load-file "~/emacs/color-theme-blackboard.el")
+;; (color-theme-blackboard)
+;; emacs 24 comes with this one by in default
+(load-theme 'wombat)
 
 ;; drag a file to emacs to open it
 (define-key global-map [ns-drag-file] 'ns-find-file)
@@ -67,33 +67,33 @@
 (setq ns-pop-up-frames nil) ;; keep OSX from opening more windows
 
 ;; alias the fullscreen command (I never use hide)
-
 (defun ns-small-window ()
   "Make the window smaller"
   (interactive)
-  (set-frame-height (selected-frame) 50)
-  (set-frame-width (selected-frame) 180))
+  (set-frame-position (selected-frame) 0 0)
+  (set-frame-height (selected-frame) 60)
+  (set-frame-width (selected-frame) 202))
 
+(define-key global-map [?\s-h] 'ns-small-window)
 (defun ns-maximize-window ()
   "Make the window smaller"
   (interactive)
   (set-frame-position (selected-frame) 0 0)
-  (set-frame-height (selected-frame) 1000)
-  (set-frame-width (selected-frame) 1000))
-
-(define-key global-map [?\s-h] 'ns-maximize-window)
-
+  (set-frame-height (selected-frame) 82)
+  (set-frame-width (selected-frame) 270))
+(define-key global-map [?\s-H] 'ns-maximize-window)
 
 ;; zenoss specific mysql (i don't use it for anything else)
 (setq sql-mysql-program "/usr/local/mysql/bin/mysql" )
 
-(setq mac-option-key-is-meta nil)
-(setq mac-command-key-is-meta t)
-(setq mac-command-modifier 'meta)
-(setq mac-option-modifier nil)
+;; (setq mac-option-key-is-meta nil)
+;; (setq mac-command-key-is-meta t)
+;; (setq mac-command-modifier 'meta)
+;; (setq mac-option-modifier nil)
 
 ;; short cut aliases
 (add-hook 'shell-mode-hook '(lambda ()
                               (local-set-key "\M-ss" 'dirs)
                               ))
 
+(setq flyspell-issue-welcome-flag nil)

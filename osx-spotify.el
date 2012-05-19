@@ -44,18 +44,18 @@ elispify(retval)
 (defun osx-spotify-playpause ()
   "Tell Spotify to play or pause."
   (interactive)
-  (spotify-do "playpause"))
+  (osx-spotify-do "playpause"))
 
 (defun osx-spotify-next-track ()
   "Tell spotify to skip to the next track."
   (interactive)
-  (spotify-do "next track"))
+  (osx-spotify-do "next track"))
 
 (defun osx-spotify-prev-track ()
   "Tell spotify to skip to the previous track."
   (interactive)
-  (itunes-do "back track")
-  (itunes-window-update))
+  (osx-spotify-do "back track"))
+
 
 (provide 'osx-spotify)
 (global-set-key "\M-sp" 'osx-spotify-playpause)
