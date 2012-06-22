@@ -50,12 +50,9 @@
 (setq pianobar-program-command "/opt/local/bin/pianobar")
 (setq pianobar-username "jrh0090@gmail.com")
 
-;; set the color theme
-;; (require 'color-theme)
-;; (load-file "~/emacs/color-theme-blackboard.el")
-;; (color-theme-blackboard)
 ;; emacs 24 comes with this one by in default
 (load-theme 'wombat)
+
 
 ;; drag a file to emacs to open it
 (define-key global-map [ns-drag-file] 'ns-find-file)

@@ -18,7 +18,7 @@
 ;; jhanson@joseph-macbook:~/emacs$ osascript -e 'tell application "Spotify" to get album of current track'
 ;; The Black Rider
 ;; jhanson@joseph-macbook:~/emacs$
-;; TODO: ask spotify for the
+;; TODO: ask spotify for the name of the current track
 
 
 
@@ -59,4 +59,7 @@ elispify(retval)
 
 (provide 'osx-spotify)
 (global-set-key "\M-sp" 'osx-spotify-playpause)
+(global-set-key "\M-sn" 'osx-spotify-next-track)
+(global-set-key "\M-sb" 'osx-spotify-prev-track)
+
 ;;; osx-spotify.el ends here

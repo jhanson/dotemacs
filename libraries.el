@@ -110,3 +110,11 @@ functions, and some types.  It also provides indentation that is
 
 (autoload 'sass-mode "sass-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.scss\\'" . sass-mode))
+
+;; for compile
+(setq compilation-ask-about-save nil)
+;;; Don't save *anything*
+(setq compilation-save-buffers-predicate '(lambda () nil))
+
+
+(add-hook 'shell-mode-hook 'compilation-shell-minor-mode)

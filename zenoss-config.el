@@ -27,7 +27,9 @@
     (set-buffer-file-coding-system 'utf-8-unix)
     (untabify-buffer)
     (delete-trailing-whitespace)))
-
+(progn
+  (+ 1 1)
+  (+ 2 2))
 ;; make trailing whitespace ugly
 (setq-default show-trailing-whitespace t)
 
@@ -303,10 +305,10 @@ directory."
         ;; the selected zenpack
         (zenpack  (ido-completing-read "Find ZenPacks: " zenpacks))
         (directory (concat dir "/" zenpack "/" (replace-regexp-in-string "\\." "\/" zenpack))))
-    (eshell)
+    (shell)
     (goto-char (point-max))
     (insert (concat "cd " directory))
-    (eshell-send-input)
+    (comint-send-input)
     ))
 (global-set-key "\C-cf" 'cd-zenpack)
 
