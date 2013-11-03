@@ -18,6 +18,9 @@
         "/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Home"
         )
 
+(setq load-path (append (list "/Applications/Emacs.app/Contents/Resources/site-lisp/elib")
+                        load-path))
+
 (setenv "PS1" "\\u:\\w$ ")
 ;; mac only font
 (set-default-font "-apple-Menlo-bold-normal-normal-*-*-*-*-*-m-0-iso10646-1")
@@ -30,20 +33,6 @@
 (global-set-key (kbd "<home>") 'back-to-indentation)
 
 ;; control Itunes with the f6 key
-(load-file "~/emacs/osx-osascript.el")
-(load-file "~/emacs/itunes.el")
-
-;; growl notifications from emacs
-(defvar growl-program "/usr/local/bin/growlnotify")
-(defun growl (title message)
-  (start-process "growl" " growl"
-                 growl-program
-                 title
-                 "-a" "Emacs")
-  (process-send-string " growl" message)
-  (process-send-string " growl" "\n")
-  (process-send-eof " growl"))
-
 (load-file "~/emacs/pianobar.el")
 (setq pianobar-program-command "/opt/local/bin/pianobar")
 (setq pianobar-username "jrh0090@gmail.com")

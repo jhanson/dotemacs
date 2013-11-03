@@ -41,16 +41,9 @@
   (interactive)
   (yas/load-directory "~/emacs/plugins/yasnippet/snippets"))
 (reload-snippets)
-;; browse the kill ring
-(require 'browse-kill-ring)
-
-;; winring
-;;(require 'winring)
 
 
 ;;; Support for the elisp library elib.
-(setq load-path (append (list "/Applications/Emacs.app/Contents/Resources/site-lisp/elib")
-                        load-path))
 
 ;; automatically show eclispse style code browser
 ;;(ecb-activate)
@@ -73,7 +66,6 @@
                            ))
 
 (autoload 'rainbow-mode "rainbow-mode" nil t)
-(autoload 'google-maps "google-maps" nil t)
 
 ;; protobuff
 (autoload 'protobuf-mode "protobuf-mode" nil t)
@@ -111,9 +103,6 @@ functions, and some types.  It also provides indentation that is
 ;; extended dired mode
 (require 'dired+)
 
-;; w3m
-;; (add-to-list 'load-path "~/emacs/w3m/")
-;; (require 'w3m)
 (setq max-specpdl-size 50000)
 (setq max-lisp-eval-depth 5000)
 
