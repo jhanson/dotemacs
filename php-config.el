@@ -35,7 +35,7 @@
 
 (add-hook 'php-mode-hook '(lambda ()
                             (drag-stuff-mode t)
-                            ;; (flyspell-prog-mode)
+                            (flyspell-prog-mode)
                             ;; flymake short cuts
                             (define-key php-mode-map '[M-S-up] 'flymake-goto-prev-error)
                             (define-key php-mode-map '[M-S-down] 'flymake-goto-next-error)

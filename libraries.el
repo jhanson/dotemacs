@@ -44,20 +44,33 @@
 ;; browse the kill ring
 (require 'browse-kill-ring)
 
+;; winring
+;;(require 'winring)
+
+
 ;;; Support for the elisp library elib.
 (setq load-path (append (list "/Applications/Emacs.app/Contents/Resources/site-lisp/elib")
                         load-path))
+
+;; automatically show eclispse style code browser
+;;(ecb-activate)
+
+
+
+;; ;; magit
+;; (setq magit-git-executable "/usr/local/git/bin/git")
+;; ;; regular vc git
+;; (add-to-list 'vc-handled-backends 'Git)
+;; (autoload 'mo-git-blame-file "mo-git-blame" nil t)
+;; (autoload 'mo-git-blame-current "mo-git-blame" nil t)
+;; (global-set-key "\C-cg" 'mo-git-blame-current)
+;; (setq mo-git-blame-git-executable "/usr/local/git/bin/git")
 
 ;; drag stuff
 (require 'drag-stuff)
 (add-hook 'org-mode-hook '(lambda ()
                            (drag-stuff-mode 0)
                            ))
-(load-file "~/.emacs.d/auto-complete.el")
-(load-file "~/.emacs.d/auto-complete-config.el")
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "/Users/joseph/.emacs.d//ac-dict")
-(ac-config-default)
 
 (autoload 'rainbow-mode "rainbow-mode" nil t)
 (autoload 'google-maps "google-maps" nil t)
@@ -98,23 +111,16 @@ functions, and some types.  It also provides indentation that is
 ;; extended dired mode
 (require 'dired+)
 
-(setq max-specpdl-size 500000)
-(setq max-lisp-eval-depth 50000)
+;; w3m
+;; (add-to-list 'load-path "~/emacs/w3m/")
+;; (require 'w3m)
+(setq max-specpdl-size 50000)
+(setq max-lisp-eval-depth 5000)
 
 ;; haskell mode
-(add-to-list 'load-path "~/emacs/haskell-mode")
-(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
-(autoload 'haskell-mode "haskell-mode" nil t)
-(add-to-list 'auto-mode-alist '("\\.hs\\'" . haskell-mode))
+;; (add-to-list 'load-path "~/emacs/haskell-mode")
+;; (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+;; (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+;; (autoload 'haskell-mode "haskell-mode" nil t)
+;; (add-to-list 'auto-mode-alist '("\\.hs\\'" . haskell-mode))
 
-(autoload 'sass-mode "sass-mode" nil t)
-(add-to-list 'auto-mode-alist '("\\.scss\\'" . sass-mode))
-
-;; for compile
-(setq compilation-ask-about-save nil)
-;;; Don't save *anything*
-(setq compilation-save-buffers-predicate '(lambda () nil))
-
-
-(add-hook 'shell-mode-hook 'compilation-shell-minor-mode)

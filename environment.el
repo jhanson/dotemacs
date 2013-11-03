@@ -25,7 +25,7 @@
 
 ;; Add color to a shell running in emacs 'M-x shell'
 (autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
-(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+
 
 ;; make the prompt read only in shell
 (setq comint-prompt-read-only t)
@@ -85,9 +85,6 @@
 ;; use y or n instead of yes or no and then pressing return
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;; always load the which-func mode (only works for python)
-(which-func-mode t)
-
 ;; i like blinking cursors
 (blink-cursor-mode t)
 
@@ -125,5 +122,9 @@
 (eshell)
 (add-to-list 'eshell-visual-commands "htop")
 (add-to-list 'eshell-visual-commands "vim")
+
+(add-hook 'shell-mode-hook '(lambda ()
+                              (ansi-color-for-comint-mode-on)
+                              (compilation-shell-minor-mode)))
 
 
