@@ -1,0 +1,3 @@
+#name : glog
+# --
+glog.V($1).Infof("$2", $3)
