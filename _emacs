@@ -19,7 +19,7 @@
 ;; (load "php-config.el")
 (load "python-config.el")
 (load "javascript-config.el")
-
+(load "go-config.el")
 ;; (load "java-config.el")
 ;; (load "erlang-config.el")
 

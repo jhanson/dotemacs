@@ -60,7 +60,14 @@
   
 (global-set-key (kbd "<f7>") 'test-control-plane)
 
+;; this should already be here but it isn't alas
+(setenv "GOPATH" "/home/jhanson/src/go")
+
+
+(load "go-lint.el")
+
 ;;; TODO shortcut for make and make test
 ;; go test this specific method
 ;; go vet the current buffer
 ;; command to run serviced in a gud buffer with a break point at the current line
+
