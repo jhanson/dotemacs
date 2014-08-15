@@ -10,7 +10,7 @@
 ;; swank-clojure works like a champ
 (add-to-list 'load-path "~/emacs/clojure-mode/swank-clojure")
 
-(setq swank-clojure-jar-path "/Users/joseph/dev/clojure/clojure-1.2.1/clojure.jar")
+(setq swank-clojure-jar-path "/Users/joseph/dev/clojure/clojure-1.2.1/clojure.jabr")
 
 (eval-after-load "slime"
   '(progn (slime-setup '(slime-repl))))

@@ -23,15 +23,21 @@
 
 (defun progmodes-write-hooks ()
   "Hooks which run on file write for programming modes"
-  (progn nil
+  (prog1 nil
     (set-buffer-file-coding-system 'utf-8-unix)
+<<<<<<< HEAD
     (untabify-buffer)));
     ;;(delete-trailing-whitespace)))
 (progn
   (+ 1 1)
   (+ 2 2))
+=======
+    (untabify-buffer)))
+    ;;(delete-trailing-whitespace))
+
+>>>>>>> af8af045435290fa1a6b7e7cc208a2f6a2e66b06
 ;; make trailing whitespace ugly
-(setq-default show-trailing-whitespace t)
+(setq-default show-trailing-whitespace nil)
 
 (defun ws ()
   "Make sure there is a space after every comma"
@@ -120,17 +126,49 @@ This assumes that you have your zope instance in a shell file called zope.out"
       (message "Restarted ur zopez"))))
 (global-set-key "\C-x\C-r" 'restart-zope)
 
+(defun restart-zep ()
+  "Restarts the zep process"
+  (interactive)
+  (progn
+    (switch-to-zep)
+    (comint-interrupt-subjob)
+    (goto-char (point-max))
+    (insert "zb.sh")
+    (comint-send-input)
+    (message "restarted ur zeps")))
+
+
+(defun restart-dsa ()
+  "Restarts the dsa process"
+  (interactive)
+  (progn
+    (switch-to-dsa)
+    (comint-interrupt-subjob)
+    (goto-char (point-max))
+    (insert "mvn clean jetty:run")
+    (comint-send-input)
+    (message "restarted dsa")))
 
 ;; Trac functions
 (defvar trac-public-url "http://dev.zenoss.com/tracint/ticket/" "Where tickets are on the public trac")
 (defvar trac-svn-log "http://dev.zenoss.com/tracint/log/sandboxen/jhanson/")
 
+<<<<<<< HEAD
 (defvar main-sandbox "~/4.2/core")
 (defvar svn-enterprise-url "http://dev.zenoss.com/svnint/sandboxen/jhanson/")
 (defvar svn-sandbox-url "http://dev.zenoss.com/svnint/sandboxen/core/jhanson/4.2/")
 (defvar svn-core-trunk "http://dev.zenoss.com/svnint/branches/core/zenoss-4.x/")
 (defvar svn-enterprise-sandbox "~/4.2/enterprise_zenpacks")
 (defvar svn-reporting-sandbox "~/dev/sandbox/reporting")
+=======
+(defvar main-sandbox "~/dev/core")
+(defvar svn-enterprise-url "http://dev.zenoss.com/svnint/sandboxen/jhanson/")
+(defvar svn-reporting-url "http://dev.zenoss.com/svnint/sandboxen/jhanson/reporting/")
+(defvar svn-sandbox-url "http://dev.zenoss.com/svnint/sandboxen/core/jhanson/")
+(defvar svn-core-trunk "http://dev.zenoss.com/svnint/trunk/core")
+(defvar svn-enterprise-sandbox "~/dev/enterprise")
+(defvar svn-reporting-sandbox "~/dev/reporting")
+>>>>>>> af8af045435290fa1a6b7e7cc208a2f6a2e66b06
 
 ;; short cuts for eshell
 (defun zenoss-shortcut-directory (directory)
@@ -168,7 +206,162 @@ This assumes that you have your zope instance in a shell file called zope.out"
     (shell-command command "svn-output")
     (switch-to-buffer-other-window "svn-output")))
 
+(defun svn-switch-project (name)
+  (interactive "sName of Branch: ")
+  (progn
+    (svn-switch-sandboxen name)
+    (restart-zope)))
 
+(defun svn-create-new-sandbox(name)
+  "Will copy svn trunk to the new branch name and switch the dev/sandbox to the new checkout"
+  (interactive "sName of Sandbox: ")
+  (let* ((new-trunk (concat svn-sandbox-url name))
+         (command (concat "svn cp -m \"copying trunk\" " svn-core-trunk " " new-trunk)))
+    (progn
+      (maybe-kill-buffer "svn-output")
+      (shell-command command "svn-output")
+      (svn-switch-sandboxen name)
+      ;; this will restart zope for me
+      (zen-switch-to-sandbox))))
+(global-set-key "\C-xvn" 'svn-create-new-sandbox)
+
+;; new enterprise
+(defun svn-create-new-enterprise(name)
+  "Will copy svn enterprise to a new branch and switch to it"
+  (interactive "sName of Enterprise Sandbox: ")
+  (let* ((new-trunk (concat svn-enterprise-url name))
+         (command (concat "svn cp -m \"copying trunk\" http://dev.zenoss.com/svnint/trunk/enterprise/zenpacks " new-trunk)))
+    (progn
+      (shell-command command "svn-output")
+      (shell-command (concat "svn switch "  new-trunk " ~/dev/sandbox/enterprise_zenpacks")))))
+(global-set-key "\C-xve" 'svn-create-new-enterprise)
+
+(defun svn-create-new-reporting(name)
+  "Will copy svn reporting to a new branch and switch to it"
+  (interactive "sName of Reporting Sandbox: ")
+  (let* ((new-trunk (concat svn-reporting-url name))
+         (command (concat "svn cp -m \"copying trunk\" http://dev.zenoss.com/svnint/trunk/enterprise/reporting " new-trunk)))
+    (progn
+      (shell-command command "svn-output")
+      (shell-command (concat "svn switch "  new-trunk " ~/dev/sandbox/reporting")))))
+
+(defun svn-merge-enterprise()
+  "Preps merging enterprise to trunk"
+  (interactive)
+  (progn
+    (shell-command (concat "svn info " svn-enterprise-sandbox) "current-project-output")
+    (switch-to-buffer "current-project-output")
+    ;; go to the svn output, find the string and copy it to the buffer
+    (beginning-of-buffer)
+    (search-forward "URL: http")
+    (backward-word 1)
+    (kill-line )
+    (kill-buffer "current-project-output")
+    ;; message the most recent thing we killed (the url of our svn)
+    (let ((sandbox-url (car kill-ring-yank-pointer)))
+      ;; get the revision
+      (shell-command (concat "svn log " sandbox-url " | head -n 1000") "svn-log-output")
+      (switch-to-buffer "svn-log-output")
+      (beginning-of-buffer)
+      ;; phrase i always use to create a branch
+      (search-forward "copying trunk")
+      ;; go back two lines to the revision number
+      (back-to-indentation)
+      (previous-line 2)
+      ;; don't need the r in the revision number
+      (forward-char 1)
+      (copy-word 1)
+      (kill-buffer "svn-log-output")
+      ;; switch to trunk
+      (shell-command "svn switch http://dev.zenoss.com/svnint/trunk/enterprise/zenpacks ~/dev/sandbox/enterprise_zenpacks")
+      (or (switch-to-buffer "*shell*")
+           (shell))
+      (insert "cd ~/dev/sandbox/enterprise_zenpacks")
+      (comint-send-input)
+      (insert (concat "svn merge -r " (car kill-ring-yank-pointer) ":HEAD " sandbox-url))
+      )))
+
+(defun svn-merge-reporting()
+  "Preps merging reporting to trunk"
+  (interactive)
+  (progn
+    (shell-command (concat "svn info " svn-reporting-sandbox) "current-project-output")
+    (switch-to-buffer "current-project-output")
+    ;; go to the svn output, find the string and copy it to the buffer
+    (beginning-of-buffer)
+    (search-forward "URL: http")
+    (backward-word 1)
+    (kill-line )
+    (kill-buffer "current-project-output")
+    ;; message the most recent thing we killed (the url of our svn)
+    (let ((sandbox-url (car kill-ring-yank-pointer)))
+      ;; get the revision
+      (shell-command (concat "svn log " sandbox-url " | head -n 1000") "svn-log-output")
+      (switch-to-buffer "svn-log-output")
+      (beginning-of-buffer)
+      ;; phrase i always use to create a branch
+      (search-forward "copying trunk")
+      ;; go back two lines to the revision number
+      (back-to-indentation)
+      (previous-line 2)
+      ;; don't need the r in the revision number
+      (forward-char 1)
+      (copy-word 1)
+      (kill-buffer "svn-log-output")
+      ;; switch to trunk
+      (shell-command "svn switch http://dev.zenoss.com/svnint/trunk/enterprise/reporting ~/dev/sandbox/reporting")
+      (or (switch-to-buffer "*shell*")
+           (shell))
+      (insert "cd ~/dev/sandbox/reporting")
+      (comint-send-input)
+      (insert (concat "svn merge -r " (car kill-ring-yank-pointer) ":HEAD " sandbox-url))
+      )))
+
+(defun svn-list-projects ()
+  "Outputs a list of all the svn sandboxen I have"
+  (interactive)
+  (shell-command-other-window (concat "svn ls " svn-sandbox-url) "svn-output"))
+
+(defun zen-switch-to-sandbox ()
+  "Will switch my Products to my sandbox (always checked out in
+dev/sandbox/Products) and will restart zope "
+  (interactive)
+  (shell-command "rm ~/zenoss/Products && ln -s ~/dev/sandbox/trunk/Products/ ~/zenoss/Products")
+  (shell-command "rm ~/zenoss/zep && ln -s ~/dev/sandbox/trunk/zep/ ~/zenoss/zep")
+  (shell-command "rm ~/zenoss/protocols && ln -s ~/dev/sandbox/trunk/protocols ~/zenoss/protocols")
+  (shell-command "cd ~/zenoss/protocols/python && make")
+  (shell-command "cd ~/zenoss/protocols/python && python setup.py develop")
+  (restart-zope))
+
+(defun zen-switch-to-trunk ()
+  "Changes the zenoss/Products to trunk and restarts zope"
+  (interactive)
+  (shell-command "rm ~/zenoss/Products && ln -s ~/dev/trunk/Products/ ~/zenoss/Products")
+  (shell-command "rm ~/zenoss/zep && ln -s ~/dev/trunk/zep ~/zenoss/zep")
+  (shell-command "rm ~/zenoss/protocols && ln -s ~/dev/trunk/protocols ~/zenoss/protocols")
+  (shell-command "cd ~/zenoss/protocols/python && make")
+  (shell-command "cd ~/zenoss/protocols/python && python setup.py develop")
+  (restart-zope))
+
+(defun zen-reload-tags ()
+  "Re-creates the tags file and then reloads it"
+  (interactive)
+  (progn
+    (shell-command (concat "find ~/dev/sandbox/trunk/Products -type f | egrep \"(\.js|\.py)\"  | grep -v '.svn' | grep -v '.pyc' | xargs etags  ~/dev/sandbox/trunk/Products/TAGS " main-sandbox))
+    (visit-tags-table (concat main-sandbox "/Products"))))
+
+(defun svn-revert-mergeinfos ()
+  (interactive)
+  (insert "svn st | awk '/ M/ {if ($2 != \".\") print $2}' | xargs svn revert"))
+
+(defun zen-kill-zenoss ()
+  (interactive)
+  (shell-command "ps aux | grep 'zen' | grep -v 'grep' | awk '{print $2}' | xargs sudo kill -9"))
+
+(defun zen-model-device (name)
+  "Will model the device specified by name. This runs asynchronously. "
+  (interactive "sName Of Device: ")
+  (shell-command (concat "zenmodeler run -d" name "--now -v 10 &") (concat "*" name "-model-output*")))
 
 (defun svn-browse-change-log()
   "Sends firefox to the log page for the current svn project"
@@ -224,6 +417,34 @@ This assumes that you have your zope instance in a shell file called zope.out"
       ))
 (global-set-key "\C-xvp" 'svn-current-project)
 
+(defun svn-merge-sandbox ()
+  "Goes and gets the first revision for the current sandbox and sets up the merge command on the shell,
+this does not actually execute the command"
+  (interactive)
+  (svn-current-project)
+  (let ((current-svn-url (car kill-ring-yank-pointer)))
+    (progn
+      ;; assume i will always have less than a 1k lines of commits :P
+      (shell-command (concat "svn log " current-svn-url " | head -n 1000") "svn-log-output")
+      (switch-to-buffer "svn-log-output")
+      (beginning-of-buffer)
+      ;; phrase i always use to create a branch
+      (search-forward "copying trunk")
+      ;; go back two lines to the revision number
+      (back-to-indentation)
+      (previous-line 2)
+      ;; don't need the r in the revision number
+      (forward-char 1)
+      (copy-word 1)
+      (kill-buffer "svn-log-output")
+      (shell)
+      (insert "cd ~/dev/trunk")
+      (comint-send-input)
+      (delete-other-windows)
+      (insert (concat "svn up && svn revert -R . && svn merge -r " (car kill-ring-yank-pointer) ":HEAD " current-svn-url " .")))))
+
+
+
 (defun maybe-kill-buffer (buffer-name)
   "Kills the buffer if it exist"
   (if (get-buffer buffer-name)
@@ -236,10 +457,10 @@ Products.Zuul etc "
   (interactive)
   (let* ((file-name (buffer-file-name (current-buffer)))
          (pieces (split-string file-name "/"))
-         (zenpack  (nth 5 pieces)))
+         (zenpack  (nth 6 pieces)))
     (if (string-match "ZenPack" zenpack)
         zenpack
-      (concat (nth 5 pieces) "." (nth 6 pieces)))))
+      (concat (nth 6 pieces) "." (nth 7 pieces)))))
 
 (defvar last-single-unit-test-command "")
 
@@ -278,6 +499,19 @@ in, doesn't remember previous test"
   (let ((package (get-current-python-package)))
     (shell-command (concat "runtests " package "&"))))
 
+(defun zenoss-startup-shells ()
+  "Sets up the various shells that I usually have running at any given point."
+  (interactive)
+  (let ((shell-list '( "zope.out" "zep.out" "dsa.out" "zenhub.out")))
+    (mapcar
+     (lambda (shell-name)
+       (if (not (get-buffer shell-name))
+             (progn
+               (shell)
+               (rename-buffer shell-name)))) shell-list)
+    ;; get zope up and running
+    (switch-to-zope)))
+
 (defun get-guid-in-zendmd (start end)
   "Looks up the guid that is highlighted by switching to the dmd output and eval'ing it there"
   (interactive "r")
@@ -285,6 +519,7 @@ in, doesn't remember previous test"
     (progn
       (zendmd-send-string (concat "lookupGuid(\"" guid "\")"))
       (switch-to-zendmd))))
+
 
 (defun dired-zenpack ()
   "Opens up dired in the selected enterprise zenpack"
@@ -304,12 +539,14 @@ directory."
         ;; the selected zenpack
         (zenpack  (ido-completing-read "Find ZenPacks: " zenpacks))
         (directory (concat dir "/" zenpack "/" (replace-regexp-in-string "\\." "\/" zenpack))))
-    (shell)
+    (eshell)
     (goto-char (point-max))
     (insert (concat "cd " directory))
-    (comint-send-input)
+    (eshell-send-input)
     ))
 (global-set-key "\C-cf" 'cd-zenpack)
+
+
 
 (defun reload-reports ()
   "Reloads all of the jaspersoft reports"
@@ -318,3 +555,11 @@ directory."
     (maybe-kill-buffer shell-command-window)
     (shell-command (concat "cd " svn-reporting-sandbox "/analytics/ && ./reload_reports.sh&") shell-command-window)))
 (global-set-key "\C-x\C-t" 'reload-reports)
+
+;; ext minor mode with link to documentation xtype lookup
+;; 1. doc lookup example: http://docs.sencha.com/touch/2-0/#!/api/Ext.Function-method-bind
+;; 2. xtype lookup to class lookup
+;; 3. register yas/snippets for new classes etc like skeleton
+;; 4. jump to source file give a configured extjs root directory
+;; 5. jsduck options and function
+;; 6. syntax highlighting for config options

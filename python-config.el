@@ -2,6 +2,10 @@
 (setq py-install-directory "~/emacs/python-mode")
 (require 'python-mode)
 
+<<<<<<< HEAD
+=======
+;; use python-mode
+>>>>>>> af8af045435290fa1a6b7e7cc208a2f6a2e66b06
 (defun zen-list-tags ()
   "Lists the tags of our current buffer, will let you jump to definition from new buffer"
   (interactive)
@@ -18,7 +22,11 @@
            (local-file (file-relative-name
                         temp-file
                         (file-name-directory buffer-file-name))))
+<<<<<<< HEAD
       (list "/opt/zenoss/bin/pyflakes" (list local-file))))
+=======
+      (list "pyflakes" (list local-file))))
+>>>>>>> af8af045435290fa1a6b7e7cc208a2f6a2e66b06
 
   (add-to-list 'flymake-allowed-file-name-masks
                '("\\.py\\'" flymake-pyflakes-init)))
@@ -70,7 +78,17 @@
 
 ;; set up zendmd as a comint inferior process
 (require 'zendmd-comint)
+<<<<<<< HEAD
 (setq inferior-zendmd-program-command "/opt/zenoss/bin/zendmd")
 (add-hook 'python-mode-hook '(lambda ()
                                (zendmd-minor-mode 1)))
 (global-set-key (kbd "\C-c 1") 'switch-to-zendmd)
+=======
+(setq inferior-zendmd-program-command "zendmd")
+(add-hook 'python-mode-hook '(lambda ()
+                               (zendmd-minor-mode 1)))
+(global-set-key (kbd "\C-c 1") 'switch-to-zendmd)
+
+
+
+>>>>>>> af8af045435290fa1a6b7e7cc208a2f6a2e66b06
