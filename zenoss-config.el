@@ -25,17 +25,8 @@
   "Hooks which run on file write for programming modes"
   (prog1 nil
     (set-buffer-file-coding-system 'utf-8-unix)
-<<<<<<< HEAD
-    (untabify-buffer)));
-    ;;(delete-trailing-whitespace)))
-(progn
-  (+ 1 1)
-  (+ 2 2))
-=======
     (untabify-buffer)))
-    ;;(delete-trailing-whitespace))
 
->>>>>>> af8af045435290fa1a6b7e7cc208a2f6a2e66b06
 ;; make trailing whitespace ugly
 (setq-default show-trailing-whitespace nil)
 
@@ -153,22 +144,13 @@ This assumes that you have your zope instance in a shell file called zope.out"
 (defvar trac-public-url "http://dev.zenoss.com/tracint/ticket/" "Where tickets are on the public trac")
 (defvar trac-svn-log "http://dev.zenoss.com/tracint/log/sandboxen/jhanson/")
 
-<<<<<<< HEAD
+
 (defvar main-sandbox "~/4.2/core")
 (defvar svn-enterprise-url "http://dev.zenoss.com/svnint/sandboxen/jhanson/")
 (defvar svn-sandbox-url "http://dev.zenoss.com/svnint/sandboxen/core/jhanson/4.2/")
 (defvar svn-core-trunk "http://dev.zenoss.com/svnint/branches/core/zenoss-4.x/")
 (defvar svn-enterprise-sandbox "~/4.2/enterprise_zenpacks")
 (defvar svn-reporting-sandbox "~/dev/sandbox/reporting")
-=======
-(defvar main-sandbox "~/dev/core")
-(defvar svn-enterprise-url "http://dev.zenoss.com/svnint/sandboxen/jhanson/")
-(defvar svn-reporting-url "http://dev.zenoss.com/svnint/sandboxen/jhanson/reporting/")
-(defvar svn-sandbox-url "http://dev.zenoss.com/svnint/sandboxen/core/jhanson/")
-(defvar svn-core-trunk "http://dev.zenoss.com/svnint/trunk/core")
-(defvar svn-enterprise-sandbox "~/dev/enterprise")
-(defvar svn-reporting-sandbox "~/dev/reporting")
->>>>>>> af8af045435290fa1a6b7e7cc208a2f6a2e66b06
 
 ;; short cuts for eshell
 (defun zenoss-shortcut-directory (directory)
