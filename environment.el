@@ -85,9 +85,6 @@
 ;; use y or n instead of yes or no and then pressing return
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;; always load the which-func mode (only works for python)
-(which-func-mode t)
-
 ;; i like blinking cursors
 (blink-cursor-mode t)
 
