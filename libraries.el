@@ -53,11 +53,6 @@
 (add-hook 'org-mode-hook '(lambda ()
                            (drag-stuff-mode 0)
                            ))
-(load-file "~/.emacs.d/auto-complete.el")
-(load-file "~/.emacs.d/auto-complete-config.el")
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "/Users/joseph/.emacs.d//ac-dict")
-(ac-config-default)
 
 (autoload 'rainbow-mode "rainbow-mode" nil t)
 (autoload 'google-maps "google-maps" nil t)
