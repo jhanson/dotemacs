@@ -147,13 +147,13 @@ This assumes that you have your zope instance in a shell file called zope.out"
 (defvar trac-public-url "http://dev.zenoss.com/tracint/ticket/" "Where tickets are on the public trac")
 (defvar trac-svn-log "http://dev.zenoss.com/tracint/log/sandboxen/jhanson/")
 
-(defvar main-sandbox "~/dev/core")
+
+(defvar main-sandbox "~/4.2/core")
 (defvar svn-enterprise-url "http://dev.zenoss.com/svnint/sandboxen/jhanson/")
-(defvar svn-reporting-url "http://dev.zenoss.com/svnint/sandboxen/jhanson/reporting/")
-(defvar svn-sandbox-url "http://dev.zenoss.com/svnint/sandboxen/core/jhanson/")
-(defvar svn-core-trunk "http://dev.zenoss.com/svnint/trunk/core")
-(defvar svn-enterprise-sandbox "~/dev/enterprise")
-(defvar svn-reporting-sandbox "~/dev/reporting")
+(defvar svn-sandbox-url "http://dev.zenoss.com/svnint/sandboxen/core/jhanson/4.2/")
+(defvar svn-core-trunk "http://dev.zenoss.com/svnint/branches/core/zenoss-4.x/")
+(defvar svn-enterprise-sandbox "~/4.2/enterprise_zenpacks")
+(defvar svn-reporting-sandbox "~/dev/sandbox/reporting")
 
 ;; short cuts for eshell
 (defun zenoss-shortcut-directory (directory)
