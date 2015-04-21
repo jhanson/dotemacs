@@ -16,20 +16,14 @@
 (setq ido-everywhere t)
 (ido-mode t)
 
-(defun ido-find-file-in-tag-files ()
-  (interactive)
-  (save-excursion
-    (let ((enable-recursive-minibuffers t)) (visit-tags-table-buffer))
-    (find-file (expand-file-name
-                (ido-completing-read "Project file: "
-                                     (tags-table-files) nil t)))))
-(global-set-key (kbd "\C-x\C-g") 'ido-find-file-in-tag-files)
+
+
 
 ;; ido for M-x
-(require 'smex)
-(add-hook 'after-init-hook 'smex-initialize)
-(global-set-key (kbd "M-x") 'smex)
-(define-key global-map "\C-x\C-m" 'smex)
+;; (require 'smex)
+;; (add-hook 'after-init-hook 'smex-initialize)
+;;(global-set-key (kbd "M-x") 'smex)
+;;(define-key global-map "\C-x\C-m" 'smex)
 
 ;;; YaSnippet
 (add-to-list 'load-path "~/emacs/plugins/yasnippet/")
@@ -106,10 +100,47 @@ functions, and some types.  It also provides indentation that is
 (setq max-specpdl-size 50000)
 (setq max-lisp-eval-depth 5000)
 
-;; haskell mode
-;; (add-to-list 'load-path "~/emacs/haskell-mode")
-;; (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-;; (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
-;; (autoload 'haskell-mode "haskell-mode" nil t)
-;; (add-to-list 'auto-mode-alist '("\\.hs\\'" . haskell-mode))
+;; melpa
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
 
+;; helm update
+;; (add-to-list 'load-path "~/emacs/helm/async")
+;; (add-to-list 'load-path "~/emacs/helm/helm")
+;; (add-to-list 'load-path "~/emacs/helm/projectile")
+(require 'helm-config)
+(require 'helm-grep)
+
+;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
+;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
+;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
+(global-set-key (kbd "C-c h") 'helm-command-prefix)
+(global-unset-key (kbd "C-x c"))
+
+(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebihnd tab to do persistent action
+(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
+(define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+
+(when (executable-find "curl")
+  (setq helm-google-suggest-use-curl-p t))
+
+(setq helm-quick-update                     t ; do not display invisible candidates
+      helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
+      helm-buffers-fuzzy-matching           t ; fuzzy matching buffer names when non--nil
+      helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
+      helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
+      helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
+      helm-ff-file-name-history-use-recentf t)
+
+(helm-mode 1)
+(global-set-key "\C-xb" 'helm-mini)
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+(global-set-key (kbd "M-s o") 'helm-occur)
+(define-key shell-mode-map (kbd "C-c C-l") 'helm-comint-input-ring)
+(require 'projectile)
+(require 'helm-projectile)
+(projectile-global-mode)
+(global-set-key (kbd "\C-x\C-g") 'helm-projectile)
+(setq projectile-indexing-method 'native)
+(setq projectile-enable-caching t)

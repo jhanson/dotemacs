@@ -17,37 +17,9 @@
       (espresso-mode)
     (js2-mode)))
 
-(defun jslint-current-buffer ()
-  "This will run jslint in the foreground on the current file you are working on
-and display the results in the other window. Since JSlint is so slow with rhino this
-is good to use to check your work not to use with flymake. Honestly jslint is far to picky
-to run in flymake mode so I think this is a better option"
-  (interactive)
-  (when (buffer-file-name)
-    (save-excursion
-      ;; goto the begining of the buffer and place the magic keywords for the js file
-      (goto-char (point-min))
-      (insert jslint-global-config)
-      (insert "\n")
-      (insert jslint-global-vars)
-      (insert "\n")
-      (save-buffer)
-
-      ;; actually run the command on the file
-      (shell-command
-       (concat "java org.mozilla.javascript.tools.shell.Main ~/Library/JSLint/jslint.js "
-               (buffer-file-name))
-       "JSLint Output")
-      (switch-to-buffer-other-window "JSLint Output")
-
-      ;; now delete the global vars declaration
-      (other-window 1)
-      (goto-char (point-min))
-      (kill-line 2)
-      (save-buffer))))
-
 ;; jscomint inferior process and set up files
 (require 'js-comint)
+(require 'javascript-jshint)
 (add-hook 'js2-mode-hook
           '(lambda ()
              (local-set-key "\C-x\C-e" 'js-send-last-sexp)
@@ -62,7 +34,7 @@ to run in flymake mode so I think this is a better option"
              ;; js2 ignores some commands
              (local-set-key (kbd "RET") 'newline-and-indent)
              (local-set-key "\C-a" 'back-to-indentation)
-             (local-set-key (kbd "\C-c i") 'jslint-current-buffer)
+             (local-set-key (kbd "\C-c i") 'javascript-jshint)
              ;; toggle js modes
              (local-set-key "\M-n" 'forward-paragraph)
              (local-set-key "\M-p" 'backward-paragraph)
@@ -80,22 +52,6 @@ to run in flymake mode so I think this is a better option"
 ;; for jscomint, tells it where my js file is
 ;; (setq inferior-js-program-command "java org.mozilla.javascript.tools.shell.Main")
 (setq inferior-js-program-command "v8")
-
-;; list of my JS libraries I need to load by default.
-(defvar js-comint-libraries  '("/Users/joseph/Library/JavaScript/env.js",
-    "/Users/joseph/zenoss/lib/python/zenoss/extjs/src/ext-all-debug.js",
-    "/Users/joseph/zenoss/lib/python/zenoss/extjs/src/adapters/ext/ext-base-debug.js"))
-
-(defun js-comint-load-libraries ()
-  "iterate through each JS library i need open and loads it in the running comint shell
-This assumes the shell to be open and is called *js*"
-  (interactive)
-  (switch-to-buffer "*js*")
-  (mapcar
-   (lambda (library)
-     (insert (concat "load(\"" library "\");" ))
-     (comint-send-input)) js-comint-libraries))
-
 
 ;; sane indenting
 (setq js-indent-level 4)
@@ -168,4 +124,3 @@ from emacs, otherwise it will prompt you"
                       "content.location.reload();")
   (message "refreshed page"))
 (global-set-key  "\C-cu" 'refresh-browser-page)
-
