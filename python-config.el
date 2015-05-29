@@ -10,22 +10,29 @@
     (if (string-match "/Products/" current-file)
         (list-tags (replace-regexp-in-string "^.*Products/" "" current-file)))))
 
-;; flymake python (pyflakes)
-;; stolen from http://www.plope.com/Members/chrism/flymake-mode
-(when (load "flymake" t)
-  (defun flymake-pyflakes-init ()
-    (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                       'flymake-create-temp-inplace))
-           (local-file (file-relative-name
-                        temp-file
-                        (file-name-directory buffer-file-name))))
+;; (flycheck-define-checker python-pyflakes
+;;     "A Python syntax and style checker using the pyflakes utility.
+;; See URL `http://pypi.python.org/pypi/pyflakes'."
+;;     :command ("pyflakes" source-inplace)
+;;     :error-patterns
+;;     ((error line-start (file-name) ":" line ":" (message) line-end))
+;;     :modes python-mode)
 
-      (list "/opt/zenoss/bin/pyflakes" (list local-file))))
+;; (add-to-list 'flycheck-checkers 'python-pyflakes)
+;; (when (load "flymake" t)
+;;   (defun flymake-pyflakes-init ()
+;;     (let* ((temp-file (flymake-init-create-temp-buffer-copy
+;;                        'flymake-create-temp-inplace))
+;;            (local-file (file-relative-name
+;;                         temp-file
+;;                         (file-name-directory buffer-file-name))))
 
-  (add-to-list 'flymake-allowed-file-name-masks
-               '("\\.py\\'" flymake-pyflakes-init)))
+;;       (list "flake8" (list local-file))))
 
-(add-hook 'find-file-hook 'flymake-find-file-hook)
+;;   (add-to-list 'flymake-allowed-file-name-masks
+;;                '("\\.py\\'" flymake-pyflakes-init)))
+
+;; (add-hook 'find-file-hook 'flymake-find-file-hook)
 
 (load "python-pylint.el")
 (load "python-pep8.el")

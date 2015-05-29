@@ -3,13 +3,16 @@
 ;; (load "_emacs")
 ;; local directory of plugins
 (add-to-list 'load-path "~/.emacs.d/")
+(add-to-list 'load-path "~/emacs/flycheck")
+(require 'flycheck)
+(add-hook 'after-init-hook #'global-flycheck-mode)
 
 (load "funcs.el")
 (if (eq system-type 'darwin)
-	    (load "mac-config.el")
+        (load "mac-config.el")
       )
 (if (eq system-type 'gnu/linux)
-	    (load "linux-config.el")
+        (load "linux-config.el")
       )
 (load "environment.el")
 (load "libraries.el")
