@@ -118,7 +118,7 @@ This assumes that you have your zope instance in a shell file called zope.out"
       ;; Go back to where i was
       (switch-to-buffer old-buffer)
       (message "Restarted ur zopez"))))
-(global-set-key "\C-x\C-r" 'restart-zope)
+
 
 (defun restart-zep ()
   "Restarts the zep process"

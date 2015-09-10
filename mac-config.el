@@ -1,8 +1,7 @@
 ;; load up my path from the system (todo figure out why this doesnt do
 ;; this automatically)
-(setenv "PATH"
-        "/Users/joseph/zenoss/bin:/opt/local/bin:/opt/local/sbin:/opt/subversion/bin:/opt/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/Xcode3.1.4/usr/bin:/usr/local/mysql/bin/:/usr/local/git/bin/:/Library/PostgreSQL/9.1/bin:/Users/joseph/source/go/bin:/Users/joseph/bin"
-        )
+(setenv "PATH" "/usr/local/apache-maven-3.2.5/bin:/Users/jhanson/bin/Sencha/Cmd/5.0.3.324:/Users/joseph/zenoss/bin:/opt/local/bin:/opt/local/sbin:/opt/subversion/bin:/opt/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/Xcode3.1.4/usr/bin:/usr/local/mysql/bin/:/usr/local/git/bin/:/Library/PostgreSQL/9.1/bin:/Users/joseph/source/go/bin:/Users/joseph/bin:/usr/local/bin:/usr/local/mysql/bin")
+
 
 (setenv "ZENHOME"
         "/Users/joseph/zenoss"

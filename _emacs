@@ -2,10 +2,12 @@
 ;; (add-to-list 'load-path "~/emacs")
 ;; (load "_emacs")
 ;; local directory of plugins
-(add-to-list 'load-path "~/.emacs.d/")
+;;(add-to-list 'load-path "~/.emacs.d/")
 (add-to-list 'load-path "~/emacs/flycheck")
-(require 'flycheck)
-(add-hook 'after-init-hook #'global-flycheck-mode)
+(when (require 'flycheck nil 'noerror)
+  (add-hook 'after-init-hook #'global-flycheck-mode))
+
+
 
 (load "funcs.el")
 (if (eq system-type 'darwin)
