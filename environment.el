@@ -52,7 +52,7 @@
   (ad-set-arg 0 (reverse (ad-get-arg 0))))
 
 ;; do not beep when you mess up
-(setq visible-bell t)
+(setq ring-bell-function 'ignore)
 
 ;; remove the gui elements
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))

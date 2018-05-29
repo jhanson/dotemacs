@@ -1,4 +1,5 @@
 (load "espresso")
+(load "js2-mode")
 ;; (load "closure-lint-mode.el")
 ;; (setq closure-lint-gjs-lint "/Users/joseph/zenoss/bin/gjslint")
 ;; js2 javascript IDE
@@ -8,7 +9,7 @@
 ;; jslint settings
 (defvar jslint-global-vars "/*global Ext, Zenoss, _t*/")
 (defvar jslint-global-config "/*jslint browser:true, devel:true, nomen:false, white:false, onevar:true, eqeqeq:false, plusplus:false*/"
-   "All of the options to pass into jslint, see the http://www.jslint.com/lint.html for a list of them all")
+   "All of the options to pass into jslint, see the http://www.jslint.com/lint.html for a list of them all.")
 
 (defun js-toggle-modes()
   "switches between espress and js2 modes"
@@ -17,7 +18,14 @@
       (espresso-mode)
     (js2-mode)))
 
-;; jscomint inferior process and set up files
+(defun js-test-file-jest()
+  "tests the current buffer in jest"
+  (interactive)
+  (shell-command
+       (concat "cd ~/projects/tocoma-ui; jest " buffer-file-name " &")
+       "*JEST-OUTPUT*"))
+
+;; JSCOMINT inferior process and set up files
 (require 'js-comint)
 (require 'javascript-jshint)
 (add-hook 'js2-mode-hook
@@ -26,7 +34,7 @@
              (local-set-key "\C-\M-x" 'js-send-last-sexp-and-go)
              (local-set-key "\C-cb" 'js-send-buffer)
              (local-set-key "\C-c\C-b" 'js-send-buffer-and-go)
-             (local-set-key "\C-c\C-r" 'js-send-region-and-go)
+             (local-set-key "\C-c\C-r" 'js-test-file-jest)
              (local-set-key "\C-c\C-d" 'js-toggle-modes)
              (local-set-key "\C-cl" 'js-load-file-and-go)
              (local-set-key "\C-c\C-z" 'run-js)
@@ -108,19 +116,7 @@
 ;; Add the hook so this is all loaded when JS2-mode is loaded
 (add-hook 'js2-mode-hook 'my-js2-mode-hook)
 
-;; mozrepl
-(autoload 'inferior-moz-mode "moz" "MozRepl Inferior Mode" t)
-(autoload 'moz-minor-mode "moz" "MozRepl Minor Mode" t)
-(add-hook 'js2-mode-hook 'javascript-moz-setup)
-(defun javascript-moz-setup () (moz-minor-mode 1))
 
-;; reload current page function
-(defun refresh-browser-page ()
-  "If you have the mozrepl running this will reload the page
-from emacs, otherwise it will prompt you"
-  (interactive)
-  ;; will start the process if it is not ready
-  (comint-send-string (inferior-moz-process)
-                      "content.location.reload();")
-  (message "refreshed page"))
-(global-set-key  "\C-cu" 'refresh-browser-page)
+(setq flycheck-less-executable "/usr/bin/less")
+(setq flycheck-javascript-jshint-executable "/usr/local/bin/jshint")
+(setq flycheck-javascript-eslint-executable "/usr/local/bin/eslint")

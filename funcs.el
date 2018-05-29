@@ -27,47 +27,6 @@ buffer read-only, so I suggest setting kill-read-only-ok to t."
 
 (global-set-key (kbd "\C-c j") 'duplicate-line)
 
-(defun cdc ()
-  "If we are in trunk it opens the stable version"
-  (interactive)
-  (let*
-      ((current-buffer-file (buffer-file-name (current-buffer)))
-       (file-name (if (string-match "/trunk/" current-buffer-file)
-                      (replace-regexp-in-string "/trunk/" "/stable/" current-buffer-file)
-                    (replace-regexp-in-string "/stable/" "/trunk/" current-buffer-file))))
-    ;; let* body
-    (if (file-exists-p file-name)
-        (find-file file-name)
-      (message "file: %s does not exist" file-name))))
-
-(defun copy-to-stable ()
-  "Copies the current buffer to stable, or in stable copies it to trunk"
-  (interactive)
-    (save-excursion
-      (mark-whole-buffer)
-      (kill-ring-save (point-min) (point-max)) ;; save the whole buffer in the kill ring
-      (cdc)
-      (mark-whole-buffer)
-      (kill-region (point-min) (point-max))
-      (yank 2)))
-
-(defun open-template ()
-  "If we are the tpl file opens up the php and if in the php will open up the tpl"
-  (interactive)
-  (let*
-      ((current-buffer-file (buffer-file-name (current-buffer)))
-       (file-name (if (string-match ".php" current-buffer-file)
-                      (replace-regexp-in-string ".php" ".tpl" current-buffer-file)
-                    (replace-regexp-in-string ".tpl" ".php" current-buffer-file))))
-    ;; let* body
-    (if (file-exists-p file-name)
-        (find-file file-name)
-      (message "file: %s does not exist" file-name))))
-
-(defun file-name ()
-  (interactive)
-  (message (buffer-file-name)))
-
 (defun shell-command-other-window (command window-name)
   "Runs the command passed in and outputs it in the other window named by window name
 This always runs on the current buffer"
@@ -123,7 +82,7 @@ This always runs on the current buffer"
 (global-set-key "\M-i" 'opposite-case)
 
 (defun opposite-quote()
-  "Turns the string into the opposite quote either single quote to double quote. You must startout on the char before the quote"
+  "Turns the string into the opposite quote either single quote to double quote. You must start out on the char before the quote"
   (interactive)
   (let ((char (char-after)))
     (save-excursion
@@ -175,5 +134,14 @@ This always runs on the current buffer"
            (set-window-start w1 s2)
            (set-window-start w2 s1))))
   (other-window 1))
-
 (global-set-key (kbd "C-c s") 'swap-windows)
+
+
+(defun beautify-json ()
+  "Formats the selected JSON."
+  (interactive)
+  (let ((b (if mark-active (min (point) (mark)) (point-min)))
+        (e (if mark-active (max (point) (mark)) (point-max))))
+    (shell-command-on-region b e
+     "python -mjson.tool" (current-buffer) t)))
+(global-set-key "\M-sk" 'beautify-json)

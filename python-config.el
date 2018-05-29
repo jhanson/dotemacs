@@ -1,6 +1,6 @@
-(add-to-list 'load-path "~/emacs/python-mode")
-(setq py-install-directory "~/emacs/python-mode")
-(require 'python-mode)
+;; (add-to-list 'load-path "~/emacs/python-mode")
+;; (setq py-install-directory "~/emacs/python-mode")
+;; (require 'python-mode)
 
 ;; use python-mode
 (defun zen-list-tags ()
@@ -9,6 +9,8 @@
   (let ((current-file (buffer-file-name (current-buffer))))
     (if (string-match "/Products/" current-file)
         (list-tags (replace-regexp-in-string "^.*Products/" "" current-file)))))
+
+(setq flycheck-python-flake8-executable "/usr/local/bin/flake8")
 
 ;; (flycheck-define-checker python-pyflakes
 ;;     "A Python syntax and style checker using the pyflakes utility.
@@ -19,20 +21,20 @@
 ;;     :modes python-mode)
 
 ;; (add-to-list 'flycheck-checkers 'python-pyflakes)
-(when (load "flymake" t)
-  (defun flymake-pyflakes-init ()
-    (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                       'flymake-create-temp-inplace))
-           (local-file (file-relative-name
-                        temp-file
-                        (file-name-directory buffer-file-name))))
+;; (when (load "flymake" t)
+;;   (defun flymake-pyflakes-init ()
+;;     (let* ((temp-file (flymake-init-create-temp-buffer-copy
+;;                        'flymake-create-temp-inplace))
+;;            (local-file (file-relative-name
+;;                         temp-file
+;;                         (file-name-directory buffer-file-name))))
 
-      (list "flake8" (list local-file))))
+;;       (list "/usr/local/bin/flake8" (list local-file))))
 
-  (add-to-list 'flymake-allowed-file-name-masks
-               '("\\.py\\'" flymake-pyflakes-init)))
+;;   (add-to-list 'flymake-allowed-file-name-masks
+;;                '("\\.py\\'" flymake-pyflakes-init)))
 
-(add-hook 'find-file-hook 'flymake-find-file-hook)
+;; (add-hook 'find-file-hook 'flymake-find-file-hook)
 
 (load "python-pylint.el")
 (load "python-pep8.el")

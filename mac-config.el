@@ -1,21 +1,10 @@
 ;; load up my path from the system (todo figure out why this doesnt do
-;; this automatically)
-(setenv "PATH" "/usr/local/apache-maven-3.2.5/bin:/Users/jhanson/bin/Sencha/Cmd/5.0.3.324:/Users/joseph/zenoss/bin:/opt/local/bin:/opt/local/sbin:/opt/subversion/bin:/opt/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:/Xcode3.1.4/usr/bin:/usr/local/mysql/bin/:/usr/local/git/bin/:/Library/PostgreSQL/9.1/bin:/Users/joseph/source/go/bin:/Users/joseph/bin:/usr/local/bin:/usr/local/mysql/bin")
+;; this automatically)               
+(setenv "PATH" "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Users/joseph.hanson/devdeps/play-1.2.x-lsw-1.2.6-121-g1651372")
 
-
-(setenv "ZENHOME"
-        "/Users/joseph/zenoss"
-        )
-
-(setenv "PYTHONPATH"
-        "/Users/joseph/zenoss/lib/python:/Users/joseph/dev/sandbox/trunk/Products:/Users/joseph/zenoss"
-        )
-(setenv "INSTANCE_HOME"
-        "/Users/joseph/zenoss"
-        )
-(setenv "JAVA_HOME"
-        "/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Home"
-        )
+;; (setenv "JAVA_HOME"
+;;         "$(/usr/libexec/java_home -v 1.7)"
+;;         )
 
 (setq load-path (append (list "/Applications/Emacs.app/Contents/Resources/site-lisp/elib")
                         load-path))
@@ -23,6 +12,7 @@
 (setenv "PS1" "\\u:\\w$ ")
 ;; mac theme
 (load-theme 'wombat)
+
 ;; mac only font
 (set-default-font "-apple-Menlo-bold-normal-normal-*-*-*-*-*-m-0-iso10646-1")
 
@@ -33,14 +23,17 @@
 (global-set-key (kbd "<end>") 'move-end-of-line)
 (global-set-key (kbd "<home>") 'back-to-indentation)
 
-(load-file "~/emacs/pianobar.el")
-(setq pianobar-program-command "/opt/local/bin/pianobar")
-(setq pianobar-username "jrh0090@gmail.com")
-
-
 (define-key global-map [ns-drag-file] 'ns-find-file)
 
-(set-frame-parameter (selected-frame) 'alpha '(99 85))
+(set-frame-parameter (selected-frame) 'alpha '(99 95))
 
 (add-to-list 'exec-path (getenv "PATH"))
 (setq ns-pop-up-frames nil) ;; keep OSX from opening more windows
+
+;; This sets up the meta to be alt (or command) for emacs
+;; It will NOT work in a terminal emacs application
+(setq mac-option-key-is-meta nil)
+(setq mac-command-key-is-meta t)
+(setq mac-command-modifier 'meta)
+(setq mac-option-modifier nil)
+(setq ispell-program-name "/usr/local/bin/ispell")

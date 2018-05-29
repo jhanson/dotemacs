@@ -25,7 +25,7 @@
 (global-set-key (kbd "M-x") 'smex)
 (define-key global-map "\C-x\C-m" 'smex)
 (require 'browser-refresh)
-(global-set-key "\C-x\C-r" 'browser-refresh)
+
 
 ;;; YaSnippet
 (add-to-list 'load-path "~/emacs/plugins/yasnippet/")
