@@ -31,6 +31,7 @@
 
 (defvar ic-backend-project-dir "~/projects/ic-backend")
 (defvar ic-backend-ui-project-dir "~/projects/ic-backend-ui")
+(defvar tocoma-ui-project-dir "~/projects/tocoma-ui")
 (defvar roy-bean-project-dir "~/projects/roybean")
 
 ;; buffer functions
@@ -154,6 +155,20 @@
       (delete-other-windows))))
  (global-set-key "\C-xvp" 'ic-backend-project-ui-diff)
 
+(defun tocoma-ui-project-ui-diff()
+  "Show me the differences in my current tocoma ui."
+  (interactive)
+  (progn
+    (let ((default-directory tocoma-ui-project-dir))
+      (shell-command
+       (concat "cd " tocoma-ui-project-dir "; git diff  " tocoma-ui-project-dir)
+       "*VC-DIFF-PROJECT*")
+      (switch-to-buffer "*VC-DIFF-PROJECT*")
+      (diff-mode)
+      ;; fullscreen it
+      (delete-other-windows))))
+ (global-set-key "\C-xvt" 'tocoma-ui-project-ui-diff)
+
 
 (defun maybe-kill-buffer (buffer-name)
   "Kills the buffer if it exist"
@@ -182,7 +197,6 @@
 (setq sql-user "root")
 (setq sql-password "msandbox")
 (setq sql-server "localhost")
-
 
 
 

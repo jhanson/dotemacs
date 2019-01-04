@@ -1,10 +1,22 @@
 (load "espresso")
 (load "js2-mode")
+
+
 ;; (load "closure-lint-mode.el")
 ;; (setq closure-lint-gjs-lint "/Users/joseph/zenoss/bin/gjslint")
 ;; js2 javascript IDE
 (autoload 'js2-mode "js2" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+
+;; prettier on save hook configuration
+(require 'prettier-js)
+(setq prettier-js-command "/usr/local/bin/prettier")
+(setq prettier-js-args '(
+  "--print-width" "120"
+  "--single-quote" "true"
+))
+
+(add-hook 'js2-mode-hook 'prettier-js-mode)
 
 ;; jslint settings
 (defvar jslint-global-vars "/*global Ext, Zenoss, _t*/")
@@ -18,15 +30,30 @@
       (espresso-mode)
     (js2-mode)))
 
+(defvar jest-last-test "", "The last test we ran on jest")
 (defun js-test-file-jest()
   "tests the current buffer in jest"
   (interactive)
+  (let* ((fName buffer-file-name))
+    (if (string-match-p (regexp-quote "spec") fName)
+         (setq jest-last-test fName)))
   (shell-command
-       (concat "cd ~/projects/tocoma-ui; jest " buffer-file-name " &")
+       (concat "cd ~/projects/tocoma-ui; jest " jest-last-test " &")
        "*JEST-OUTPUT*"))
 
-;; JSCOMINT inferior process and set up files
-(require 'js-comint)
+(defun js-test-debug-file-jest()
+  "tests the current buffer in jest"
+  (interactive)
+  (let* ((fName buffer-file-name))
+    (if (string-match-p (regexp-quote "spec") fName)
+        (setq jest-last-test fName)))
+  (when (get-buffer "*JEST-OUTPUT-DEBUG*")
+    (kill-buffer "*JEST-OUTPUT-DEBUG*"))
+  (shell-command
+       (concat "cd ~/projects/tocoma-ui; node inspect ./node_modules/jest/bin/jest.js " jest-last-test " &")
+       "*JEST-OUTPUT-DEBUG*")
+  (other-window 1))
+
 (require 'javascript-jshint)
 (add-hook 'js2-mode-hook
           '(lambda ()
@@ -36,8 +63,10 @@
              (local-set-key "\C-c\C-b" 'js-send-buffer-and-go)
              (local-set-key "\C-c\C-r" 'js-test-file-jest)
              (local-set-key "\C-c\C-d" 'js-toggle-modes)
+             (local-set-key "\C-c\k" 'react-dom-fix)
              (local-set-key "\C-cl" 'js-load-file-and-go)
              (local-set-key "\C-c\C-z" 'run-js)
+             (local-set-key "\M-." 'find-tag)
 
              ;; js2 ignores some commands
              (local-set-key (kbd "RET") 'newline-and-indent)
@@ -120,3 +149,7 @@
 (setq flycheck-less-executable "/usr/bin/less")
 (setq flycheck-javascript-jshint-executable "/usr/local/bin/jshint")
 (setq flycheck-javascript-eslint-executable "/usr/local/bin/eslint")
+
+
+(provide 'javascript-config)
+;;; javascript-config.el ends here

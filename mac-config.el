@@ -1,5 +1,5 @@
 ;; load up my path from the system (todo figure out why this doesnt do
-;; this automatically)               
+;; this automatically)
 (setenv "PATH" "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Users/joseph.hanson/devdeps/play-1.2.x-lsw-1.2.6-121-g1651372")
 
 ;; (setenv "JAVA_HOME"
@@ -11,10 +11,11 @@
 
 (setenv "PS1" "\\u:\\w$ ")
 ;; mac theme
-(load-theme 'wombat)
+(load "blackboard-theme")
 
 ;; mac only font
 (set-default-font "-apple-Menlo-bold-normal-normal-*-*-*-*-*-m-0-iso10646-1")
+(set-face-attribute 'default nil :height 120)
 
 ;; now delete forward deletes a char
 (global-set-key (kbd "<kp-delete>") 'delete-char)
@@ -24,6 +25,7 @@
 (global-set-key (kbd "<home>") 'back-to-indentation)
 
 (define-key global-map [ns-drag-file] 'ns-find-file)
+;; make the default font larger
 
 (set-frame-parameter (selected-frame) 'alpha '(99 95))
 

@@ -2,6 +2,8 @@
 (define-key global-map "\C-x\C-p" 'revert-buffer)
 (define-key global-map "\M-g" 'goto-line)
 
+(define-key global-map "\C-x\C-g" 'helm-projectile)
+
 ;; control a to begining of statement instead of line
 (global-set-key (kbd "C-a") 'back-to-indentation)
 
