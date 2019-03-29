@@ -14,6 +14,7 @@
 (setq prettier-js-args '(
   "--print-width" "120"
   "--single-quote" "true"
+  "--tab-width" "4"
 ))
 
 (add-hook 'js2-mode-hook 'prettier-js-mode)
