@@ -39,7 +39,7 @@
     (if (string-match-p (regexp-quote "spec") fName)
          (setq jest-last-test fName)))
   (shell-command
-       (concat "cd ~/projects/tocoma-ui; jest " jest-last-test " &")
+       (concat "cd ~/projects/manage-view; jest " jest-last-test " &")
        "*JEST-OUTPUT*"))
 
 (defun js-test-debug-file-jest()

@@ -32,6 +32,7 @@
 (defvar ic-backend-project-dir "~/projects/ic-backend")
 (defvar ic-backend-ui-project-dir "~/projects/ic-backend-ui")
 (defvar tocoma-ui-project-dir "~/projects/tocoma-ui")
+(defvar manage-view-project-dir "~/projects/manage-view")
 (defvar roy-bean-project-dir "~/projects/roybean")
 
 ;; buffer functions
@@ -167,7 +168,21 @@
       (diff-mode)
       ;; fullscreen it
       (delete-other-windows))))
- (global-set-key "\C-xvt" 'tocoma-ui-project-ui-diff)
+(global-set-key "\C-xvt" 'tocoma-ui-project-ui-diff)
+
+(defun manage-view-project-ui-diff()
+  "Show me the differences in my current manage view."
+  (interactive)
+  (progn
+    (let ((default-directory manage-view-project-dir))
+      (shell-command
+       (concat "cd " manage-view-project-dir "; git diff  " manage-view-project-dir)
+       "*VC-DIFF-PROJECT*")
+      (switch-to-buffer "*VC-DIFF-PROJECT*")
+      (diff-mode)
+      ;; fullscreen it
+      (delete-other-windows))))
+ (global-set-key "\C-xve" 'manage-view-project-ui-diff)
 
 
 (defun maybe-kill-buffer (buffer-name)
