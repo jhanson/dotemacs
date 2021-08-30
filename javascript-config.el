@@ -10,11 +10,12 @@
 
 ;; prettier on save hook configuration
 (require 'prettier-js)
-(setq prettier-js-command "/usr/local/bin/prettier")
+(setq prettier-js-command "/Users/joseph.hanson/.nvm/versions/node/v10.15.3/bin/prettier")
 (setq prettier-js-args '(
   "--print-width" "120"
   "--single-quote" "true"
   "--tab-width" "4"
+  "--trailing-comma" "none"
 ))
 
 (add-hook 'js2-mode-hook 'prettier-js-mode)
@@ -39,7 +40,7 @@
     (if (string-match-p (regexp-quote "spec") fName)
          (setq jest-last-test fName)))
   (shell-command
-       (concat "cd ~/projects/manage-view; jest " jest-last-test " &")
+       (concat "cd ~/projects/manage-view; /Users/joseph.hanson/.nvm/versions/node/v10.15.3/bin/jest " jest-last-test " &")
        "*JEST-OUTPUT*"))
 
 (defun js-test-debug-file-jest()

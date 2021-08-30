@@ -10,7 +10,7 @@
     (if (string-match "/Products/" current-file)
         (list-tags (replace-regexp-in-string "^.*Products/" "" current-file)))))
 
-(setq flycheck-python-flake8-executable "/usr/local/bin/flake8")
+(setq flycheck-python-flake8-executable "/Users/joseph.hanson/fabric/bin/flake8")
 
 ;; (flycheck-define-checker python-pyflakes
 ;;     "A Python syntax and style checker using the pyflakes utility.

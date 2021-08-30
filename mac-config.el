@@ -14,8 +14,8 @@
 (load "blackboard-theme")
 
 ;; mac only font
-(set-default-font "-apple-Menlo-bold-normal-normal-*-*-*-*-*-m-0-iso10646-1")
-(set-face-attribute 'default nil :height 120)
+;;(set-default-font "-apple-Menlo-bold-normal-normal-*-*-*-*-*-m-0-iso10646-1")
+;;(set-face-attribute 'default nil :height 120)
 
 ;; now delete forward deletes a char
 (global-set-key (kbd "<kp-delete>") 'delete-char)

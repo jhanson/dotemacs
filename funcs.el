@@ -145,3 +145,17 @@ This always runs on the current buffer"
     (shell-command-on-region b e
      "python -mjson.tool" (current-buffer) t)))
 (global-set-key "\M-sk" 'beautify-json)
+
+(defun github-pr ()
+    "Open GitHub PR for current repository and branch"
+    (interactive)
+    (setq gpr-branch (shell-command-to-string "git rev-parse --abbrev-ref HEAD"))
+    (setq gpr-project (shell-command-to-string "basename $(git rev-parse --show-toplevel)"))
+    (setq gpr-url (format "open https://github.com/lithiumtech/%s/pull/new/%s"
+                          (string-trim-right gpr-project)
+                          (string-trim-right gpr-branch)))
+    (message gpr-url)
+    (shell-command gpr-url))
+
+
+
