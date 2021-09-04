@@ -1,0 +1,6 @@
+# -*- coding: utf-8 -*-
+# name: r
+# description: return parameter
+# --
+@rtype:   ${1:type}
+@return:  ${2:description}

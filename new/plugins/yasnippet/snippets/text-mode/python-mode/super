@@ -1,0 +1,4 @@
+# -*- coding: utf-8 -*-
+# name: super
+# --
+super(${1:className}, self).${2:method}($3)

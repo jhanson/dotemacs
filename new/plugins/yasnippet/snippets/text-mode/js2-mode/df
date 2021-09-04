@@ -1,0 +1,9 @@
+#name : function docs
+# --
+/**
+ * $1
+ *
+ * @param {$2} $3
+ * @return {$4} $5
+ **/
+

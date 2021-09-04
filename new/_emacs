@@ -1,0 +1,35 @@
+;; Add this to the .emacs to get it to load this as the init script
+
+(when (require 'flycheck nil 'noerror)
+  (add-hook 'after-init-hook #'global-flycheck-mode))
+
+
+(load "funcs.el")
+(if (eq system-type 'darwin)
+        (load "mac-config.el")
+      )
+(if (eq system-type 'gnu/linux)
+        (load "linux-config.el")
+      )
+(load "environment.el")
+(load "libraries.el")
+(load "lithium-config.el")
+(load "shortcuts.el")
+
+;;(load "python-config.el")
+(load "javascript-config.el")
+
+(custom-set-variables
+
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ )
+
+(custom-set-faces
+   ;; custom-set-faces was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+  )

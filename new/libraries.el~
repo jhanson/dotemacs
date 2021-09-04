@@ -16,7 +16,7 @@
 (setq ido-everywhere t)
 (ido-mode t)
 
-(amx-mode)
+
 
 
 ;; ido for M-x
