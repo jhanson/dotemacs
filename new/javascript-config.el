@@ -167,7 +167,7 @@
 (setq company-tooltip-align-annotations t)
 
 ;; formats the buffer before saving
-(add-hook 'before-save-hook 'tide-format-before-save)
+;; (add-hook 'before-save-hook 'tide-format-before-save)
 
 (add-hook 'typescript-mode-hook #'setup-tide-mode)
 
@@ -177,3 +177,4 @@
 ;;; javascript-config.el ends here
 
 
+(add-to-list 'auto-mode-alist '("\\.tsx$" . typescript-mode))

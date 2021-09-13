@@ -27,6 +27,7 @@
 (add-hook 'php-mode-hook 'progmodes-hooks)
 (add-hook 'python-mode-hook 'progmodes-hooks)
 (add-hook 'js2-mode-hook 'progmodes-hooks)
+(add-hook 'typescript-mode-hook 'progmodes-hooks)
 ;(add-hook 'java-mode-hook 'progmodes-hooks)
 
 (defvar ic-backend-project-dir "~/projects/ic-backend")
@@ -43,7 +44,7 @@
         (goto-char (point-max)))
     (progn
       (shell name)
-      (insert "source ~/.profile")
+      (insert "source ~/.bashrc")
       ;; press Enter
       (comint-send-input))))
 
@@ -213,9 +214,8 @@
 (setq sql-password "msandbox")
 (setq sql-server "localhost")
 
-(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")                         ("melpa" . "https://melpa.org/packages/")))
 
-(setq package-check-signature nil)
+
 
 ;; start the server so we can use emacsclient in intellij
 (server-start)

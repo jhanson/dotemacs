@@ -43,8 +43,15 @@
 (setq max-specpdl-size 50000)
 (setq max-lisp-eval-depth 5000)
 
+(amx-mode)
+
 ;; melpa
 (require 'package)
-(add-to-list 'package-archives
-             '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
+;; (add-to-list 'package-archives
+;;              '("melpa-stable" . "http://melpa-stable.milkbox.net/packages/") t)
 
+(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+			 ("melpa" . "https://melpa.org/packages/")))
+
+;; workaround hanging http 
+(setq package-check-signature nil)
