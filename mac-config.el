@@ -1,6 +1,8 @@
+(setenv "PATH" "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin")
+(setq exec-path (append exec-path '("/opt/homebrew/bin")))
 ;; load up my path from the system (todo figure out why this doesnt do
 ;; this automatically)
-(setenv "PATH" "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Users/joseph.hanson/devdeps/play-1.2.x-lsw-1.2.6-121-g1651372")
+;;(setenv "PATH" "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Users/joseph.hanson/devdeps/play-1.2.x-lsw-1.2.6-121-g1651372")
 
 ;; (setenv "JAVA_HOME"
 ;;         "$(/usr/libexec/java_home -v 1.7)"
@@ -38,4 +40,4 @@
 (setq mac-command-key-is-meta t)
 (setq mac-command-modifier 'meta)
 (setq mac-option-modifier nil)
-(setq ispell-program-name "/usr/local/bin/ispell")
+(setq ispell-program-name "/opt/homebrew/bin/ispell")

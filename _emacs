@@ -20,9 +20,10 @@
 (load "libraries.el")
 (load "lithium-config.el")
 (load "shortcuts.el")
-;; (load "php-config.el")
-(load "python-config.el")
 (load "javascript-config.el")
+;; (load "php-config.el")
+;;(load "python-config.el")
+
 ;;(load "go-config.el")
 ;; (load "java-config.el")
 ;; (load "erlang-config.el")

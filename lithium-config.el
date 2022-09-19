@@ -27,9 +27,11 @@
 (add-hook 'php-mode-hook 'progmodes-hooks)
 (add-hook 'python-mode-hook 'progmodes-hooks)
 (add-hook 'js2-mode-hook 'progmodes-hooks)
+(add-hook 'typescript-mode-hook 'progmodes-hooks)
 ;(add-hook 'java-mode-hook 'progmodes-hooks)
 
 (defvar ic-backend-project-dir "~/projects/ic-backend")
+(defvar app-project-dir "~/projects/app")
 (defvar ic-backend-ui-project-dir "~/projects/ic-backend-ui")
 (defvar tocoma-ui-project-dir "~/projects/tocoma-ui")
 (defvar manage-view-project-dir "~/projects/manage-view")
@@ -43,16 +45,15 @@
         (goto-char (point-max)))
     (progn
       (shell name)
-      (insert "source ~/.profile")
       ;; press Enter
-      (comint-send-input))))
+      )))
 
-(defun switch-to-ant ()
-  "Switchs to my ant.out buffer where I usually run ic-backend"
+(defun switch-to-webpack ()
+  "Switchs to my webpack.out buffer where I usually run ic-backend"
   (interactive)
-  (quick-switch-to-buffer "ant.out"))
+  (quick-switch-to-buffer "webpack.out"))
 
-(global-set-key (kbd "\C-c 6") 'switch-to-ant)
+(global-set-key (kbd "\C-c 6") 'switch-to-webpack)
 
 (defun switch-to-mysql ()
   "Switch to mysql."
@@ -62,12 +63,12 @@
   )
 (global-set-key (kbd "\C-c 2") 'switch-to-mysql)
 
-(defun switch-to-zenhub ()
+(defun switch-to-parse-server ()
   "Switch to zenhub."
   (interactive)
-  (quick-switch-to-buffer "zenhub.out"))
+  (quick-switch-to-buffer "parse.out"))
 
-(global-set-key (kbd "\C-c 3") 'switch-to-zenhub)
+(global-set-key (kbd "\C-c 3") 'switch-to-parse-server)
 
 (defun switch-to-analytics ()
   (interactive)
@@ -87,24 +88,22 @@
   (shell-command "ps aux | grep -i 'play-1.2' | grep -v 'grep' | awk '{print $2}' | xargs kill -9")
   )
 
-(defun run-ic-backend ()
-  "Runs the ic-backend program in the ant.out buffer with the output streaming to output.txt"
+(defun run-client-test-this-file ()
+  "runs all the client tests in the current buffer in another window"
   (interactive)
-  (let (old-buffer (buffer-name (current-buffer)))
-    (progn
-      (switch-to-ant)
-      ;; stop whatever is going on there
-      (comint-interrupt-subjob)
-      (goto-char (point-max))
-      (kill-ic-backend)
-      ;; new instance command
-      (insert "ant run > output.txt 2>&1")
-      ;; press Enter
-      (comint-send-input)
-      ;; Go back to where i was
-      (switch-to-buffer old-buffer)
-      (message "Restarted ic-backend"))))
-(global-set-key "\C-x\C-r" 'run-ic-backend)
+  (shell-command-other-window "cd ~/projects/app/client; yarn run test" "*Parse-Server-Test*"))
+
+(defun run-parse-test-this-file ()
+  "runs all the parse tests in the current buffer in another window"
+  (interactive)
+  (shell-command-other-window "cd ~/projects/app/server/parse; yarn run test" "*Parse-Server-Test*"))
+(global-set-key "\C-x\C-r" 'run-parse-test-this-file)
+
+(defun run-app-parse-tests ()
+  "runs the tests for the parse server"
+  (interactive)
+  (shell-command "cd ~/projects/app/server/parse; yarn run test&"  "*parse-test*"))
+(global-set-key "\C-c\C-r" 'run-app-parse-tests)
 
 (defun run-ic-backend-test ()
   "Runs the ic-backend in the ant.out buffer with the output going to output.txt in the same directory. This runs the ant test target"
@@ -128,19 +127,19 @@
       (message "Restarted ic-backend"))))
 (global-set-key "\C-xt" 'run-ic-backend-test)
 
-(defun ic-backend-project-diff()
-  "Shows me the differences in my current sandbox"
+(defun app-project-diff()
+  "Shows me the differences in my current app"
   (interactive)
   (progn
-    (let ((default-directory ic-backend-project-dir))
+    (let ((default-directory app-project-dir))
       (shell-command
-       (concat "cd " ic-backend-project-dir "; git diff  " ic-backend-project-dir)
+       (concat "cd " app-project-dir "; git diff  " app-project-dir)
        "*VC-DIFF-PROJECT*")
       (switch-to-buffer "*VC-DIFF-PROJECT*")
       (diff-mode)
       ;; fullscreen it
       (delete-other-windows))))
- (global-set-key "\C-xvo" 'ic-backend-project-diff)
+ (global-set-key "\C-xvo" 'app-project-diff)
 
 (defun ic-backend-project-ui-diff()
   "Shows me the differences in my current UI sandbox"
@@ -212,6 +211,7 @@
 (setq sql-user "root")
 (setq sql-password "msandbox")
 (setq sql-server "localhost")
+
 
 
 

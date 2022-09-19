@@ -1,4 +1,3 @@
-(load "espresso")
 (load "js2-mode")
 
 
@@ -10,15 +9,16 @@
 
 ;; prettier on save hook configuration
 (require 'prettier-js)
-(setq prettier-js-command "/Users/joseph.hanson/.nvm/versions/node/v10.15.3/bin/prettier")
+(setq prettier-js-command "/opt/homebrew/bin/prettier")
 (setq prettier-js-args '(
-  "--print-width" "120"
-  "--single-quote" "true"
   "--tab-width" "4"
-  "--trailing-comma" "none"
+  "--use-tabs" "false"
+  "--single-quote" "true"
 ))
 
+
 (add-hook 'js2-mode-hook 'prettier-js-mode)
+(add-hook 'typescript-mode-hook 'prettier-js-mode)
 
 ;; jslint settings
 (defvar jslint-global-vars "/*global Ext, Zenoss, _t*/")
@@ -152,6 +152,30 @@
 (setq flycheck-javascript-jshint-executable "/usr/local/bin/jshint")
 (setq flycheck-javascript-eslint-executable "/usr/local/bin/eslint")
 
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode +1)
+  (tide-hl-identifier-mode +1))
+  ;; company is an optional dependency. You have to
+  ;; install it separately via package-install
+  ;; `M-x package-install [ret] company`
+  ;;(company-mode +1))
+
+;; aligns annotation to the right hand side
+(setq company-tooltip-align-annotations t)
+
+;; formats the buffer before saving
+;; (add-hook 'before-save-hook 'tide-format-before-save)
+
+(add-hook 'typescript-mode-hook #'setup-tide-mode)
+
+
 
 (provide 'javascript-config)
 ;;; javascript-config.el ends here
+
+
+(add-to-list 'auto-mode-alist '("\\.tsx$" . typescript-mode))

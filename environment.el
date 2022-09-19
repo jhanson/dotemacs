@@ -28,7 +28,7 @@
 
 
 ;; make the prompt read only in shell
-(setq comint-prompt-read-only t)
+;;(setq comint-prompt-read-only nil)
 
 ;; high light current line
 (global-hl-line-mode 0)
@@ -123,8 +123,8 @@
 (add-to-list 'eshell-visual-commands "htop")
 (add-to-list 'eshell-visual-commands "vim")
 
-(add-hook 'shell-mode-hook '(lambda ()
-                              (ansi-color-for-comint-mode-on)
-                              (compilation-shell-minor-mode)))
+;; (add-hook 'shell-mode-hook '(lambda ()
+;;                               (ansi-color-for-comint-mode-on)
+;;                               (compilation-shell-minor-mode)))
 
 
