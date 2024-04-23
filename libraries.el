@@ -23,15 +23,15 @@
 ;;(define-key global-map "\C-x\C-m" 'smex)
 
 ;;; YaSnippet
-(add-to-list 'load-path "~/emacs/plugins/yasnippet/")
-(require 'yasnippet) ;; not yasnippet-bundle
-(yas/initialize)
+;; (add-to-list 'load-path "~/emacs/plugins/yasnippet/")
+;; (require 'yasnippet) ;; not yasnippet-bundle
+;; (yas/initialize)
 
-(defun reload-snippets ()
-  "Convenience method for reloading the ya snippet plugins"
-  (interactive)
-  (yas/load-directory "~/emacs/plugins/yasnippet/snippets"))
-(reload-snippets)
+;; (defun reload-snippets ()
+;;   "Convenience method for reloading the ya snippet plugins"
+;;   (interactive)
+;;   (yas/load-directory "~/emacs/plugins/yasnippet/snippets"))
+;; (reload-snippets)
 
 ;; sass mode
 (add-to-list (quote auto-mode-alist) (cons "\\.scss$" (function sass-mode)))
@@ -55,4 +55,4 @@
 
 ;; workaround hanging http
 (setq package-check-signature nil)
-(load "yaml-mode")
+;;(load "yaml-mode")

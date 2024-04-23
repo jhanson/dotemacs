@@ -2,15 +2,12 @@
 
 
 ;; copy line instead of kill-undo
-(defun copy-line (&optional arg)
-  "Do a kill-line but copy rather than kill. This function directly calls
-kill-line, so see documentation of kill-line for how to use it including prefix
-argument and relevant variables. This function works by temporarily making the
-buffer read-only, so I suggest setting kill-read-only-ok to t."
-  (interactive "P")
-  (toggle-read-only 1)
-  (kill-line arg)
-  (toggle-read-only 0))
+(defun copy-line (arg)
+  "Copy lines (as many as prefix argument) in the kill ring"
+  (interactive "p")
+  (kill-ring-save (line-beginning-position)
+                  (line-beginning-position (+ 1 arg)))
+  (message "%d line%s copied" arg (if (= 1 arg) "" "s")))
 
 (setq-default kill-read-only-ok t)
 (global-set-key "\M-k" 'copy-line)
