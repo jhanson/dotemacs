@@ -31,7 +31,7 @@
 ;(add-hook 'java-mode-hook 'progmodes-hooks)
 
 (defvar ic-backend-project-dir "~/projects/ic-backend")
-(defvar app-project-dir "~/projects/app")
+(defvar app-project-dir "~/Developer/olci")
 (defvar ic-backend-ui-project-dir "~/projects/ic-backend-ui")
 (defvar tocoma-ui-project-dir "~/projects/tocoma-ui")
 (defvar manage-view-project-dir "~/projects/manage-view")
